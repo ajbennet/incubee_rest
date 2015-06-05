@@ -12,5 +12,8 @@
          
 	<context:component-scan base-package="ee.incub.rest.spring.controllers" />
  	<mvc:annotation-driven />
- 	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+ 	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+ 	 <!-- setting maximum upload size -->
+		<property name="maxUploadSize" value="10000000" />
+	</bean>
 </beans>

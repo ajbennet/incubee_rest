@@ -4,7 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"bytes"})
 public class FileMeta {
-
+	private String id;
 	private String fileName;
 	private String fileSize;
 	private String fileType;
@@ -34,5 +34,17 @@ public class FileMeta {
 	}
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
+	}
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 }
