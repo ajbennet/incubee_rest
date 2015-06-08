@@ -14,7 +14,7 @@ public class Incubee {
 	private String videourl;
 	private String founder;
 	private String location;
-	private String email;
+	private String username;
 	private String password;
 	private String confirmpassword;
 	private MultipartFile[] images;
@@ -91,13 +91,7 @@ public class Incubee {
 		this.location = location;
 	}
 
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	public String getPassword() {
 		return password;
@@ -122,6 +116,15 @@ public class Incubee {
 	public void setImages(MultipartFile[] images) {
 		this.images = images;
 	}
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
 
 	@Override
 	public String toString() {
@@ -130,7 +133,7 @@ public class Incubee {
 				+ highconcept + ", description=" + description
 				+ ", twitterurl=" + twitterurl + ", videourl=" + videourl
 				+ ", founder=" + founder + ", location=" + location
-				+ ", email=" + email + ", password=" + password
+				+ ", username=" + username + ", password=" + password
 				+ ", confirmpassword=" + confirmpassword + ", images="
 				+ Arrays.toString(images) + "]";
 	}

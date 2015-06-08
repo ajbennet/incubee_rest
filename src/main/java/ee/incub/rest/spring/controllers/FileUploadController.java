@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import ee.incub.rest.spring.model.DynamoDBAdaptor;
 import ee.incub.rest.spring.model.Incubee;
 
 /**
@@ -154,6 +155,8 @@ public class FileUploadController {
 	public String handleRequest(Incubee incubee) {
 	    logger.info("criteria: {}", incubee);
 	    System.out.println("Incubee size"+ incubee);
+	    DynamoDBAdaptor.loadIncubee(incubee);
+	    
 	    return "OK";
 	}
 }

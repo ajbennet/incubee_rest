@@ -114,7 +114,7 @@
 						<div class="tp-caption large_white_bold sft" data-x="550"
 							data-y="center" data-hoffset="0" data-voffset="-80"
 							data-speed="500" data-start="1200" data-easing="Power4.easeOut">
-							Start.Us</div>
+							Incubee</div>
 						<div class="tp-caption large_white_light sfr" data-x="770"
 							data-y="center" data-hoffset="0" data-voffset="-80"
 							data-speed="500" data-start="1400" data-easing="Power4.easeOut">
@@ -618,21 +618,21 @@
 											placeholder="Information about the founder">
 									</div>
 									<div class="form-group">
-										<label>Images of your startup</label> <input id="file-3"
+										<label>Images of your startup</label> <input name="file-3" id="file-3" 
 											type="file" multiple>
 									</div>
 									<div class="form-group">
 										<label for="inputEmail3" class="control-label">Login Credentials</label>
-											<input type="email" class="form-control" id="username"
+											<input type="email" class="form-control" name="username"
 												placeholder="Email">
 									</div>
 									<div class="form-group">
 											<input type="password" class="form-control"
-												id="password" placeholder="Password">
+												name="password" placeholder="Password">
 									</div>
 									<div class="form-group">
 											<input type="password" class="form-control"
-												id="confirmpassword" placeholder="confirma">
+												name="confirmpassword" placeholder="confirma">
 									</div>
 									<div class="form-group">
 									</div>
@@ -690,7 +690,7 @@
 									</a>
 									<div class="media-body">
 										<h4 class="media-heading">
-											<a href="mailto:support@Start.us.com">support@Start.us.com</a>
+											<a href="mailto:support@incub.ee">support@incub.ee</a>
 										</h4>
 									</div>
 								</div>
@@ -752,7 +752,7 @@
 			//grab all form data  
 			var formData = new FormData(this);
 			// add files 
-			var files = document.getElementById("file-3").files;
+			/* var files = document.getElementById("file-3").files;
 			var i = 0, len = files.length, img, reader, file;
 
 			for (; i < len; i++) {
@@ -767,7 +767,7 @@
 				if (formData) {
 					formData.append("images", file);
 				}
-			}
+			} */
 
 			$.ajax({
 				url : 'rest/handle',
