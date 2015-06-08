@@ -3,6 +3,7 @@ package ee.incub.rest.spring.controllers;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,7 +157,12 @@ public class FileUploadController {
 	    logger.info("criteria: {}", incubee);
 	    System.out.println("Incubee size"+ incubee);
 	    DynamoDBAdaptor.loadIncubee(incubee);
-	    
 	    return "OK";
+	}
+	
+	@RequestMapping(value="/all", method=RequestMethod.GET)
+	@ResponseBody
+	public List<Incubee> getAll() {
+		return DynamoDBAdaptor.getAllIncubees();
 	}
 }

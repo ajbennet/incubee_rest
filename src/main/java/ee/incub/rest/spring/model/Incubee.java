@@ -16,7 +16,6 @@ public class Incubee {
 	private String location;
 	private String username;
 	private String password;
-	private String confirmpassword;
 	private MultipartFile[] images;
 	
 	public String getCompanyname() {
@@ -101,14 +100,6 @@ public class Incubee {
 		this.password = password;
 	}
 
-	public String getConfirmpassword() {
-		return confirmpassword;
-	}
-
-	public void setConfirmpassword(String confirmpassword) {
-		this.confirmpassword = confirmpassword;
-	}
-
 	public MultipartFile[] getImages() {
 		return images;
 	}
@@ -134,7 +125,7 @@ public class Incubee {
 				+ ", twitterurl=" + twitterurl + ", videourl=" + videourl
 				+ ", founder=" + founder + ", location=" + location
 				+ ", username=" + username + ", password=" + password
-				+ ", confirmpassword=" + confirmpassword + ", images="
+				+ ", images="
 				+ Arrays.toString(images) + "]";
 	}
 
