@@ -1,4 +1,4 @@
-package ee.incub.rest.spring.model;
+package ee.incub.rest.spring.aws.adaptors;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
+import ee.incub.rest.spring.model.Incubee;
 import ee.incub.rest.spring.utils.Constants;
 
 public class DynamoDBAdaptor {

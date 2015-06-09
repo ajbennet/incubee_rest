@@ -3,6 +3,7 @@ package ee.incub.rest.spring.controllers;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import ee.incub.rest.spring.model.DynamoDBAdaptor;
+import ee.incub.rest.spring.aws.adaptors.DynamoDBAdaptor;
+import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
 import ee.incub.rest.spring.model.Incubee;
 
 /**
@@ -154,8 +156,20 @@ public class FileUploadController {
 	@RequestMapping(value="/handle", method=RequestMethod.POST)
 	@ResponseBody
 	public String handleRequest(Incubee incubee) {
-	    logger.info("criteria: {}", incubee);
-	    System.out.println("Incubee size"+ incubee);
+	    logger.info("Incubee Object" + incubee);
+	    if (incubee.getImages()!=null){
+	    	S3Adaptor adaptor = new S3Adaptor();
+	    	MultipartFile[] fileList = incubee.getImages();
+	    	for (int i = 0; i < fileList.length; i++) {
+				try {
+					adaptor.uploadFile(fileList[i]);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error("S3 Upload Exception :" + e);
+				}
+			}
+	    }
 	    DynamoDBAdaptor.loadIncubee(incubee);
 	    return "OK";
 	}
