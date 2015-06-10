@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,6 +24,7 @@ import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
 import ee.incub.rest.spring.model.Incubee;
 import ee.incub.rest.spring.model.IncubeeRequest;
 import ee.incub.rest.spring.model.IncubeeResponse;
+import ee.incub.rest.spring.model.Token;
 import ee.incub.rest.spring.utils.Utils;
 
 /**
@@ -160,12 +165,34 @@ public class SignupController {
 	@ResponseBody
 	public String handleRequest(IncubeeRequest incubee) {
 	    logger.info("Incubee Object" + incubee);
+	    Token token = null;
+	    
+	    if (incubee.getToken()!=null){
+	    	try {
+				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
+			} catch (JsonParseException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
+	    }
+	    if (token ==null || GoogleVerificationController.verifyToken(token.getToken())){
+	    	return "Please Sign in with Google";
+	    }
+	    String uuid = "inc_"+UUID.randomUUID().toString();
+	    String[] keyList = null;
 	    if (incubee.getImages()!=null){
 	    	S3Adaptor adaptor = new S3Adaptor();
 	    	MultipartFile[] fileList = incubee.getImages();
+	    	keyList = new String[fileList.length];
 	    	for (int i = 0; i < fileList.length; i++) {
 				try {
-					adaptor.uploadFile(fileList[i]);
+					keyList[i]=adaptor.uploadFile(fileList[i]);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -173,7 +200,7 @@ public class SignupController {
 				}
 			}
 	    }
-	    DynamoDBAdaptor.loadIncubee(incubee);
+	    DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList, uuid));
 	    return "OK";
 	}
 	

@@ -40,7 +40,7 @@ public class DynamoDBAdaptor {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DynamoDBAdaptor.class);
 
-	public static void loadIncubee(IncubeeRequest incubee) {
+	public static void loadIncubee(Incubee incubee) {
 
 		Table table = dynamoDB.getTable(Constants.DB_TABLE_NAME);
 
@@ -51,10 +51,9 @@ public class DynamoDBAdaptor {
 			Item item = new Item()
 					.withPrimaryKey("incubee_id", incubee.getCompanyname())
 					.withString("company_url", incubee.getCompanyurl())
-					.withString("password", incubee.getPassword())
 					// need to hash this.
 					.withStringSet("photos",
-							new HashSet<String>(Arrays.asList("test")))
+							new HashSet<String>(Arrays.asList(incubee.getImages())))
 					.withString("high_concept", incubee.getHighconcept())
 					.withString("description", incubee.getDescription())
 					.withString("username", incubee.getUsername())

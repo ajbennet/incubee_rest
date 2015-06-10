@@ -17,6 +17,7 @@ public class IncubeeRequest {
 	private String contactemail;
 	private String username;
 	private String token;
+
 	private MultipartFile[] images;
 	
 	public String getCompanyname() {
@@ -142,6 +143,13 @@ public class IncubeeRequest {
 	 */
 	public void setContactemail(String contactemail) {
 		this.contactemail = contactemail;
+	}
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }
