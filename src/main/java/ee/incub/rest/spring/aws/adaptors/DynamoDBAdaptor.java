@@ -28,6 +28,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 import ee.incub.rest.spring.model.Incubee;
+import ee.incub.rest.spring.model.IncubeeRequest;
 import ee.incub.rest.spring.utils.Constants;
 
 public class DynamoDBAdaptor {
@@ -39,7 +40,7 @@ public class DynamoDBAdaptor {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DynamoDBAdaptor.class);
 
-	public static void loadIncubee(Incubee incubee) {
+	public static void loadIncubee(IncubeeRequest incubee) {
 
 		Table table = dynamoDB.getTable(Constants.DB_TABLE_NAME);
 
@@ -103,6 +104,8 @@ public class DynamoDBAdaptor {
 			incubee.setDescription(item.get("description")!=null?item.get("description").getS():null);
 			incubee.setFounder(item.get("founder")!=null?item.get("founder").getS():null);
 			incubee.setHighconcept(item.get("high_concept")!=null?item.get("high_concept").getS():null);
+			incubee.setUUID(item.get("uuid")!=null?item.get("uuid").getS():null);
+			incubee.setContactemail(item.get("contact_email")!=null?item.get("contact_email").getS():null);
 			incubee.setLocation(item.get("location")!=null?item.get("location").getS():null);
 			incubee.setTwitterurl(item.get("twitter_url")!=null?item.get("twitter_url").getS():null);
 			incubee.setVideourl(item.get("video_url")!=null?item.get("video_url").getS():null);

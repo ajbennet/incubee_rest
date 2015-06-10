@@ -18,15 +18,18 @@ import org.springframework.web.multipart.MultipartFile;
 import ee.incub.rest.spring.aws.adaptors.DynamoDBAdaptor;
 import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
 import ee.incub.rest.spring.model.Incubee;
+import ee.incub.rest.spring.model.IncubeeRequest;
+import ee.incub.rest.spring.model.IncubeeResponse;
+import ee.incub.rest.spring.utils.Utils;
 
 /**
  * Handles requests for the application file upload requests
  */
 @Controller
-public class FileUploadController {
+public class SignupController {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(FileUploadController.class);
+			.getLogger(SignupController.class);
 
 	/**
 	 * Upload single file using Spring Controller
@@ -155,7 +158,7 @@ public class FileUploadController {
 	
 	@RequestMapping(value="/handle", method=RequestMethod.POST)
 	@ResponseBody
-	public String handleRequest(Incubee incubee) {
+	public String handleRequest(IncubeeRequest incubee) {
 	    logger.info("Incubee Object" + incubee);
 	    if (incubee.getImages()!=null){
 	    	S3Adaptor adaptor = new S3Adaptor();
@@ -176,7 +179,7 @@ public class FileUploadController {
 	
 	@RequestMapping(value="/all", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Incubee> getAll() {
-		return DynamoDBAdaptor.getAllIncubees();
+	public List<IncubeeResponse> getAll() {
+		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
 	}
 }

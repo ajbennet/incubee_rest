@@ -1,9 +1,7 @@
 package ee.incub.rest.spring.model;
 
-import java.util.Arrays;
 
-
-public class Incubee {
+public class IncubeeResponse {
 	private String companyname;
 	private String companyurl;
 	private String logourl;
@@ -13,9 +11,7 @@ public class Incubee {
 	private String videourl;
 	private String founder;
 	private String location;
-	private String uuid;
-	private String username;
-	private String contactemail;
+	private String contactEmail;
 	private String[] images;
 	
 	public String getCompanyname() {
@@ -90,21 +86,6 @@ public class Incubee {
 		this.location = location;
 	}
 
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
 	public String[] getImages() {
 		return images;
@@ -114,25 +95,20 @@ public class Incubee {
 		this.images = images;
 	}
 
-
-
-	@Override
-	public String toString() {
-		return "Incubee [companyname=" + companyname + ", companyurl="
-				+ companyurl + ", logourl=" + logourl + ", highconcept="
-				+ highconcept + ", description=" + description
-				+ ", twitterurl=" + twitterurl + ", videourl=" + videourl
-				+ ", founder=" + founder + ", location=" + location + ", uuid="
-				+ uuid + ", username=" + username + ", contactEmail="
-				+ contactemail + ", images=" + Arrays.toString(images) + "]";
+	
+	/**
+	 * @return the contactEmail
+	 */
+	public String getContactEmail() {
+		return contactEmail;
 	}
 
-	public String getContactemail() {
-		return contactemail;
+	/**
+	 * @param contactEmail the contactEmail to set
+	 */
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
 	}
 
-	public void setContactemail(String contactemail) {
-		this.contactemail = contactemail;
-	}
 	
 }

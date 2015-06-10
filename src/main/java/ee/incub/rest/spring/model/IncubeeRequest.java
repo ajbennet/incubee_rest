@@ -2,8 +2,9 @@ package ee.incub.rest.spring.model;
 
 import java.util.Arrays;
 
+import org.springframework.web.multipart.MultipartFile;
 
-public class Incubee {
+public class IncubeeRequest {
 	private String companyname;
 	private String companyurl;
 	private String logourl;
@@ -13,10 +14,10 @@ public class Incubee {
 	private String videourl;
 	private String founder;
 	private String location;
-	private String uuid;
-	private String username;
 	private String contactemail;
-	private String[] images;
+	private String username;
+	private String token;
+	private MultipartFile[] images;
 	
 	public String getCompanyname() {
 		return companyname;
@@ -90,28 +91,29 @@ public class Incubee {
 		this.location = location;
 	}
 
-	public String getUuid() {
-		return uuid;
+
+
+	public String getPassword() {
+		return token;
 	}
 
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
+	public void setPassword(String password) {
+		this.token = password;
 	}
 
+	public MultipartFile[] getImages() {
+		return images;
+	}
+
+	public void setImages(MultipartFile[] images) {
+		this.images = images;
+	}
 	public String getUsername() {
 		return username;
 	}
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String[] getImages() {
-		return images;
-	}
-
-	public void setImages(String[] images) {
-		this.images = images;
 	}
 
 
@@ -122,17 +124,24 @@ public class Incubee {
 				+ companyurl + ", logourl=" + logourl + ", highconcept="
 				+ highconcept + ", description=" + description
 				+ ", twitterurl=" + twitterurl + ", videourl=" + videourl
-				+ ", founder=" + founder + ", location=" + location + ", uuid="
-				+ uuid + ", username=" + username + ", contactEmail="
-				+ contactemail + ", images=" + Arrays.toString(images) + "]";
+				+ ", founder=" + founder + ", location=" + location
+				+ ", username=" + username + ", idToken=" + token
+				+ ", images="
+				+ Arrays.toString(images) + "]";
 	}
 
+	/**
+	 * @return the contactemail
+	 */
 	public String getContactemail() {
 		return contactemail;
 	}
 
+	/**
+	 * @param contactemail the contactemail to set
+	 */
 	public void setContactemail(String contactemail) {
 		this.contactemail = contactemail;
 	}
-	
+
 }
