@@ -77,7 +77,31 @@ public class DynamoDBAdaptor {
 		}
 
 	}
+	
+	public static void getIncubee(String incubee_id) {
+		Table table = dynamoDB.getTable(Constants.DB_TABLE_NAME);
 
+		
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
+			    new ProfileCredentialsProvider());
+		
+		QuerySpec querySpec = new QuerySpec()
+        .withKeyConditionExpression("incubee_id = :v1 ")
+        .withValueMap(new ValueMap()
+            .withString(":v1", incubee_id))
+            //.withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
+            ;
+		ItemCollection<QueryOutcome> items = table.query(querySpec);
+        Iterator<Item> iterator = items.iterator();
+
+        System.out.println("Query: printing results...");
+
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next().toJSONPretty());
+        }
+		
+	}
+	
 	public static List<Incubee> getAllIncubees() {
 		long twoWeeksAgoMilli = (new Date()).getTime()
 				- (15L * 24L * 60L * 60L * 1000L);

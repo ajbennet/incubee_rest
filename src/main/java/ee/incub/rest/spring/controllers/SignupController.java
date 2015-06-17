@@ -209,4 +209,12 @@ public class SignupController {
 	public List<IncubeeResponse> getAll() {
 		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
 	}
+	
+	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@ResponseBody
+	public String getCompanyInfoForUser(@RequestParam("incubee_id") String incubee_id) {
+		DynamoDBAdaptor.getIncubee(incubee_id);
+		return incubee_id;
+	}
+	
 }
