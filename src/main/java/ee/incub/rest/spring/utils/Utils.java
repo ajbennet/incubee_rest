@@ -10,22 +10,24 @@ import ee.incub.rest.spring.model.IncubeeResponse;
 
 public class Utils {
 	
-	public static Incubee fromIncubeeRequest(IncubeeRequest request, String[] images, String uuid){
+	public static Incubee fromIncubeeRequest(IncubeeRequest request, String[] images, String video, String uuid){
 		if (request == null){
 			return null;
 		}else {
 			Incubee incubee = new Incubee();
-			incubee.setCompanyname(request.getCompanyname());
-			incubee.setCompanyurl(request.getCompanyurl());
+			incubee.setCompany_name(request.getCompany_name());
+			incubee.setCompany_url(request.getCompany_url());
 			incubee.setDescription(request.getDescription());
-			incubee.setHighconcept(request.getHighconcept());
-			incubee.setLogourl(request.getLogourl());
+			incubee.setHigh_concept(request.getHigh_concept());
+			incubee.setLogo_url(request.getLogourl());
 			incubee.setLocation(request.getLocation());
-			incubee.setTwitterurl(request.getTwitterurl());
+			incubee.setTwitter_url(request.getTwitter_url());
 			incubee.setFounder(request.getFounder());
-			incubee.setUUID(uuid);
-			incubee.setContactemail(request.getContactemail());
-			incubee.setUsername(request.getUsername());
+			incubee.setId(uuid);
+			incubee.setContact_email(request.getContact_email());
+			incubee.setField(request.getField());
+			incubee.setFunding(request.isFunding());
+			incubee.setProject_status(request.getProject_status());
 			if (images!=null ){
 				String[] tempImages = new String[images.length];
 				for (int i = 0; i < images.length; i++) {
@@ -33,6 +35,7 @@ public class Utils {
 				}
 				incubee.setImages(tempImages);
 			}
+			incubee.setVideo(video);
 			return incubee;	
 		}
 	}
@@ -42,16 +45,21 @@ public class Utils {
 			return null;
 		}else {
 			IncubeeResponse incubee = new IncubeeResponse();
-			incubee.setCompanyname(request.getCompanyname());
-			incubee.setCompanyurl(request.getCompanyurl());
+			incubee.setCompany_name(request.getCompany_name());
+			incubee.setCompany_url(request.getCompany_url());
 			incubee.setDescription(request.getDescription());
-			incubee.setHighconcept(request.getHighconcept());
-			incubee.setLogourl(request.getLogourl());
+			incubee.setHigh_concept(request.getHigh_concept());
+			incubee.setLogo_url(request.getLogo_url());
 			incubee.setLocation(request.getLocation());
-			incubee.setTwitterurl(request.getTwitterurl());
+			incubee.setTwitter_url(request.getTwitter_url());
 			incubee.setFounder(request.getFounder());
-			incubee.setContactEmail(request.getContactemail());
+			incubee.setContact_email(request.getContact_email());
 			incubee.setImages(request.getImages());
+			incubee.setVideo_url(request.getVideo_url());
+			incubee.setVideo(request.getVideo());
+			incubee.setProject_status(request.getProject_status());
+			incubee.setFunding(request.isFunding());
+			incubee.setField(request.getField());
 			return incubee;	
 		}
 	}

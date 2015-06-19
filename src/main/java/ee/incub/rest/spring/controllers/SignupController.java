@@ -12,7 +12,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ee.incub.rest.spring.aws.adaptors.DynamoDBAdaptor;
 import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
-import ee.incub.rest.spring.model.Incubee;
 import ee.incub.rest.spring.model.IncubeeRequest;
 import ee.incub.rest.spring.model.IncubeeResponse;
 import ee.incub.rest.spring.model.Token;
+import ee.incub.rest.spring.model.User;
 import ee.incub.rest.spring.utils.Utils;
 
 /**
@@ -165,23 +168,23 @@ public class SignupController {
 	@ResponseBody
 	public String handleRequest(IncubeeRequest incubee) {
 	    logger.info("Incubee Object" + incubee);
-	    Token token = null;
-	    
-	    if (incubee.getToken()!=null){
-	    	try {
-				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
-			} catch (JsonParseException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			} catch (IOException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			}
-	    }
-	    if (token ==null || GoogleVerificationController.verifyToken(token.getToken())){
+//	    Token token = null;
+//	    
+//	    if (incubee.getToken()!=null){
+//	    	try {
+//				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
+//			} catch (JsonParseException e) {
+//				logger.error(e.getMessage());
+//				e.printStackTrace();
+//			} catch (JsonMappingException e) {
+//				logger.error(e.getMessage());
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				logger.error(e.getMessage());
+//				e.printStackTrace();
+//			}
+//	    }
+	    if (incubee.getUser() ==null || !GoogleVerificationController.verifyToken(incubee.getUser())){
 	    	return "Please Sign in with Google";
 	    }
 	    String uuid = "inc_"+UUID.randomUUID().toString();
@@ -192,7 +195,7 @@ public class SignupController {
 	    	keyList = new String[fileList.length];
 	    	for (int i = 0; i < fileList.length; i++) {
 				try {
-					keyList[i]=adaptor.uploadFile(fileList[i]);
+					keyList[i]=adaptor.uploadFile(fileList[i],"img");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -200,7 +203,21 @@ public class SignupController {
 				}
 			}
 	    }
-	    DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList, uuid));
+	    String video = null;
+	    if (incubee.getVideo()!=null){
+	    	S3Adaptor adaptor = new S3Adaptor();
+	    	MultipartFile file = incubee.getVideo();
+	    	if (file!=null){
+	    		try{
+					video =adaptor.uploadFile(file,"vid");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error("S3 Upload Exception :" + e);
+				}
+			}
+	    }
+	    DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList, video, uuid));
 	    return "OK";
 	}
 	
@@ -210,11 +227,21 @@ public class SignupController {
 		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.GET)
-	@ResponseBody
-	public String getCompanyInfoForUser(@RequestParam("incubee_id") String incubee_id) {
-		DynamoDBAdaptor.getIncubee(incubee_id);
-		return incubee_id;
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public ResponseEntity<String> login(@RequestBody final Token token){
+		//String incubee_id= null;
+		logger.info("Recieved Login Request with token : " + token);
+		//retreive the user with the id.
+		if (token!=null && token.getId()!=null){
+			User user = DynamoDBAdaptor.getUser(token.getId());
+			if (user == null){
+				// create user
+				///boolean createdUser = DynamoDBAdaptor.createUser(token);
+				return new ResponseEntity<String>("User Not Found",HttpStatus.NOT_FOUND);
+			}
+		}
+		//DynamoDBAdaptor.getIncubee(incubee_id);
+		return new ResponseEntity<String>("OK",HttpStatus.OK);
 	}
 	
 }

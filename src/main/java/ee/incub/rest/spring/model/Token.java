@@ -5,6 +5,14 @@ public class Token {
 	private String id;
 	private String token;
 	private String email;
+	private String image_url;
+	
+	public String getImage_url() {
+		return image_url;
+	}
+	public void setImage_url(String image_url) {
+		this.image_url = image_url;
+	}
 	public String getName() {
 		return name;
 	}
@@ -28,5 +36,10 @@ public class Token {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	@Override
+	public String toString() {
+		return "Token [name=" + name + ", id=" + id + ", token=" + token
+				+ ", email=" + email + "]";
 	}
 }

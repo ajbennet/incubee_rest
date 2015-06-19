@@ -35,13 +35,15 @@ public class S3Adaptor {
         }
 	}
 	
-	public String uploadFile(MultipartFile file) throws IOException{
+	public String uploadFile(MultipartFile file, String prefix ) throws IOException{
 		
 		AmazonS3 s3 = new AmazonS3Client(credentials);
         Region usWest2 = Region.getRegion(Regions.US_WEST_2);
         s3.setRegion(usWest2);
-        
-        String key = UUID.randomUUID().toString();
+        if (prefix == null){
+        	prefix = "img";
+        }
+        String key = prefix+"_"+UUID.randomUUID().toString();
         System.out.println("Uploading a new file to S3 \n");
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());

@@ -8,26 +8,24 @@
 
 <head>
 <meta charset="UTF-8">
-<title>incubee App </title>
+<title>incubee App</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="google-signin-client_id"
 	content="1079218369753-3fg9sou40kdrjb5hsfnm0oo9jj0dok9a.apps.googleusercontent.com">
 <link rel="shortcut icon" href="favicon.png">
-
 <link rel="stylesheet" href="css/animate.css">
 <link rel="stylesheet" href="css/font-awesome.min.css">
 <link rel="stylesheet" href="css/slick.css">
 <link rel="stylesheet" href="js/rs-plugin/css/settings.css">
-
+<link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/freeze.css">
 
 
 <script type="text/javascript" src="js/modernizr.custom.32033.js"></script>
-<link
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
-	rel="stylesheet">
+
+
 <link href="css/fileinput.css" media="all" rel="stylesheet"
 	type="text/css" />
 <script
@@ -84,7 +82,7 @@
 						<li><a href="#demo">demo</a></li>
 						<li id="sign-up"><a href="#signup">sign-in</a></li>
 						<li><a href="#support">support</a></li>
-						
+
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -139,7 +137,7 @@
 							data-start="1900" data-easing="Power4.easeOut">
 							<a href="#getApp" class="btn btn-default btn-lg">GET APP</a>
 						</div>
-						
+
 					</li>
 					<!-- SLIDE 2 -->
 					<li data-transition="zoomout" data-slotamount="7"
@@ -561,12 +559,8 @@
 									for</span><br> <b>Apple IOS</b>
 							</a>
 						</div>
-
 					</div>
 				</div>
-
-
-
 			</div>
 		</section>
 		<section id="signup" class="doublediagonal">
@@ -579,53 +573,183 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="row">
-							<div class="col-md-8 col-sm-8 scrollpoint sp-effect1">
+							<div class="col-md-10 col-sm-10 scrollpoint sp-effect1">
 								<form name="signupform" id="signupform" action="javascript:;"
 									enctype="multipart/form-data" method="post"
 									accept-charset="utf-8">
 									<div class="form-group required">
-										<input type="text" name="companyname" class="form-control"
-											placeholder="Company Name">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Company Name</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="company_name" class="form-control"
+													placeholder="Company Name">
+											</div>
+										</div>
 									</div>
 									<div class="form-group ">
-										<input type="text" name="companyurl" class="form-control"
-											placeholder="Company URL">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Company URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="company_url" class="form-control"
+													placeholder="Company URL">
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<input type="text" name="logourl" class="form-control"
-											placeholder="Logo URL">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Logo URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="logo_url" class="form-control"
+													placeholder="Logo URL">
+											</div>
+										</div>
 									</div>
 									<div class="form-group required">
-										<textarea cols="30" rows="3" class="form-control"
-											name="highconcept"
-											placeholder="High concept or a brief description"></textarea>
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">High concept</label>
+											</div>
+											<div class="col-xs-9">
+												<textarea cols="30" rows="3" class="form-control"
+													name="high_concept"
+													placeholder="High concept or a brief description"></textarea>
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<textarea cols="30" rows="10" class="form-control"
-											name="description"
-											placeholder="Description about the company/product"></textarea>
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Description</label>
+											</div>
+											<div class="col-xs-9">
+												<textarea cols="30" rows="10" class="form-control"
+													name="description"
+													placeholder="Description about the company/product"></textarea>
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<input type="text" name="twitterurl" class="form-control"
-											placeholder="Twitter URL">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Twitter URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="twitter_url" class="form-control"
+													placeholder="Twitter URL">
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<input type="text" name="videourl" class="form-control"
-											placeholder="Video URL">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Video URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="video_url" class="form-control"
+													placeholder="Video URL">
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<input type="text" name="location" class="form-control"
-											placeholder="Location">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Location</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="location" class="form-control"
+													placeholder="Location">
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<input type="textarea" name="founder" class="form-control"
-											placeholder="Information about the founder">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Founder </label>
+											</div>
+											<div class="col-xs-9">
+												<input type="textarea" name="founder" class="form-control"
+													placeholder="Information about the founder">
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
-										<label>Images of your startup</label> <input name="images"
-											id="images" type="file" multiple>
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Field</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" name="field" class="form-control"
+													placeholder="Field">
+											</div>
+										</div>
 									</div>
-									<div class="g-signin2" data-onsuccess="onSignIn"></div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Startup phase</label>
+											</div>
+											<div class="col-xs-9">
+												<select name="project_status" id="project_status"
+													class="form-control" style="width: 200px"
+													autocomplete="off"  title='Choose one'>
+													<option disabled="disabled" selected="selected">Choose one</option>
+													<optgroup>
+													<option>Ideation</option>
+													<option>Work-in-progress</option>
+													<option>Just-launched</option>
+													<option>Launched-with-customers</option>
+													</optgroup>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Seeking funding</label>
+											</div>
+											<div class="col-xs-9">
+												<select name="funding" id="funding"
+													class="form-control" style="width: 200px"
+													autocomplete="off">
+													<option disabled="disabled" selected="selected">Choose one</option>
+													<optgroup>
+													<option>Yes</option>
+													<option>No</option>
+													</optgroup>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Images </label>
+											</div>
+											<div class="col-xs-9">
+												<input name="images" id="images" type="file" multiple>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Video </label>
+											</div>
+											<div class="col-xs-9">
+												<input name="video" id="video" type="file" multiple>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="g-signin2" data-onsuccess="onSignIn"></div>
+									</div>
 									<input type="hidden" name="username" id="username"> <input
 										type="hidden" name="token" id="token">
 									<div class="form-group"></div>
@@ -727,6 +851,7 @@
 	<script src="js/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
 	<script src="js/waypoints.min.js"></script>
 	<script src="js/scripts.js"></script>
+	<script src="js/incubee.js"></script>
 	<script>
 		$(document).ready(function() {
 			appMaster.preLoader();
@@ -736,7 +861,18 @@
 			showCaption : false,
 			browseClass : "btn btn-primary btn-lg",
 			fileType : "any",
-			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
+			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+			allowedFileTypes: ['image'],
+			maxFilesNum: 4
+		});
+		$("#video").fileinput({
+			showUpload : false,
+			showCaption : false,
+			browseClass : "btn btn-primary btn-lg",
+			fileType : "any",
+			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+			allowedFileTypes: [ 'video'],
+			maxFilesNum: 1
 		});
 		$("#signupform").submit(function(event) {
 
@@ -780,36 +916,6 @@
 
 			return false;
 		});
-	</script>
-	<script>
-		function onSignIn(googleUser) {
-			var profile = googleUser.getBasicProfile();
-			/* console.log('ID: ' + profile.getId());
-			console.log('Name: ' + profile.getName());
-			console.log('Image URL: ' + profile.getImageUrl());
-			console.log('Email: ' + profile.getEmail()); */
-			var id_token = googleUser.getAuthResponse().id_token;
-			var token = {
-				"name" : profile.getName(),
-				"id" : profile.getId(),
-				"imageurl" : profile.getImageUrl(),
-				"email" : profile.getEmail(),
-				"token" : id_token
-			};
-			console.log('profile :' + JSON.stringify(token));
-			document.getElementById("token").value = JSON.stringify(token);
-			document.getElementById("username").value = profile.getEmail();
-			//set image url and remove s96-c in the url to allow resizing
-			var imgurl = profile.getImageUrl();
-			if (imgurl){
-				var start = imgurl.substring(0,imgurl.indexOf("s96-c"));
-				
-				if (start){
-					imgurl = start + imgurl.substring(imgurl.indexOf("s96-c")+6);
-				}
-				document.getElementById("sign-up").innerHTML = "<div class=\"avatar-frame\" style=\"background-image:url("+imgurl+"?sz=40);\" data-reactid=\".0.$/.0.2.2.$=10:0\"></div>";
-			}
-		}
 	</script>
 
 </body>

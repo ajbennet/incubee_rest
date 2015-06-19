@@ -3,136 +3,133 @@ package ee.incub.rest.spring.model;
 import java.util.Arrays;
 
 
+
 public class Incubee {
-	private String companyname;
-	private String companyurl;
-	private String logourl;
-	private String highconcept;
+	private String company_name;
+	private String company_url;
+	private String logo_url;
+	private String high_concept;
 	private String description;
-	private String twitterurl;
-	private String videourl;
+	private String twitter_url;
+	private String video_url;
 	private String founder;
 	private String location;
-	private String uuid;
-	private String username;
-	private String contactemail;
+	private String id;
+	private String contact_email;
 	private String[] images;
-	
-	public String getCompanyname() {
-		return companyname;
+	private String video;
+	private boolean funding;
+	private String project_status;
+	private String field;
+	public String getCompany_name() {
+		return company_name;
 	}
-
-	public void setCompanyname(String companyname) {
-		this.companyname = companyname;
+	public void setCompany_name(String company_name) {
+		this.company_name = company_name;
 	}
-
-	public String getCompanyurl() {
-		return companyurl;
+	public String getCompany_url() {
+		return company_url;
 	}
-
-	public void setCompanyurl(String companyurl) {
-		this.companyurl = companyurl;
+	public void setCompany_url(String company_url) {
+		this.company_url = company_url;
 	}
-
-	public String getLogourl() {
-		return logourl;
+	public String getLogo_url() {
+		return logo_url;
 	}
-
-	public void setLogourl(String logourl) {
-		this.logourl = logourl;
+	public void setLogo_url(String logo_url) {
+		this.logo_url = logo_url;
 	}
-
-	public String getHighconcept() {
-		return highconcept;
+	public String getHigh_concept() {
+		return high_concept;
 	}
-
-	public void setHighconcept(String highconcept) {
-		this.highconcept = highconcept;
+	public void setHigh_concept(String high_concept) {
+		this.high_concept = high_concept;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public String getTwitterurl() {
-		return twitterurl;
+	public String getTwitter_url() {
+		return twitter_url;
 	}
-
-	public void setTwitterurl(String twitterurl) {
-		this.twitterurl = twitterurl;
+	public void setTwitter_url(String twitter_url) {
+		this.twitter_url = twitter_url;
 	}
-
-	public String getVideourl() {
-		return videourl;
+	public String getVideo_url() {
+		return video_url;
 	}
-
-	public void setVideourl(String videourl) {
-		this.videourl = videourl;
+	public void setVideo_url(String video_url) {
+		this.video_url = video_url;
 	}
-
 	public String getFounder() {
 		return founder;
 	}
-
 	public void setFounder(String founder) {
 		this.founder = founder;
 	}
-
 	public String getLocation() {
 		return location;
 	}
-
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-	public String getUuid() {
-		return uuid;
+	public String getId() {
+		return id;
 	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
+	public void setId(String uuid) {
+		this.id = uuid;
 	}
-
-	public String getUsername() {
-		return username;
+	
+	public String getContact_email() {
+		return contact_email;
 	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	public void setContact_email(String contact_email) {
+		this.contact_email = contact_email;
 	}
-
 	public String[] getImages() {
 		return images;
 	}
-
 	public void setImages(String[] images) {
 		this.images = images;
 	}
-
-
-
+	public String getVideo() {
+		return video;
+	}
+	public void setVideo(String video) {
+		this.video = video;
+	}
+	public boolean isFunding() {
+		return funding;
+	}
+	public void setFunding(boolean funding) {
+		this.funding = funding;
+	}
+	public String getProject_status() {
+		return project_status;
+	}
+	public void setProject_status(String project_status) {
+		this.project_status = project_status;
+	}
+	public String getField() {
+		return field;
+	}
+	public void setField(String field) {
+		this.field = field;
+	}
 	@Override
 	public String toString() {
-		return "Incubee [companyname=" + companyname + ", companyurl="
-				+ companyurl + ", logourl=" + logourl + ", highconcept="
-				+ highconcept + ", description=" + description
-				+ ", twitterurl=" + twitterurl + ", videourl=" + videourl
+		return "Incubee [company_name=" + company_name + ", company_url="
+				+ company_url + ", logo_url=" + logo_url + ", high_concept="
+				+ high_concept + ", description=" + description
+				+ ", twitter_url=" + twitter_url + ", video_url=" + video_url
 				+ ", founder=" + founder + ", location=" + location + ", uuid="
-				+ uuid + ", username=" + username + ", contactEmail="
-				+ contactemail + ", images=" + Arrays.toString(images) + "]";
-	}
-
-	public String getContactemail() {
-		return contactemail;
-	}
-
-	public void setContactemail(String contactemail) {
-		this.contactemail = contactemail;
+				+ id + ", contact_email="
+				+ contact_email + ", images=" + Arrays.toString(images)
+				+ ", video=" + video + ", funding=" + funding
+				+ ", project_status=" + project_status + ", field=" + field
+				+ "]";
 	}
 	
 }
