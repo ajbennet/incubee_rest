@@ -35,7 +35,7 @@ public class Utils {
 				}
 				incubee.setImages(tempImages);
 			}
-			incubee.setVideo(video);
+			incubee.setVideo(Constants.S3_IMAGE_URL+video);
 			return incubee;	
 		}
 	}

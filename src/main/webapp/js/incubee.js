@@ -5,16 +5,16 @@ function onSignIn(googleUser) {
 	console.log('Image URL: ' + profile.getImageUrl());
 	console.log('Email: ' + profile.getEmail()); */
 	var id_token = googleUser.getAuthResponse().id_token;
-	var user = {
+	var token = {
 		"name" : profile.getName(),
 		"id" : profile.getId(),
 		"image_url" : profile.getImageUrl(),
 		"email" : profile.getEmail(),
 		"token" : id_token
 	};
-	console.log('profile :' + JSON.stringify(user));
-	login(user);
-	document.getElementById("user").value = JSON.stringify(user);
+	console.log('profile :' + JSON.stringify(token));
+	login(token);
+	document.getElementById("token").value = JSON.stringify(token);
 	//set image url and remove s96-c in the url to allow resizing
 	var imgurl = profile.getImageUrl();
 	if (imgurl) {
@@ -23,9 +23,9 @@ function onSignIn(googleUser) {
 		if (start) {
 			imgurl = start + imgurl.substring(imgurl.indexOf("s96-c") + 6);
 		}
-		document.getElementById("sign-up").innerHTML = "<div class=\"avatar-frame\" style=\"background-image:url("
+		document.getElementById("sign-up").innerHTML = "<a href=\"#signup\"><div class=\"avatar-frame\" style=\"background-image:url("
 				+ imgurl
-				+ "?sz=40);\" data-reactid=\".0.$/.0.2.2.$=10:0\"></div>";
+				+ "?sz=40);\" data-reactid=\".0.$/.0.2.2.$=10:0\"></div></a>";
 	}
 };
 

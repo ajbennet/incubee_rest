@@ -15,7 +15,8 @@ public class IncubeeRequest {
 	private String founder;
 	private String location;
 	private String contact_email;
-	private User user;
+	private String token;
+	
 	private String project_status;
 	private String field;
 	private boolean funding;
@@ -70,6 +71,12 @@ public class IncubeeRequest {
 	public void setFounder(String founder) {
 		this.founder = founder;
 	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public String getLocation() {
 		return location;
 	}
@@ -82,12 +89,7 @@ public class IncubeeRequest {
 	public void setContact_email(String contact_email) {
 		this.contact_email = contact_email;
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+	
 	public String getProject_status() {
 		return project_status;
 	}
@@ -125,7 +127,7 @@ public class IncubeeRequest {
 				+ ", high_concept=" + high_concept + ", description="
 				+ description + ", twitter_url=" + twitter_url + ", video_url="
 				+ video_url + ", founder=" + founder + ", location=" + location
-				+ ", contact_email=" + contact_email + ", user=" + user
+				+ ", contact_email=" + contact_email + ", token=" + token
 				+ ", project_status=" + project_status + ", field=" + field
 				+ ", funding=" + funding + ", images="
 				+ Arrays.toString(images) + ", video=" + video + "]";

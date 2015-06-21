@@ -166,26 +166,27 @@ public class SignupController {
 	
 	@RequestMapping(value="/handle", method=RequestMethod.POST)
 	@ResponseBody
-	public String handleRequest(IncubeeRequest incubee) {
+	public ResponseEntity<String> handleRequest(IncubeeRequest incubee) {
 	    logger.info("Incubee Object" + incubee);
-//	    Token token = null;
-//	    
-//	    if (incubee.getToken()!=null){
-//	    	try {
-//				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
-//			} catch (JsonParseException e) {
-//				logger.error(e.getMessage());
-//				e.printStackTrace();
-//			} catch (JsonMappingException e) {
-//				logger.error(e.getMessage());
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				logger.error(e.getMessage());
-//				e.printStackTrace();
-//			}
-//	    }
-	    if (incubee.getUser() ==null || !GoogleVerificationController.verifyToken(incubee.getUser())){
-	    	return "Please Sign in with Google";
+	    Token token = null;
+	    
+	    if (incubee.getToken()!=null){
+	    	try {
+				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
+			} catch (JsonParseException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
+	    }
+	    
+	    if (token ==null || !GoogleVerificationController.verifyToken(token)){
+	    	return new ResponseEntity<String>("Please sign-in with Google",HttpStatus.UNAUTHORIZED);
 	    }
 	    String uuid = "inc_"+UUID.randomUUID().toString();
 	    String[] keyList = null;
@@ -218,7 +219,7 @@ public class SignupController {
 			}
 	    }
 	    DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList, video, uuid));
-	    return "OK";
+	    return  new ResponseEntity<String>("OK",HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/all", method=RequestMethod.GET)

@@ -59,31 +59,38 @@ public class DynamoDBAdaptor {
 
 			logger.debug("Adding data to " + Constants.INCUBEE_TABLE);
 
-			Item item = new Item()
-					.withPrimaryKey("id", incubee.getId())
-					.withString("company_name", incubee.getCompany_name())
-					.withString("company_url", incubee.getCompany_url())
-					// need to hash this.
-					.withStringSet(
-							"photos",
-							new HashSet<String>(Arrays.asList(incubee
-									.getImages())))
-					.withString("video", incubee.getVideo())
-					.withString("high_concept", incubee.getHigh_concept())
-					.withString("description", incubee.getDescription())
-					.withString("founder", incubee.getFounder())
-					.withString("logo_url", incubee.getLogo_url())
-					.withString("twitter_url", incubee.getTwitter_url())
-					.withString("location", incubee.getLocation())
-					.withString("video_url", incubee.getVideo_url())
-
-					.withBoolean("funding", incubee.isFunding())
-					.withString("field", incubee.getField())
-					.withString("project_status", incubee.getProject_status())
-					.withString("added_time",
-							(dateFormatter.format(new Date())))
-					.withString("updated_time",
-							(dateFormatter.format(new Date())));
+			Item item = new Item().withPrimaryKey("id", incubee.getId());
+			if (incubee.getCompany_name() != null)
+				item.withString("company_name", incubee.getCompany_name());
+			if (incubee.getCompany_url() != null)
+				item.withString("company_url", incubee.getCompany_url());
+			// need to hash this.
+			if (incubee.getCompany_name() != null)
+				item.withStringSet("photos",
+						new HashSet<String>(Arrays.asList(incubee.getImages())));
+			if (incubee.getVideo() != null)
+				item.withString("video", incubee.getVideo());
+			if (incubee.getHigh_concept() != null)
+				item.withString("high_concept", incubee.getHigh_concept());
+			if (incubee.getDescription() != null)
+				item.withString("description", incubee.getDescription());
+			if (incubee.getFounder() != null)
+				item.withString("founder", incubee.getFounder());
+			if (incubee.getLogo_url() != null)
+				item.withString("logo_url", incubee.getLogo_url());
+			if (incubee.getTwitter_url() != null)
+				item.withString("twitter_url", incubee.getTwitter_url());
+			if (incubee.getLocation() != null)
+				item.withString("location", incubee.getLocation());
+			if (incubee.getVideo_url() != null)
+				item.withString("video_url", incubee.getVideo_url());
+			item.withBoolean("funding", incubee.isFunding());
+			if (incubee.getField() != null)
+				item.withString("field", incubee.getField());
+			if (incubee.getProject_status() != null)
+				item.withString("project_status", incubee.getProject_status());
+			item.withString("added_time", (dateFormatter.format(new Date())));
+			item.withString("updated_time", (dateFormatter.format(new Date())));
 			table.putItem(item);
 			logger.info("Added data for company :" + incubee.getCompany_name());
 			System.out.println("Added data for company :"
@@ -220,8 +227,8 @@ public class DynamoDBAdaptor {
 		ScanResult result = client.scan(scanRequest);
 		for (Map<String, AttributeValue> item : result.getItems()) {
 			Incubee incubee = new Incubee();
-			incubee.setCompany_name(item.get("incubee_id") != null ? item.get(
-					"incubee_id").getS() : null);
+			incubee.setCompany_name(item.get("company_name") != null ? item.get(
+					"company_name").getS() : null);
 			incubee.setCompany_url(item.get("company_url") != null ? item.get(
 					"company_url").getS() : null);
 			incubee.setLogo_url(item.get("logo_url") != null ? item.get(
@@ -232,8 +239,7 @@ public class DynamoDBAdaptor {
 					.get("founder").getS() : null);
 			incubee.setHigh_concept(item.get("high_concept") != null ? item
 					.get("high_concept").getS() : null);
-			incubee.setId(item.get("id") != null ? item.get("id").getS()
-					: null);
+			incubee.setId(item.get("id") != null ? item.get("id").getS() : null);
 			incubee.setContact_email(item.get("contact_email") != null ? item
 					.get("contact_email").getS() : null);
 			incubee.setLocation(item.get("location") != null ? item.get(
@@ -244,6 +250,12 @@ public class DynamoDBAdaptor {
 					"video_url").getS() : null);
 			incubee.setVideo(item.get("video") != null ? item.get("video")
 					.getS() : null);
+			List<String> photos = item.get("photos") != null ?item
+					.get("photos").getSS() : null;
+			String[] photosStr = new String[photos.size()];
+			if (photos!=null){	
+				incubee.setImages(photos.toArray(photosStr));	
+			}
 			incubee.setFunding(item.get("funding") != null ? item
 					.get("funding").getBOOL() : null);
 			incubee.setField(item.get("field") != null ? item.get("field")

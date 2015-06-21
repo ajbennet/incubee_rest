@@ -37,9 +37,4 @@ public class Token {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	@Override
-	public String toString() {
-		return "Token [name=" + name + ", id=" + id + ", token=" + token
-				+ ", email=" + email + "]";
-	}
 }
