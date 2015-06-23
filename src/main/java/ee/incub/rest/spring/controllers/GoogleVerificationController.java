@@ -1,14 +1,7 @@
 package ee.incub.rest.spring.controllers;
 
-import java.util.Arrays;
-
-import com.google.api.client.auth.openidconnect.IdToken.Payload;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 
 import ee.incub.rest.spring.model.Token;
-import ee.incub.rest.spring.model.User;
-import ee.incub.rest.spring.utils.Constants;
 
 public class GoogleVerificationController {
 

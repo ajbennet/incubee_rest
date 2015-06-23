@@ -17,6 +17,7 @@ public class IncubeeResponse {
 	private boolean funding;
 	private String project_status;
 	private String field;
+	private String id;
 	public String getCompany_name() {
 		return company_name;
 	}
@@ -107,6 +108,18 @@ public class IncubeeResponse {
 	}
 	public void setField(String field) {
 		this.field = field;
+	}
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 }

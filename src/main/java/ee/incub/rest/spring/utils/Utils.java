@@ -45,6 +45,7 @@ public class Utils {
 			return null;
 		}else {
 			IncubeeResponse incubee = new IncubeeResponse();
+			incubee.setId(request.getId());
 			incubee.setCompany_name(request.getCompany_name());
 			incubee.setCompany_url(request.getCompany_url());
 			incubee.setDescription(request.getDescription());
