@@ -52,15 +52,28 @@ public class User {
 	}
 	
 	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", login_type=" + login_type + ", token="
-				+ token + ", user_type=" + user_type + ", company_id="
-				+ company_id + ", image_url=" + image_url + ", email=" + email
-				+ ", name=" + name + "]";
+	/**
+	 * @return the handle_id
+	 */
+	public String getHandle_id() {
+		return handle_id;
+	}
+	/**
+	 * @param handle_id the handle_id to set
+	 */
+	public void setHandle_id(String handle_id) {
+		this.handle_id = handle_id;
 	}
 
+	@Override
+	public String toString() {
+		return "User [handle_id=" + handle_id + ", id=" + id + ", login_type="
+				+ login_type + ", token=" + token + ", user_type=" + user_type
+				+ ", company_id=" + company_id + ", image_url=" + image_url
+				+ ", email=" + email + ", name=" + name + "]";
+	}
 
+	private String handle_id;
 	private String id;
 	private String login_type;
 	private String token;
@@ -69,4 +82,5 @@ public class User {
 	private String image_url;
 	private String email;
 	private String name;
+	
 }

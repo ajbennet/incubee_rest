@@ -39,12 +39,145 @@ public class SignupController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SignupController.class);
 
+
+	@RequestMapping(value = "/handle", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<String> handleRequest(IncubeeRequest incubee) {
+		logger.info("Incubee Object" + incubee);
+		Token token = null;
+
+		if (incubee.getToken() != null) {
+			try {
+				token = new ObjectMapper().readValue(incubee.getToken(),
+						Token.class);
+			} catch (JsonParseException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		if (token == null || !GoogleVerificationController.verifyToken(token)) {
+			return new ResponseEntity<String>("Please sign-in with Google",
+					HttpStatus.UNAUTHORIZED);
+		}
+		String uuid = "inc_" + UUID.randomUUID().toString();
+		User user = DynamoDBAdaptor.getUserForHandle(token.getId());
+		if (user == null) {
+			//creating new incubee & user
+			createNewIncubee(incubee, uuid);
+			createUser(token, uuid);
+			return new ResponseEntity<String>("User & Startup Created", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
+		}
+	}
+
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	@ResponseBody
+	public List<IncubeeResponse> getAll() {
+		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<IncubeeResponse> getForId(@RequestParam("id") String id) {
+		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<String> login(@RequestBody final Token token) {
+		// String incubee_id= null;
+		logger.info("Recieved Login Request with token : " + token);
+		// retreive the user with the id.
+		if (token != null && token.getId() != null) {
+			User user = DynamoDBAdaptor.getUser(token.getId());
+			if (user == null) {
+				// create user
+				// /boolean createdUser = DynamoDBAdaptor.createUser(token);
+				return new ResponseEntity<String>("User Not Found",
+						HttpStatus.NOT_FOUND);
+			}
+		}
+		// DynamoDBAdaptor.getIncubee(incubee_id);
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
+	}
+
+	private boolean createNewIncubee(IncubeeRequest incubee, String uuid) {
+		boolean isCreated = false;
+		logger.info("Creating new Incubee : " + incubee + " with id :" + uuid);
+		String[] keyList = null;
+		if (incubee.getImages() != null) {
+			S3Adaptor adaptor = new S3Adaptor();
+			MultipartFile[] fileList = incubee.getImages();
+			keyList = new String[fileList.length];
+			for (int i = 0; i < fileList.length; i++) {
+				try {
+					keyList[i] = adaptor.uploadFile(fileList[i], "img");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error("S3 Upload Exception :" + e);
+				}
+			}
+		}
+		String video = null;
+		if (incubee.getVideo() != null) {
+			S3Adaptor adaptor = new S3Adaptor();
+			MultipartFile file = incubee.getVideo();
+			if (file != null) {
+				try {
+					video = adaptor.uploadFile(file, "vid");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error("S3 Upload Exception :" + e);
+				}
+			}
+		}
+		DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList,
+				video, uuid));
+		// check if user already has a company associated to his account.
+		isCreated = true;
+		logger.info("Incubee Created : " + incubee.getCompany_name());
+		return isCreated;
+	}
+
+	private boolean createUser(Token token, String company_id) {
+		if (token != null && company_id != null) {
+			logger.info("Creating User with : " + token + " for company :"
+					+ company_id);
+			User user = new User();
+			String user_id = "usr_" + UUID.randomUUID().toString();
+			user.setId(user_id);
+			user.setCompany_id(company_id);
+			user.setEmail(token.getEmail());
+			user.setImage_url(token.getImage_url());
+			user.setName(token.getName());
+			user.setToken(token.getToken());
+			user.setHandle_id(token.getId());
+			user.setLogin_type("google");
+			DynamoDBAdaptor.createUser(user);
+			logger.info("Created User : " + user_id);
+			return true;
+		} else {
+			logger.error("Created User Failed - No Token or company_id  ");
+			return false;
+		}
+	}
+	
+	
 	/**
 	 * Upload single file using Spring Controller
 	 */
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-	public @ResponseBody
-	String uploadFileHandler(@RequestParam("name") String name,
+	public @ResponseBody String uploadFileHandler(
+			@RequestParam("name") String name,
 			@RequestParam("file") MultipartFile file) {
 
 		if (!file.isEmpty()) {
@@ -82,8 +215,8 @@ public class SignupController {
 	 * Upload multiple file using Spring Controller
 	 */
 	@RequestMapping(value = "/uploadMultipleFile", method = RequestMethod.POST)
-	public @ResponseBody
-	String uploadMultipleFileHandler(@RequestParam("name") String[] names,
+	public @ResponseBody String uploadMultipleFileHandler(
+			@RequestParam("name") String[] names,
 			@RequestParam("file") MultipartFile[] files) {
 
 		if (files.length != names.length)
@@ -121,15 +254,14 @@ public class SignupController {
 		}
 		return message;
 	}
-	
+
 	/**
 	 * Upload multiple file using Spring Controller
 	 */
 	@RequestMapping(value = "/uploadmyfile", method = RequestMethod.POST)
-	public @ResponseBody
-	String uploadFiles(@RequestParam(value="name",required=false) String name,
+	public @ResponseBody String uploadFiles(
+			@RequestParam(value = "name", required = false) String name,
 			@RequestParam("images") MultipartFile[] files) {
-
 
 		String message = "";
 		for (int i = 0; i < files.length; i++) {
@@ -155,94 +287,12 @@ public class SignupController {
 				logger.info("Server File Location="
 						+ serverFile.getAbsolutePath());
 
-				message = message + "You successfully uploaded file=" + tempName
-						+ "<br />";
+				message = message + "You successfully uploaded file="
+						+ tempName + "<br />";
 			} catch (Exception e) {
 				return "You failed to upload " + name + " => " + e.getMessage();
 			}
 		}
 		return message;
 	}
-	
-	@RequestMapping(value="/handle", method=RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<String> handleRequest(IncubeeRequest incubee) {
-	    logger.info("Incubee Object" + incubee);
-	    Token token = null;
-	    
-	    if (incubee.getToken()!=null){
-	    	try {
-				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
-			} catch (JsonParseException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			} catch (IOException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
-			}
-	    }
-	    
-	    if (token ==null || !GoogleVerificationController.verifyToken(token)){
-	    	return new ResponseEntity<String>("Please sign-in with Google",HttpStatus.UNAUTHORIZED);
-	    }
-	    String uuid = "inc_"+UUID.randomUUID().toString();
-	    String[] keyList = null;
-	    if (incubee.getImages()!=null){
-	    	S3Adaptor adaptor = new S3Adaptor();
-	    	MultipartFile[] fileList = incubee.getImages();
-	    	keyList = new String[fileList.length];
-	    	for (int i = 0; i < fileList.length; i++) {
-				try {
-					keyList[i]=adaptor.uploadFile(fileList[i],"img");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					logger.error("S3 Upload Exception :" + e);
-				}
-			}
-	    }
-	    String video = null;
-	    if (incubee.getVideo()!=null){
-	    	S3Adaptor adaptor = new S3Adaptor();
-	    	MultipartFile file = incubee.getVideo();
-	    	if (file!=null){
-	    		try{
-					video =adaptor.uploadFile(file,"vid");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					logger.error("S3 Upload Exception :" + e);
-				}
-			}
-	    }
-	    DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList, video, uuid));
-	    return  new ResponseEntity<String>("OK",HttpStatus.OK);
-	}
-	
-	@RequestMapping(value="/all", method=RequestMethod.GET)
-	@ResponseBody
-	public List<IncubeeResponse> getAll() {
-		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
-	}
-	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public ResponseEntity<String> login(@RequestBody final Token token){
-		//String incubee_id= null;
-		logger.info("Recieved Login Request with token : " + token);
-		//retreive the user with the id.
-		if (token!=null && token.getId()!=null){
-			User user = DynamoDBAdaptor.getUser(token.getId());
-			if (user == null){
-				// create user
-				///boolean createdUser = DynamoDBAdaptor.createUser(token);
-				return new ResponseEntity<String>("User Not Found",HttpStatus.NOT_FOUND);
-			}
-		}
-		//DynamoDBAdaptor.getIncubee(incubee_id);
-		return new ResponseEntity<String>("OK",HttpStatus.OK);
-	}
-	
 }

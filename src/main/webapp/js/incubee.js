@@ -25,7 +25,7 @@ function onSignIn(googleUser) {
 		}
 		document.getElementById("sign-up").innerHTML = "<a href=\"#signup\"><div class=\"avatar-frame\" style=\"background-image:url("
 				+ imgurl
-				+ "?sz=40);\" data-reactid=\".0.$/.0.2.2.$=10:0\"></div></a>";
+				+ "?sz=40);margin-left: auto;margin-right: auto;\"></div></a>";
 	}
 };
 
