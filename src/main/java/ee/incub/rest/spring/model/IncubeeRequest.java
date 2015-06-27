@@ -16,7 +16,7 @@ public class IncubeeRequest {
 	private String location;
 	private String contact_email;
 	private String token;
-	
+	private String id;
 	private String project_status;
 	private String field;
 	private boolean funding;
@@ -131,6 +131,18 @@ public class IncubeeRequest {
 				+ ", project_status=" + project_status + ", field=" + field
 				+ ", funding=" + funding + ", images="
 				+ Arrays.toString(images) + ", video=" + video + "]";
+	}
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	

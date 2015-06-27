@@ -4,7 +4,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.codehaus.jackson.JsonParseException;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +29,7 @@ import ee.incub.rest.spring.aws.adaptors.DynamoDBAdaptor;
 import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
 import ee.incub.rest.spring.model.IncubeeRequest;
 import ee.incub.rest.spring.model.IncubeeResponse;
+import ee.incub.rest.spring.model.LoginResponse;
 import ee.incub.rest.spring.model.Token;
 import ee.incub.rest.spring.model.User;
 import ee.incub.rest.spring.utils.Utils;
@@ -70,11 +74,12 @@ public class SignupController {
 		User user = DynamoDBAdaptor.getUserForHandle(token.getId());
 		if (user == null) {
 			//creating new incubee & user
-			createNewIncubee(incubee, uuid);
+			createOrUpdateIncubee(incubee, uuid);
 			createUser(token, uuid);
 			return new ResponseEntity<String>("User & Startup Created", HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("OK", HttpStatus.OK);
+			createOrUpdateIncubee(incubee, uuid);
+			return new ResponseEntity<String>("Incubee Updated", HttpStatus.OK);
 		}
 	}
 
@@ -86,29 +91,45 @@ public class SignupController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<IncubeeResponse> getForId(@RequestParam("id") String id) {
-		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
+	public IncubeeResponse getForId(@PathVariable("id") String id) {
+		logger.info("Recieved getIncubee for Id: " + id);
+		return Utils.fromIncubee(DynamoDBAdaptor.getIncubee(id));
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<String> login(@RequestBody final Token token) {
+	public ResponseEntity<LoginResponse> login(@RequestBody final Token token) {
 		// String incubee_id= null;
 		logger.info("Recieved Login Request with token : " + token);
+		LoginResponse response = new LoginResponse();
 		// retreive the user with the id.
 		if (token != null && token.getId() != null) {
 			User user = DynamoDBAdaptor.getUser(token.getId());
 			if (user == null) {
 				// create user
 				// /boolean createdUser = DynamoDBAdaptor.createUser(token);
-				return new ResponseEntity<String>("User Not Found",
+				response.setStatusCode(LoginResponse.USER_NOT_FOUND);
+				response.setStatusMessage("User not found");
+				return new ResponseEntity<LoginResponse>(response,
 						HttpStatus.NOT_FOUND);
+			}
+			else {
+				//Incubee incubee = DynamoDBAdaptor.getIncubee(user.getCompany_id());
+				response.setStatusCode(LoginResponse.SUCCESS);
+				response.setStatusMessage("Success");
+				Map<String, Object> map = new HashMap<String,Object>();
+				map.put("company_id", user.getCompany_id());
+				response.setServicedata(map);
+				//return new ResponseEntity<String>("{\"company_id\":\""+user.getCompany_id()+"\"}", HttpStatus.OK);
+				return new ResponseEntity<LoginResponse>(response, HttpStatus.OK);
 			}
 		}
 		// DynamoDBAdaptor.getIncubee(incubee_id);
-		return new ResponseEntity<String>("OK", HttpStatus.OK);
+		response.setStatusCode(LoginResponse.TOKEN_NOT_FOUND);
+		response.setStatusMessage("Token not found");
+		return new ResponseEntity<LoginResponse>(response, HttpStatus.BAD_REQUEST);
 	}
 
-	private boolean createNewIncubee(IncubeeRequest incubee, String uuid) {
+	private boolean createOrUpdateIncubee(IncubeeRequest incubee, String uuid) {
 		boolean isCreated = false;
 		logger.info("Creating new Incubee : " + incubee + " with id :" + uuid);
 		String[] keyList = null;
@@ -118,7 +139,8 @@ public class SignupController {
 			keyList = new String[fileList.length];
 			for (int i = 0; i < fileList.length; i++) {
 				try {
-					keyList[i] = adaptor.uploadFile(fileList[i], "img");
+					if(!fileList[i].isEmpty())
+						keyList[i] = adaptor.uploadFile(fileList[i], "img");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -132,7 +154,8 @@ public class SignupController {
 			MultipartFile file = incubee.getVideo();
 			if (file != null) {
 				try {
-					video = adaptor.uploadFile(file, "vid");
+					if(!file.isEmpty())
+						video = adaptor.uploadFile(file, "vid");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -140,8 +163,13 @@ public class SignupController {
 				}
 			}
 		}
-		DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList,
+		if(incubee.getId()!=null){
+			DynamoDBAdaptor.updateIncubee(Utils.fromIncubeeRequest(incubee, keyList,
+				video, incubee.getId()));
+		} else{
+			DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList,
 				video, uuid));
+		}
 		// check if user already has a company associated to his account.
 		isCreated = true;
 		logger.info("Incubee Created : " + incubee.getCompany_name());

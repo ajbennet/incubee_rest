@@ -21,7 +21,10 @@ import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.TableCollection;
+import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -30,12 +33,12 @@ import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 
 import ee.incub.rest.spring.model.Incubee;
-import ee.incub.rest.spring.model.Token;
 import ee.incub.rest.spring.model.User;
 import ee.incub.rest.spring.utils.Constants;
 import ee.incub.rest.spring.utils.Utils;
@@ -103,7 +106,6 @@ public class DynamoDBAdaptor {
 		}
 
 	}
-	
 
 	public static boolean createUser(User user) {
 
@@ -114,10 +116,10 @@ public class DynamoDBAdaptor {
 			logger.debug("Adding data to " + Constants.USER_TABLE);
 
 			Item item = new Item()
-					.withPrimaryKey("id", user.getId())
+					.withPrimaryKey("id", user.getHandle_id())
 					.withString("handle_id", user.getHandle_id())
 					.withString("img_url", user.getImage_url())
-					.withString("compnay_id", user.getCompany_id())
+					.withString("company_id", user.getCompany_id())
 					.withString("email", user.getEmail())
 					.withString("name", user.getName())
 					.withString("login_type", user.getLogin_type())
@@ -136,44 +138,45 @@ public class DynamoDBAdaptor {
 		return false;
 	}
 
-//	public static Incubee getIncubee(String incubee_id) {
-//		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
-//		QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
-//				"id = :v1 ").withValueMap(
-//				new ValueMap().withString(":v1", incubee_id))
-//		// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
-//		;
-//		ItemCollection<QueryOutcome> items = table.query(querySpec);
-//		Iterator<Item> iterator = items.iterator();
-//
-//		System.out.println("Query: printing results...");
-//		Incubee incubee = null;
-//		while (iterator.hasNext()) {
-//			if (incubee == null) {
-//				incubee = new Incubee();
-//			}
-//			Item item = iterator.next();
-//			logger.info("Incubee from DB for company: " + incubee_id + " - "
-//					+ item.toJSONPretty());
-//
-//			incubee.setCompany_name(item.getString("incubee_id"));
-//			incubee.setCompany_url(item.getString("company_url"));
-//			incubee.setImages((String[]) item.getStringSet("photos").toArray());
-//			incubee.setHigh_concept(item.getString("high_concept"));
-//			incubee.setDescription(item.getString("description"));
-//			incubee.setVideo(item.getString("video"));
-//			incubee.setFounder(item.getString("founder"));
-//			incubee.setLogo_url(item.getString("logo_url"));
-//			incubee.setTwitter_url(item.getString("twitter_url"));
-//			incubee.setLocation(item.getString("location"));
-//			incubee.setVideo_url(item.getString("video_url"));
-//			incubee.setFunding(item.getBoolean("funding"));
-//			incubee.setProject_status(item.getString("project_status"));
-//			incubee.setField(item.getString("field"));
-//
-//		}
-//		return incubee;
-//	}
+	// public static Incubee getIncubee(String incubee_id) {
+	// Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+	// QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+	// "id = :v1 ").withValueMap(
+	// new ValueMap().withString(":v1", incubee_id))
+	// //
+	// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
+	// ;
+	// ItemCollection<QueryOutcome> items = table.query(querySpec);
+	// Iterator<Item> iterator = items.iterator();
+	//
+	// System.out.println("Query: printing results...");
+	// Incubee incubee = null;
+	// while (iterator.hasNext()) {
+	// if (incubee == null) {
+	// incubee = new Incubee();
+	// }
+	// Item item = iterator.next();
+	// logger.info("Incubee from DB for company: " + incubee_id + " - "
+	// + item.toJSONPretty());
+	//
+	// incubee.setCompany_name(item.getString("incubee_id"));
+	// incubee.setCompany_url(item.getString("company_url"));
+	// incubee.setImages((String[]) item.getStringSet("photos").toArray());
+	// incubee.setHigh_concept(item.getString("high_concept"));
+	// incubee.setDescription(item.getString("description"));
+	// incubee.setVideo(item.getString("video"));
+	// incubee.setFounder(item.getString("founder"));
+	// incubee.setLogo_url(item.getString("logo_url"));
+	// incubee.setTwitter_url(item.getString("twitter_url"));
+	// incubee.setLocation(item.getString("location"));
+	// incubee.setVideo_url(item.getString("video_url"));
+	// incubee.setFunding(item.getBoolean("funding"));
+	// incubee.setProject_status(item.getString("project_status"));
+	// incubee.setField(item.getString("field"));
+	//
+	// }
+	// return incubee;
+	// }
 
 	public static User getUser(String user_id) {
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
@@ -213,12 +216,12 @@ public class DynamoDBAdaptor {
 		}
 
 	}
-	
+
 	public static User getUserForHandle(String handle_id) {
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
-					"handle_id = :v1 ").withValueMap(
+					"id = :v1 ").withValueMap(
 					new ValueMap().withString(":v1", handle_id))
 			// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
 			;
@@ -252,12 +255,12 @@ public class DynamoDBAdaptor {
 		}
 
 	}
-	
+
 	public static Incubee getIncubee(String incubee_id) {
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
-					"incubee_id = :v1 ").withValueMap(
+					"id = :v1 ").withValueMap(
 					new ValueMap().withString(":v1", incubee_id))
 			// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
 			;
@@ -267,11 +270,11 @@ public class DynamoDBAdaptor {
 			System.out.println("Query: printing results...: ");
 			Incubee incubee = null;
 			while (iterator.hasNext()) {
-				
+
 				Item item = iterator.next();
-				logger.info("Incubee from DB for incubee_id: " + incubee_id + " - "
-						+ item.toJSONPretty());
-				incubee= Utils.fromItem(item);
+				logger.info("Incubee from DB for incubee_id: " + incubee_id
+						+ " - " + item.toJSONPretty());
+				incubee = Utils.fromItem(item);
 
 			}
 			return incubee;
@@ -280,15 +283,15 @@ public class DynamoDBAdaptor {
 			return null;
 		}
 	}
-	
+
 	public static List<Incubee> getAllIncubees() {
-		long twoWeeksAgoMilli = (new Date()).getTime()
-				- (15L * 24L * 60L * 60L * 1000L);
-		Date twoWeeksAgo = new Date();
-		twoWeeksAgo.setTime(twoWeeksAgoMilli);
-		SimpleDateFormat df = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		String twoWeeksAgoStr = df.format(twoWeeksAgo);
+//		long twoWeeksAgoMilli = (new Date()).getTime()
+//				- (15L * 24L * 60L * 60L * 1000L);
+//		Date twoWeeksAgo = new Date();
+//		twoWeeksAgo.setTime(twoWeeksAgoMilli);
+//		SimpleDateFormat df = new SimpleDateFormat(
+//				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//		String twoWeeksAgoStr = df.format(twoWeeksAgo);
 
 		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
 				new ProfileCredentialsProvider());
@@ -297,7 +300,7 @@ public class DynamoDBAdaptor {
 		List<Incubee> list = new ArrayList<Incubee>();
 		ScanResult result = client.scan(scanRequest);
 		for (Map<String, AttributeValue> item : result.getItems()) {
-				list.add(Utils.fromItem(item));
+			list.add(Utils.fromItem(item));
 		}
 		logger.info("Incubee List :" + list);
 		return list;
@@ -327,7 +330,6 @@ public class DynamoDBAdaptor {
 			createIncubeeTable();
 		}
 	}
-	
 
 	static void createUserTable() {
 		String tableName = Constants.USER_TABLE;
@@ -401,6 +403,63 @@ public class DynamoDBAdaptor {
 
 	}
 
+	public static void updateIncubee( Incubee incubee) {
+
+	        Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+
+	        try {
+
+	        	NameMap nameMap = new NameMap().with("#loc", "location");
+	        	ValueMap valueMap = new ValueMap()
+	                .with(":company_name", incubee.getCompany_name())
+	                .with(":company_url", incubee.getCompany_url())
+	                .with(":logo_url", incubee.getLogo_url())
+	                .with(":location", incubee.getLocation())
+	                .with(":high_concept", incubee.getHigh_concept())
+	                .with(":description", incubee.getDescription())
+	                .with(":field", incubee.getField())
+	                .with(":twitter_url",incubee.getTwitter_url())
+	                .with(":project_status",incubee.getProject_status())
+	                .with(":video_url", incubee.getVideo_url())
+	                .withBoolean(":funding", incubee.isFunding());
+	        	if(incubee.getImages()!=null){
+	        		valueMap.withStringSet(":photos", incubee.getImages());
+	        	}	
+	        	if(incubee.getVideo()!=null){
+	        		valueMap.with(":video", incubee.getVideo());
+	        	}
+	            UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+		            .withPrimaryKey("id", incubee.getId())
+		            .withReturnValues(ReturnValue.ALL_NEW)
+		            .withUpdateExpression("set funding=:funding "
+		            		+ ",company_name = :company_name"
+		            		+ ",company_url = :company_url "
+		            		+ ",logo_url = :logo_url "
+		            		+ ",#loc = :location "
+		            		+ ",high_concept = :high_concept "
+		            		+ ",description = :description "
+		            		+ ",field = :field "
+		            		+ ",twitter_url =  :twitter_url "
+		            		+ ",project_status = :project_status "
+		            		+ ",video_url = :video_url "
+		            		+ ",photos = :photos "
+		            		+ ",video = :video")
+		            .withNameMap(nameMap)
+		            .withValueMap(valueMap)
+	            ;
+
+	            UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+
+	            // Check the response.
+	            logger.info("Printing item after updating it");
+	            logger.info(outcome.getItem().toJSONPretty());
+
+	        } catch (Exception e) {
+	            logger.error("Error updating item in " + Constants.INCUBEE_TABLE);
+	            logger.error(e.getMessage());
+	        }
+	    }
+
 	static void getTableInformation(String tableName) {
 
 		System.out.println("Describing " + tableName);
@@ -416,5 +475,45 @@ public class DynamoDBAdaptor {
 				tableDescription.getProvisionedThroughput()
 						.getWriteCapacityUnits());
 	}
+
+	// public static Incubee getIncubee(String incubee_id) {
+	// Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+	// QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+	// "id = :v1 ").withValueMap(
+	// new ValueMap().withString(":v1", incubee_id))
+	// //
+	// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
+	// ;
+	// ItemCollection<QueryOutcome> items = table.query(querySpec);
+	// Iterator<Item> iterator = items.iterator();
+	//
+	// System.out.println("Query: printing results...");
+	// Incubee incubee = null;
+	// while (iterator.hasNext()) {
+	// if (incubee == null) {
+	// incubee = new Incubee();
+	// }
+	// Item item = iterator.next();
+	// logger.info("Incubee from DB for company: " + incubee_id + " - "
+	// + item.toJSONPretty());
+	//
+	// incubee.setCompany_name(item.getString("incubee_id"));
+	// incubee.setCompany_url(item.getString("company_url"));
+	// incubee.setImages((String[]) item.getStringSet("photos").toArray());
+	// incubee.setHigh_concept(item.getString("high_concept"));
+	// incubee.setDescription(item.getString("description"));
+	// incubee.setVideo(item.getString("video"));
+	// incubee.setFounder(item.getString("founder"));
+	// incubee.setLogo_url(item.getString("logo_url"));
+	// incubee.setTwitter_url(item.getString("twitter_url"));
+	// incubee.setLocation(item.getString("location"));
+	// incubee.setVideo_url(item.getString("video_url"));
+	// incubee.setFunding(item.getBoolean("funding"));
+	// incubee.setProject_status(item.getString("project_status"));
+	// incubee.setField(item.getString("field"));
+	//
+	// }
+	// return incubee;
+	// }
 
 }

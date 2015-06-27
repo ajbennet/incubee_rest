@@ -583,7 +583,7 @@
 												<label class="form-label">Company Name</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="company_name" class="form-control"
+												<input type="text" id="company_name" name="company_name" class="form-control"
 													placeholder="Company Name">
 											</div>
 										</div>
@@ -594,7 +594,7 @@
 												<label class="form-label">Company URL</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="company_url" class="form-control"
+												<input type="text" id="company_url" name="company_url" class="form-control"
 													placeholder="Company URL">
 											</div>
 										</div>
@@ -605,7 +605,7 @@
 												<label class="form-label">Logo URL</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="logo_url" class="form-control"
+												<input type="text" id="logo_url" name="logo_url" class="form-control"
 													placeholder="Logo URL">
 											</div>
 										</div>
@@ -617,7 +617,7 @@
 											</div>
 											<div class="col-xs-9">
 												<textarea cols="30" rows="3" class="form-control"
-													name="high_concept"
+													id="high_concept" name="high_concept"
 													placeholder="High concept or a brief description"></textarea>
 											</div>
 										</div>
@@ -629,7 +629,7 @@
 											</div>
 											<div class="col-xs-9">
 												<textarea cols="30" rows="10" class="form-control"
-													name="description"
+													id="description" name="description"
 													placeholder="Description about the company/product"></textarea>
 											</div>
 										</div>
@@ -640,7 +640,7 @@
 												<label class="form-label">Twitter URL</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="twitter_url" class="form-control"
+												<input type="text" id="twitter_url"  name="twitter_url" class="form-control"
 													placeholder="Twitter URL">
 											</div>
 										</div>
@@ -651,7 +651,7 @@
 												<label class="form-label">Video URL</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="video_url" class="form-control"
+												<input type="text" id="video_url" name="video_url" class="form-control"
 													placeholder="Video URL">
 											</div>
 										</div>
@@ -662,7 +662,7 @@
 												<label class="form-label">Location</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="location" class="form-control"
+												<input type="text" id="location" name="location" class="form-control"
 													placeholder="Location">
 											</div>
 										</div>
@@ -673,7 +673,7 @@
 												<label class="form-label">Founder </label>
 											</div>
 											<div class="col-xs-9">
-												<input type="textarea" name="founder" class="form-control"
+												<input type="textarea" id="founder" name="founder" class="form-control"
 													placeholder="Information about the founder">
 											</div>
 										</div>
@@ -684,7 +684,7 @@
 												<label class="form-label">Field</label>
 											</div>
 											<div class="col-xs-9">
-												<input type="text" name="field" class="form-control"
+												<input type="text" id="field" name="field" class="form-control"
 													placeholder="Field">
 											</div>
 										</div>
@@ -751,6 +751,7 @@
 										<div class="g-signin2" data-onsuccess="onSignIn"></div>
 									</div>
 									<input	type="hidden" name="token" id="token">
+									<input	type="hidden" name="id" id="id">
 									<div class="form-group"></div>
 									<button type="submit" class="btn btn-primary btn-lg">Submit</button>
 								</form>
@@ -879,24 +880,7 @@
 			event.preventDefault();
 			//grab all form data  
 			var formData = new FormData(this);
-			// add files 
-			/* var files = document.getElementById("file-3").files;
-			var i = 0, len = files.length, img, reader, file;
-
-			for (; i < len; i++) {
-				file = files[i];
-
-				if (window.FileReader) {
-					reader = new FileReader();
-					reader.onloadend = function(e) {
-					};
-					reader.readAsDataURL(file);
-				}
-				if (formData) {
-					formData.append("images", file);
-				}
-			} */
-
+			
 			$.ajax({
 				url : 'rest/handle',
 				type : 'POST',

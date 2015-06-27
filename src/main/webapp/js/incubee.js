@@ -36,14 +36,52 @@ function login(token){
 		data: JSON.stringify(token),
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
-		async : false,
+		async : true,
 		cache : false,
 		processData : false,
-		success : function() {
-			alert('Form Submitted!');
+		success : function(data) {
+			//alert('Form Submitted!' + data);
+			console.log("retrieved " + data);
+			if(data && data.servicedata && data.servicedata.company_id){
+				getCompany(data.servicedata.company_id);
+			}
 		},
-		error : function() {
-			alert("error in ajax form submission");
+		error : function(data) {
+			console.error("error in login form submission" + data);
 		}
 	});
 };
+
+function getCompany(id){
+	$.ajax({
+		url : 'rest/'+id,
+		type : 'GET',
+		async : true,
+		cache : false,
+		processData : false,
+		success : function(data) {
+			if(data){
+				console.log("retrieved Company" + data.company_name);
+				document.getElementById("company_name").value=data.company_name;
+				document.getElementById("company_url").value=data.company_url;
+				document.getElementById("field").value=data.field;
+				document.getElementById("founder").value=data.founder;
+				document.getElementById("logo_url").value=data.logo_url;
+				document.getElementById("high_concept").value=data.high_concept;
+				document.getElementById("description").value=data.description;
+				if (data.funding)
+					document.getElementById("funding").value="Yes";
+				else
+					document.getElementById("funding").value="No";
+				document.getElementById("project_status").value=data.project_status;
+				document.getElementById("location").value=data.location;
+				document.getElementById("twitter_url").value=data.twitter_url;
+				document.getElementById("video_url").value=data.video_url;
+				document.getElementById("id").value=data.id;
+			}
+		},
+		error : function(data) {
+			console.error("error in ajax form submission" + data);
+		}
+	});
+}
