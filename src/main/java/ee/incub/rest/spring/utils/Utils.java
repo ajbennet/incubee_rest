@@ -41,11 +41,13 @@ public class Utils {
 			if (images!=null ){
 				String[] tempImages = new String[images.length];
 				for (int i = 0; i < images.length; i++) {
-					tempImages[i]=Constants.S3_IMAGE_URL+images[i];
+					if(images[i]!=null)
+						tempImages[i]=Constants.S3_IMAGE_URL+images[i];
 				}
 				incubee.setImages(tempImages);
 			}
-			incubee.setVideo(Constants.S3_IMAGE_URL+video);
+			
+			incubee.setVideo((video!=null?Constants.S3_IMAGE_URL+video:null));
 			return incubee;	
 		}
 	}

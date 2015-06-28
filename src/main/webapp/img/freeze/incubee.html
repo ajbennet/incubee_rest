@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://localhost:8080/incubee/index.html# -->
+<html lang="en" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" data-ember-extension="1"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>incubee</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="google-signin-client_id" content="1079218369753-3fg9sou40kdrjb5hsfnm0oo9jj0dok9a.apps.googleusercontent.com">
+<link rel="shortcut icon" href="http://localhost:8080/incubee/favicon.png">
+<link rel="stylesheet" href="http://localhost:8080/incubee/css/animate.css">
+<link rel="stylesheet" href="http://localhost:8080/incubee/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://localhost:8080/incubee/css/slick.css">
+<link rel="stylesheet" href="http://localhost:8080/incubee/js/rs-plugin/css/settings.css">
+<link rel="stylesheet" href="http://localhost:8080/incubee/css/bootstrap.css">
+<link rel="stylesheet" href="http://localhost:8080/incubee/css/incubee.css">
+
+
+<script src="./incubee_files/cb=gapi.loaded_0" async=""></script><script type="text/javascript" src="./incubee_files/modernizr.custom.32033.js"></script>
+
+
+<link href="./incubee_files/fileinput.css" media="all" rel="stylesheet" type="text/css">
+<script src="./incubee_files/jquery.min.js"></script>
+<script src="./incubee_files/fileinput.js" type="text/javascript"></script>
+<script src="./incubee_files/platform.js" async="" defer="" gapi_processed="true"></script>
+<script src="./incubee_files/bootstrap.min.js" type="text/javascript"></script>
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<style>.abcRioButton{border:1px solid #d5d5d5;border:1px solid rgba(0,0,0,.17);-webkit-border-radius:2px;border-radius:2px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.05);box-shadow:0 1px 0 rgba(0,0,0,.05);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s,box-shadow .218s;transition:background-color .218s,border-color .218s,box-shadow .218s;-webkit-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;color:#262626;cursor:pointer;outline:none;overflow:hidden;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}.abcRioButton:hover{border:1px solid #aaa;border:1px solid rgba(0,0,0,.25);-webkit-box-shadow:0 1px 0 rgba(0,0,0,.1);box-shadow:0 1px 0 rgba(0,0,0,.1)}.abcRioButton:active{background-color:#e5e5e5;border:1px solid #aaa;border:1px solid rgba(0,0,0,.25);-webkit-box-shadow:inset 0 1px 0 #ddd;box-shadow:inset 0 1px 0 #ddd;color:#262626}.abcRioButtonLightGray{background-color:#f5f5f5;color:#262626}.abcRioButtonLightGray:active{background-color:#e5e5e5;color:#262626}.abcRioButtonGreen,.abcRioButtonRed,.abcRioButtonBlue,.abcRioButtonDarkGray{border:none;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.1);box-shadow:0 1px 0 rgba(0,0,0,.1);color:#fff}.abcRioButtonGreen:hover,.abcRioButtonRed:hover,.abcRioButtonBlue:hover,.abcRioButtonDarkGray:hover{border:none;-webkit-box-shadow:inset 0 -2px 0 rgba(0,0,0,.2);box-shadow:inset 0 -2px 0 rgba(0,0,0,.2);color:#fff}.abcRioButtonGreen:active,.abcRioButtonRed:active,.abcRioButtonBlue:active,.abcRioButtonDarkGray:active{border:none;-webkit-box-shadow:inset 0 2px 0 rgba(0,0,0,.2);box-shadow:inset 0 2px 0 rgba(0,0,0,.2);color:#fff}.abcRioButtonGreen{background-color:#53a93f}.abcRioButtonGreen:hover{background-color:#65b045}.abcRioButtonGreen:active{background-color:#3e802f}.abcRioButtonRed{background-color:#dd4b39}.abcRioButtonRed:hover{background-color:#e74b37}.abcRioButtonRed:active{background-color:#be3e2e}.abcRioButtonBlue{background-color:#427fed}.abcRioButtonBlue:hover{background-color:#4285f4}.abcRioButtonBlue:active{background-color:#2c56b1}.abcRioButtonDarkGray{background-color:#737373}.abcRioButtonDarkGray:hover{background-color:gray}.abcRioButtonDarkGray:active{background-color:#404040}.abcRioButtonGrayedOut,.abcRioButtonGrayedOut:hover,.abcRioButtonGrayedOut:active{background-color:#e5e5e5;border:none;-webkit-box-shadow:none;box-shadow:none;color:#aaa}.abcRioButtonIcon{float:left}.abcRioButtonSvg{display:block}.abcRioButtonIconImage{fill:#dd4b38}.abcRioButtonGreen .abcRioButtonIconImage,.abcRioButtonRed .abcRioButtonIconImage,.abcRioButtonBlue .abcRioButtonIconImage,.abcRioButtonDarkGray .abcRioButtonIconImage,.abcRioButtonGrayedOut .abcRioButtonIconImage{fill:#fff}.abcRioButtonLightBlue .abcRioButtonIconImage{fill:#427fed}.abcRioButtonContents{font-family:Roboto,arial,sans-serif;font-size:12px;font-weight:700;margin-left:6px;margin-right:6px;vertical-align:top}.abcRioButtonContentWrapper{height:100%;width:100%}.abcRioButtonGreen .abcRioButtonContentWrapper,.abcRioButtonRed .abcRioButtonContentWrapper,.abcRioButtonBlue .abcRioButtonContentWrapper,.abcRioButtonDarkGray .abcRioButtonContentWrapper,.abcRioButtonGrayedOut .abcRioButtonContentWrapper{border:1px solid transparent}.abcRioButtonErrorWrapper,.abcRioButtonWorkingWrapper{display:none;height:100%;width:100%}.abcRioButtonErrorIcon,.abcRioButtonWorkingIcon{margin-left:auto;margin-right:auto}.abcRioButtonErrorState,.abcRioButtonWorkingState{border:1px solid #d5d5d5;border:1px solid rgba(0,0,0,.17);-webkit-box-shadow:0 1px 0 rgba(0,0,0,.05);box-shadow:0 1px 0 rgba(0,0,0,.05);color:#262626}.abcRioButtonErrorState:hover,.abcRioButtonWorkingState:hover{border:1px solid #aaa;border:1px solid rgba(0,0,0,.25);-webkit-box-shadow:0 1px 0 rgba(0,0,0,.1);box-shadow:0 1px 0 rgba(0,0,0,.1)}.abcRioButtonErrorState:active,.abcRioButtonWorkingState:active{border:1px solid #aaa;border:1px solid rgba(0,0,0,.25);-webkit-box-shadow:inset 0 1px 0 #ddd;box-shadow:inset 0 1px 0 #ddd;color:#262626}.abcRioButtonWorkingState,.abcRioButtonWorkingState:hover{background-color:#f5f5f5}.abcRioButtonWorkingState:active{background-color:#e5e5e5}.abcRioButtonErrorState,.abcRioButtonErrorState:hover{background-color:#fff}.abcRioButtonErrorState:active{background-color:#e5e5e5}.abcRioButtonWorkingState .abcRioButtonWorkingWrapper,.abcRioButtonErrorState .abcRioButtonErrorWrapper{display:block}.abcRioButtonErrorState .abcRioButtonContentWrapper,.abcRioButtonWorkingState .abcRioButtonContentWrapper,.abcRioButtonErrorState .abcRioButtonWorkingWrapper{display:none}.-webkit-keyframes abcRioButtonWorkingIconPathSpinKeyframes{0%{-webkit-transform:rotate(0)}} </style></head>
+
+<body>
+
+	<div class="pre-loader" style="display: none;">
+		<div class="load-con">
+			<img src="./incubee_files/logo.png" class="animated fadeInDown" alt="">
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+		</div>
+	</div>
+
+	<header>
+
+		<nav class="navbar navbar-default navbar-fixed-top scrolled" role="navigation">
+			<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="fa fa-bars fa-lg"></span>
+					</button>
+					<a class="navbar-brand" href="http://localhost:8080/incubee/index.html"> <img src="./incubee_files/logo.png" alt="" class="logo">
+					</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+					<ul class="nav navbar-nav navbar-right">
+
+						<li><a href="http://localhost:8080/incubee/index.html#features">features</a></li>
+						<li><a href="http://localhost:8080/incubee/index.html#reviews">reviews</a></li>
+						<li id="sign-up"><a href="http://localhost:8080/incubee/index.html#signup"><div class="avatar-frame" style="background-image:url(https://lh4.googleusercontent.com/-CL6coBFm9VE/AAAAAAAAAAI/AAAAAAAAHCk/ngCxGax3Tcc/photo.jpg?sz=40);margin-left: auto;margin-right: auto;"></div></a></li>
+						<li><a href="http://localhost:8080/incubee/index.html#getApp">getapp</a></li>
+
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-->
+		</nav>
+
+
+		<!--RevSlider-->
+		<div class="tp-banner-container" style="max-height: none; overflow: visible; height: 638px;">
+			<div class="tp-banner revslider-initialised tp-simpleresponsive" id="revslider-671" style="height: 100%; max-height: none;">
+				<ul style="display: block; overflow: hidden; width: 100%; height: 100%; max-height: none;">
+					<!-- SLIDE  -->
+					<li data-transition="fade" data-slotamount="7" data-masterspeed="1500" style="width: 100%; height: 100%; overflow: hidden; visibility: visible; left: 0px; top: 0px; z-index: 20; opacity: 1;">
+						<!-- MAIN IMAGE --> <div class="slotholder" style="width:100%;height:100%;" data-duration="undefined" data-zoomstart="undefined" data-zoomend="undefined" data-rotationstart="undefined" data-rotationend="undefined" data-ease="undefined" data-bgpositionend="undefined" data-bgposition="left top" data-kenburns="undefined" data-easeme="undefined" data-bgfit="cover" data-bgfitend="undefined" data-owidth="undefined" data-oheight="undefined"><div class="tp-bgimg defaultimg" data-lazyload="undefined" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat" data-lazydone="undefined" src="img/transparent.png" data-src="img/transparent.png" style="width: 100%; height: 100%; opacity: 1; position: relative; background-image: url(http://localhost:8080/incubee/img/transparent.png); background-color: rgba(0, 0, 0, 0); background-size: cover; background-position: 0% 0%; background-repeat: no-repeat;"></div></div> <!-- LAYERS --> <!-- LAYER NR. 1 -->
+						<div class="tp-caption lfl fadeout hidden-xs start" data-x="left" data-y="bottom" data-hoffset="30" data-voffset="0" data-speed="500" data-start="700" data-easing="Power4.easeOut" style="left: 6.08654394039009px; top: 462.686324786325px; visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.0025, 0, 0, 0, 1); -webkit-transform: none;">
+							<img src="./incubee_files/hand-freeze.png" alt="" style="width: 0px; height: 0px;">
+						</div>
+
+						<div class="tp-caption lfl fadeout visible-xs start" data-x="left" data-y="center" data-hoffset="700" data-voffset="0" data-speed="500" data-start="700" data-easing="Power4.easeOut" style="left: 142.019358609102px; top: 206.5px; visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.0025, 0, 0, 0, 1); -webkit-transform: none;">
+							<img src="./incubee_files/iphone-freeze.png" alt="" style="width: 102.697435897436px; height: 225.213675213675px;">
+						</div>
+
+						<div class="tp-caption large_white_bold sft start" data-x="550" data-y="center" data-hoffset="0" data-voffset="-80" data-speed="500" data-start="1200" data-easing="Power4.easeOut" style="-webkit-transition: all 0s ease 0s; transition: all 0s ease 0s; min-height: 0px; min-width: 0px; line-height: 41px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-size: 29px; left: 247.735042735043px; top: 262.465811965812px; visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.0025, 0, 0, 0, 1); -webkit-transform: none;">
+							incubee</div>
+
+						<div class="tp-caption large_white_light sfb start" data-x="550" data-y="center" data-hoffset="0" data-voffset="0" data-speed="1000" data-start="1500" data-easing="Power4.easeOut" style="-webkit-transition: all 0s ease 0s; transition: all 0s ease 0s; min-height: 0px; min-width: 0px; line-height: 41px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-size: 29px; left: 247.735042735043px; top: 298.5px; visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.0025, 0, 0, 0, 1); -webkit-transform: none;">
+							A startup hive</div>
+
+						<div class="tp-caption sfb hidden-xs start" data-x="550" data-y="center" data-hoffset="0" data-voffset="85" data-speed="1000" data-start="1700" data-easing="Power4.easeOut" style="-webkit-transition: all 0s ease 0s; transition: all 0s ease 0s; min-height: 0px; min-width: 0px; line-height: 9px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-size: 6px; left: 247.735042735043px; top: 357.286324786325px; visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.0025, 0, 0, 0, 1); -webkit-transform: none;">
+							<a href="http://localhost:8080/incubee/index.html#features" class="btn btn-primary inverse btn-lg">Learn
+								More</a>
+						</div>
+						<div class="tp-caption sfr hidden-xs start" data-x="730" data-y="center" data-hoffset="0" data-voffset="85" data-speed="1500" data-start="1900" data-easing="Power4.easeOut" style="-webkit-transition: all 0s ease 0s; transition: all 0s ease 0s; min-height: 0px; min-width: 0px; line-height: 9px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-size: 6px; left: 328.811965811966px; top: 357.286324786325px; visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.0025, 0, 0, 0, 1); -webkit-transform: none;">
+							<a href="http://localhost:8080/incubee/index.html#getApp" class="btn btn-default btn-lg">Get App</a>
+						</div>
+					</li>
+				</ul>
+			<div class="tp-loader spinner0" style="visibility: hidden; opacity: 0;"><div class="dot1"></div><div class="dot2"></div><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div><div class="tp-bannertimer" style="visibility: hidden; width: 0%;"></div></div>
+		</div>
+	</header>
+
+
+	<div class="wrapper">
+
+		<section id="features">
+			<div class="container">
+				<div class="section-heading scrollpoint sp-effect3 active animated fadeInDown">
+					<h1>Features</h1>
+					<div class="divider"></div>
+					<p>Promote your startup/product on incubee</p>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-sm-4 scrollpoint sp-effect1 active animated fadeInLeft">
+						<div class="media media-left feature">
+							<a class="pull-right" href="./incubee_files/incubee.html"> <i class="fa fa-cogs fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">User Settings</h3>
+								Personalized setting for every user
+							</div>
+						</div>
+						<div class="media media-left feature">
+							<a class="pull-right" href="./incubee_files/incubee.html"> <i class="fa fa-envelope fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Messages Inbox</h3>
+								Messages from real users about your product
+							</div>
+						</div>
+						<div class="media media-left feature">
+							<a class="pull-right" href="./incubee_files/incubee.html"> <i class="fa fa-users fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">User Feedback</h3>
+								Get user feedback even before your startup hits market.
+							</div>
+						</div>
+						<div class="media media-left feature">
+							<a class="pull-right" href="./incubee_files/incubee.html"> <i class="fa fa-comments fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Live Chat Messages</h3>
+								Live chat with the founders
+							</div>
+						</div>
+						<div class="media media-left feature">
+							<a class="pull-right" href="./incubee_files/incubee.html"> <i class="fa fa-search fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Search</h3>
+								Search for startups of interest.
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4">
+						<img src="./incubee_files/iphone-freeze.png" class="img-responsive scrollpoint sp-effect5 active animated fadeInUp" alt="">
+					</div>
+					<div class="col-md-4 col-sm-4 scrollpoint sp-effect2 active animated fadeInRight">
+						<div class="media feature">
+							<a class="pull-left" href="./incubee_files/incubee.html"> <i class="fa fa-map-marker fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Location based Search</h3>
+								Look for startups in a particular location
+							</div>
+						</div>
+						<div class="media feature">
+							<a class="pull-left" href="./incubee_files/incubee.html"> <i class="fa fa-film fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Video Pitch</h3>
+								Upload a video pitch for the startup
+							</div>
+						</div>
+						<div class="media feature">
+							<a class="pull-left" href="./incubee_files/incubee.html"> <i class="fa fa-compass fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Intuitive Statistics</h3>
+								Get user statistics that can help drive your startup direction.
+							</div>
+						</div>
+						<div class="media feature">
+							<a class="pull-left" href="./incubee_files/incubee.html"> <i class="fa fa-share-alt fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Share</h3>
+								Share the startups you like in your social media.
+							</div>
+						</div>
+						<div class="media active feature">
+							<a class="pull-left" href="./incubee_files/incubee.html"> <i class="fa fa-plus fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">And much more!</h3>
+								Lots more features to come.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="reviews">
+			<div class="container">
+				<div class="section-heading inverse scrollpoint sp-effect3 active animated fadeInDown">
+					<h1>Reviews</h1>
+					<div class="divider"></div>
+					<p>Read What's The People Are Saying About Us</p>
+				</div>
+				<div class="row">
+					<div class="col-md-10 col-md-push-1 scrollpoint sp-effect3 active animated fadeInDown">
+						<div class="review-filtering slick-initialized slick-slider">
+							<div class="slick-list draggable" tabindex="0"><div class="slick-track" style="opacity: 1; width: 2485px; -webkit-transform: translate3d(-1491px, 0px, 0px);"><div class="review rollitin slick-slide slick-cloned" style="width: 497px;">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="review-person">
+											<img src="./incubee_files/93.jpg" alt="" class="img-responsive">
+										</div>
+									</div>
+									<div class="col-md-10">
+										<div class="review-comment">
+											<h3>“Keep It Up Guys Your Work Rules, Cheers :)”</h3>
+											<p>
+												- Theodore Cyril <span> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i> <i class="fa fa-star-half-o fa-lg"></i> <i class="fa fa-star-o fa-lg"></i>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div><div class="review slick-slide" style="width: 497px;">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="review-person">
+											<img src="./incubee_files/94.jpg" alt="" class="img-responsive">
+										</div>
+									</div>
+									<div class="col-md-10">
+										<div class="review-comment">
+											<h3>“I love incubee, I highly recommend it, Everyone Try
+												It Now”</h3>
+											<p>
+												- Vidya Kumar <span> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star-o fa-lg"></i>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div><div class="review rollitin slick-slide" style="width: 497px;">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="review-person">
+											<img src="./incubee_files/70.jpg" alt="" class="img-responsive">
+										</div>
+									</div>
+									<div class="col-md-10">
+										<div class="review-comment">
+											<h3>“Incubee app is the best app for checking out
+												startups in the market”</h3>
+											<p>
+												- Ryan Winkler <span> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i> <i class="fa fa-star-half-o fa-lg"></i> <i class="fa fa-star-o fa-lg"></i>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div><div class="review rollitin slick-slide slick-active" style="width: 497px;">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="review-person">
+											<img src="./incubee_files/93.jpg" alt="" class="img-responsive">
+										</div>
+									</div>
+									<div class="col-md-10">
+										<div class="review-comment">
+											<h3>“Keep It Up Guys Your Work Rules, Cheers :)”</h3>
+											<p>
+												- Theodore Cyril <span> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i> <i class="fa fa-star-half-o fa-lg"></i> <i class="fa fa-star-o fa-lg"></i>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div><div class="review slick-slide slick-cloned" style="width: 497px;">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="review-person">
+											<img src="./incubee_files/94.jpg" alt="" class="img-responsive">
+										</div>
+									</div>
+									<div class="col-md-10">
+										<div class="review-comment">
+											<h3>“I love incubee, I highly recommend it, Everyone Try
+												It Now”</h3>
+											<p>
+												- Vidya Kumar <span> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i> <i class="fa fa-star fa-lg"></i>
+													<i class="fa fa-star-o fa-lg"></i>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div></div></div>
+							
+							
+						<ul class="slick-dots" style="display: block;"><li class=""><button type="button">1</button></li><li class=""><button type="button">2</button></li><li class="slick-active"><button type="button">3</button></li></ul></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="screens">
+			<div class="container">
+
+				<div class="section-heading scrollpoint sp-effect3">
+					<h1>Screens</h1>
+					<div class="divider"></div>
+					<p>See what’s included in the App</p>
+				</div>
+
+				<div class="filter scrollpoint sp-effect3">
+					<a href="javascript:void(0)" class="button js-filter-all active">All
+						Screens</a> <a href="javascript:void(0)" class="button js-filter-one">User
+						Profile</a> <a href="javascript:void(0)" class="button js-filter-two">Messaging</a> 
+				</div>
+				<div class="slider filtering scrollpoint sp-effect5 slick-initialized slick-slider">
+					<div class="slick-list draggable" tabindex="0"><div class="slick-track" style="opacity: 1; width: 2490px; -webkit-transform: translate3d(-498px, 0px, 0px);"><div class="one slick-slide slick-cloned" style="width: 249px;">
+						<img src="./incubee_files/location.jpg" alt="">
+						<h4>Location</h4>
+					</div><div class="two slick-slide slick-cloned" style="width: 249px;">
+						<img src="./incubee_files/report.jpg" alt="">
+						<h4>Report</h4>
+					</div><div class="one slick-slide slick-active" style="width: 249px;">
+						<img src="./incubee_files/home.jpg" alt="">
+						<h4>Home</h4>
+					</div><div class="two slick-slide slick-active" style="width: 249px;">
+						<img src="./incubee_files/ftue.jpg" alt="">
+						<h4>Tutorial</h4>
+					</div><div class="three slick-slide" style="width: 249px;">
+						<img src="./incubee_files/login.jpg" alt="">
+						<h4>Login</h4>
+					</div><div class="one slick-slide" style="width: 249px;">
+						<img src="./incubee_files/profile.jpg" alt="">
+						<h4>Profile</h4>
+					</div><div class="one slick-slide" style="width: 249px;">
+						<img src="./incubee_files/location.jpg" alt="">
+						<h4>Location</h4>
+					</div><div class="two slick-slide" style="width: 249px;">
+						<img src="./incubee_files/report.jpg" alt="">
+						<h4>Report</h4>
+					</div><div class="one slick-slide slick-cloned" style="width: 249px;">
+						<img src="./incubee_files/home.jpg" alt="">
+						<h4>Home</h4>
+					</div><div class="two slick-slide slick-cloned" style="width: 249px;">
+						<img src="./incubee_files/ftue.jpg" alt="">
+						<h4>Tutorial</h4>
+					</div></div></div>
+					
+					
+					
+					
+					
+				<button type="button" class="slick-prev" style="display: block;">Previous</button><button type="button" class="slick-next" style="display: block;">Next</button></div>
+			</div>
+		</section>
+
+
+		<section id="getApp">
+			<div class="container-fluid">
+				<div class="section-heading inverse scrollpoint sp-effect3">
+					<h1>Get App</h1>
+					<div class="divider"></div>
+					<p>Choose your native platform and get started!</p>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="hanging-phone scrollpoint sp-effect2 hidden-xs">
+							<img src="./incubee_files/freeze-angled2.png" alt="">
+						</div>
+						<div class="platforms">
+							<a href="./incubee_files/incubee.html" class="btn btn-primary inverse scrollpoint sp-effect1"> <i class="fa fa-android fa-3x pull-left"></i> <span>Download
+									for</span><br> <b>Android</b>
+							</a> <a href="./incubee_files/incubee.html" class="btn btn-primary inverse scrollpoint sp-effect2"> <i class="fa fa-apple fa-3x pull-left"></i> <span>Download
+									for</span><br> <b>Apple IOS</b>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="signup" class="doublediagonal">
+			<div class="container">
+				<div class="section-heading scrollpoint sp-effect3">
+					<h1>Sign-up</h1>
+					<div class="divider"></div>
+					<p>Bring your startup to incubee</p>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-10 col-sm-10 scrollpoint sp-effect1">
+								<form name="signupform" id="signupform" action="javascript:;" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+									<div class="form-group required">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Company Name</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="company_name" name="company_name" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Company URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="company_url" name="company_url" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Logo URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="logo_url" name="logo_url" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group required">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">High concept</label>
+											</div>
+											<div class="col-xs-9">
+												<textarea cols="30" rows="3" class="form-control" id="high_concept" name="high_concept"></textarea>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Description</label>
+											</div>
+											<div class="col-xs-9">
+												<textarea cols="30" rows="10" class="form-control" id="description" name="description"></textarea>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Twitter URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="twitter_url" name="twitter_url" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Video URL</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="video_url" name="video_url" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Location</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="location" name="location" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Founder </label>
+											</div>
+											<div class="col-xs-9">
+												<input type="textarea" id="founder" name="founder" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Field</label>
+											</div>
+											<div class="col-xs-9">
+												<input type="text" id="field" name="field" class="form-control">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Startup phase</label>
+											</div>
+											<div class="col-xs-9">
+												<select name="project_status" id="project_status" class="form-control" style="width: 200px" autocomplete="off" title="Choose one">
+													<option disabled="disabled" selected="selected">Choose
+														one</option>
+													<optgroup>
+														<option>Ideation</option>
+														<option>Work-in-progress</option>
+														<option>Just-launched</option>
+														<option>Launched-with-customers</option>
+													</optgroup>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Seeking funding</label>
+											</div>
+											<div class="col-xs-9">
+												<select name="funding" id="funding" class="form-control" style="width: 200px" autocomplete="off">
+													<option disabled="disabled" selected="selected">Choose
+														one</option>
+													<optgroup>
+														<option>Yes</option>
+														<option>No</option>
+													</optgroup>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Images </label>
+											</div>
+											<div class="col-xs-9">
+												<span class="file-input file-input-new"><div class="file-preview ">
+    <div class="close fileinput-remove">×</div>
+    <div class="">
+    <div class="file-preview-thumbnails"></div>
+    <div class="clearfix"></div>    <div class="file-preview-status text-center text-success"></div>
+    <div class="kv-fileinput-error file-error-message" style="display: none;"></div>
+    </div>
+</div>
+<div class="kv-upload-progress hide"></div>
+<button type="button" title="Clear selected files" class="btn btn-default fileinput-remove fileinput-remove-button"><i class="glyphicon glyphicon-trash"></i> Remove</button>
+<button type="button" title="Abort ongoing upload" class="hide btn btn-default fileinput-cancel fileinput-cancel-button"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</button>
+
+<div class="btn btn-primary btn-lg btn-file"> <i class="glyphicon glyphicon-folder-open"></i> &nbsp;Browse … <input name="images" id="images" type="file" multiple=""></div>
+</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-3">
+												<label class="form-label">Video </label>
+											</div>
+											<div class="col-xs-9">
+												<span class="file-input file-input-new"><div class="file-preview ">
+    <div class="close fileinput-remove">×</div>
+    <div class="">
+    <div class="file-preview-thumbnails"></div>
+    <div class="clearfix"></div>    <div class="file-preview-status text-center text-success"></div>
+    <div class="kv-fileinput-error file-error-message" style="display: none;"></div>
+    </div>
+</div>
+<div class="kv-upload-progress hide"></div>
+<button type="button" title="Clear selected files" class="btn btn-default fileinput-remove fileinput-remove-button"><i class="glyphicon glyphicon-trash"></i> Remove</button>
+<button type="button" title="Abort ongoing upload" class="hide btn btn-default fileinput-cancel fileinput-cancel-button"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</button>
+
+<div class="btn btn-primary btn-lg btn-file"> <i class="glyphicon glyphicon-folder-open"></i> &nbsp;Browse … <input name="video" id="video" type="file" multiple=""></div>
+</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="g-signin2" data-onsuccess="onSignIn" data-gapiscan="true" data-onload="true"><div style="height:36px;width:120px;" class="abcRioButton abcRioButtonLightBlue"><div class="abcRioButtonContentWrapper"><div style="margin:6px 0 0 6px;" class="abcRioButtonIcon"><div style="width:22px;height:22px;" class="abcRioButtonSvgImageWithFallback abcRioButtonIconImage abcRioButtonIconImage20"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="0 0 14 14" class="abcRioButtonSvg"><g><path d="m7.228,7.958l-.661-.514c-.201-.166-.476-.386-.476-.79 0-.405 .275-.663 .513-.901 .769-.606 1.538-1.25 1.538-2.611 0-1.256-.632-1.862-.94-2.24h.899l.899-.902h-3.622c-.989,0-2.235,.147-3.278,1.01-.788,.68-1.172,1.618-1.172,2.464 0,1.433 1.098,2.885 3.04,2.885 .183,0 .384-.018 .586-.036-.092,.22-.183,.405-.183,.717 0,.569 .048,.809 .305,1.14-.824,.055-2.119,.12-3.254,.819-1.082,.644-1.411,1.717-1.411,2.379 0,1.361 1.281,2.629 3.938,2.629 3.149,0 4.816-1.747 4.816-3.474 .001-1.269-.731-1.894-1.537-2.575zm-4.689-5.384c0-.479 .091-.975 .402-1.361 .293-.368 .806-.607 1.283-.607 1.519,0 2.306,2.06 2.306,3.383 0,.33-.037,.918-.457,1.341-.294,.295-.786,.515-1.244,.515-1.575,0-2.29-2.041-2.29-3.271zm2.308,10.66c-1.96,0-3.224-.938-3.224-2.243s1.063-1.691 1.466-1.839c.77-.256 1.788-.348 1.788-.348s.456,.026 .665,.019c1.115,.546 1.997,1.487 1.997,2.428 0,1.138-.935,1.983-2.692,1.983z"></path></g></svg></div></div><span style="font-size:13px;line-height:34px;" class="abcRioButtonContents"><span id="not_signed_in2p582ynqsn6e" style="display: none;">Sign in</span><span id="connected2p582ynqsn6e">Signed in</span></span></div></div></div>
+									</div>
+									<input type="hidden" name="token" id="token" value="{&quot;name&quot;:&quot;Abinathab Bennet&quot;,&quot;id&quot;:&quot;110489314263267697974&quot;,&quot;image_url&quot;:&quot;https://lh4.googleusercontent.com/-CL6coBFm9VE/AAAAAAAAAAI/AAAAAAAAHCk/ngCxGax3Tcc/s96-c/photo.jpg&quot;,&quot;email&quot;:&quot;abinathab@gmail.com&quot;,&quot;token&quot;:&quot;eyJhbGciOiJSUzI1NiIsImtpZCI6IjEyMzg5MzdjOTBlOGU2MzgzZmYwYzdiYzE0NTlkOGQyNjQzZDFhYzkifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwic3ViIjoiMTEwNDg5MzE0MjYzMjY3Njk3OTc0IiwiYXpwIjoiMTA3OTIxODM2OTc1My0zZmc5c291NDBrZHJqYjVoc2ZubTBvbzlqajBkb2s5YS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImVtYWlsIjoiYWJpbmF0aGFiQGdtYWlsLmNvbSIsImF0X2hhc2giOiJsUXR4RVlOanBQQm1reXRYb1RJTmx3IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF1ZCI6IjEwNzkyMTgzNjk3NTMtM2ZnOXNvdTQwa2RyamI1aHNmbm0wb285amowZG9rOWEuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJpYXQiOjE0MzU0NTkyMjYsImV4cCI6MTQzNTQ2MjgyNiwibmFtZSI6IkFiaW5hdGhhYiBCZW5uZXQiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDQuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1DTDZjb0JGbTlWRS9BQUFBQUFBQUFBSS9BQUFBQUFBQUhDay9uZ0N4R2F4M1RjYy9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiQWJpbmF0aGFiIiwiZmFtaWx5X25hbWUiOiJCZW5uZXQiLCJsb2NhbGUiOiJlbiJ9.sdeiMh1Hw4pwiMARWQHea4meWboylAFoRSb1IqScFfKf6upwr8eIUt5AHY0d88Lu0_S_xPSiS7VMJdu05hORbWJ1M_kUNd2wlxJRMjUXUs6rh2VM6ltFvgS_FqCbfVg3xw-j69MwelqHyP2AknQyT29KIw_CguMGtYoVO-DEt0fUQlE299Z_wvxTP2lkPd4EO1OfR4CIX7YXFxjFXQwKe7eim3u3MrZB5yhwEOHlMXTg4GXAsTY_RkxQriG013vu0P4ZnxLl8GymjdigInN-Wrj76jp3SYHD8o-JC-F_oOmm_GrIdNEXG2YaFjbGSmXSOrxBGLhEZXYMNjRp1kSaqg&quot;}"> <input type="hidden" name="id" id="id" value="inc_952745e0-ea2e-4365-83b3-cd379072ce57">
+									<div class="form-group"></div>
+									<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<footer>
+			<div class="container">
+				<a href="./incubee_files/incubee.html" class="scrollpoint sp-effect3"> <img src="./incubee_files/logo.png" alt="" class="logo">
+				</a>
+				<div class="social">
+					<a href="./incubee_files/incubee.html" class="scrollpoint sp-effect3"><i class="fa fa-twitter fa-lg"></i></a> <a href="./incubee_files/incubee.html" class="scrollpoint sp-effect3"><i class="fa fa-google-plus fa-lg"></i></a> <a href="./incubee_files/incubee.html" class="scrollpoint sp-effect3"><i class="fa fa-facebook fa-lg"></i></a>
+				</div>
+				<div class="rights">
+					<p>Copyright © 2015</p>
+
+				</div>
+			</div>
+		</footer>
+
+	</div>
+	<script src="./incubee_files/slick.min.js"></script>
+	<script src="./incubee_files/placeholdem.min.js"></script>
+	<script src="./incubee_files/jquery.themepunch.plugins.min.js"></script>
+	<script src="./incubee_files/jquery.themepunch.revolution.min.js"></script>
+	<script src="./incubee_files/waypoints.min.js"></script>
+	<script src="./incubee_files/scripts.js"></script>
+	<script src="./incubee_files/incubee.js"></script>
+	<script>
+		$(document).ready(function() {
+			appMaster.preLoader();
+		});
+		$("#images").fileinput({
+			showUpload : false,
+			showCaption : false,
+			browseClass : "btn btn-primary btn-lg",
+			fileType : "any",
+			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+			allowedFileTypes : [ 'image' ],
+			maxFilesNum : 4
+		});
+		$("#video").fileinput({
+			showUpload : false,
+			showCaption : false,
+			browseClass : "btn btn-primary btn-lg",
+			fileType : "any",
+			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+			allowedFileTypes : [ 'video' ],
+			maxFilesNum : 1
+		});
+		$("#signupform").submit(function(event) {
+
+			//disable the default form submission
+			event.preventDefault();
+			//grab all form data  
+			var formData = new FormData(this);
+
+			$.ajax({
+				url : 'rest/handle',
+				type : 'POST',
+				data : formData,
+				async : false,
+				cache : false,
+				contentType : false,
+				processData : false,
+				success : function() {
+					alert('Form Submitted!');
+				},
+				error : function() {
+					alert("error in ajax form submission");
+				}
+			});
+
+			return false;
+		});
+	</script>
+
+
+
+
+<iframe style="position: absolute; width: 1px; height: 1px; left: -9999px;" id="ssIFrame_google" sandbox="allow-scripts allow-same-origin" src="./incubee_files/iframe.html"></iframe></body></html>
