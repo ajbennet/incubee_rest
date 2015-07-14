@@ -1,7 +1,7 @@
 package ee.incub.rest.spring.controllers;
 
 
-import ee.incub.rest.spring.model.Token;
+import ee.incub.rest.spring.model.http.Token;
 
 public class GoogleVerificationController {
 

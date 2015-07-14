@@ -1,10 +1,13 @@
-package ee.incub.rest.spring.model;
+package ee.incub.rest.spring.model.http;
 
+import java.util.Arrays;
 
-public class IncubeeResponse {
+import org.springframework.web.multipart.MultipartFile;
+
+public class IncubeeRequest {
 	private String company_name;
 	private String company_url;
-	private String logo_url;
+	private String logourl;
 	private String high_concept;
 	private String description;
 	private String twitter_url;
@@ -12,12 +15,14 @@ public class IncubeeResponse {
 	private String founder;
 	private String location;
 	private String contact_email;
-	private String[] images;
-	private String video;
-	private boolean funding;
+	private String token;
+	private String id;
 	private String project_status;
 	private String field;
-	private String id;
+	private boolean funding;
+
+	private MultipartFile[] images;
+	private MultipartFile video;
 	public String getCompany_name() {
 		return company_name;
 	}
@@ -30,11 +35,11 @@ public class IncubeeResponse {
 	public void setCompany_url(String company_url) {
 		this.company_url = company_url;
 	}
-	public String getLogo_url() {
-		return logo_url;
+	public String getLogourl() {
+		return logourl;
 	}
-	public void setLogo_url(String logo_url) {
-		this.logo_url = logo_url;
+	public void setLogourl(String logourl) {
+		this.logourl = logourl;
 	}
 	public String getHigh_concept() {
 		return high_concept;
@@ -66,37 +71,25 @@ public class IncubeeResponse {
 	public void setFounder(String founder) {
 		this.founder = founder;
 	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public String getLocation() {
 		return location;
 	}
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
 	public String getContact_email() {
 		return contact_email;
 	}
 	public void setContact_email(String contact_email) {
 		this.contact_email = contact_email;
 	}
-	public String[] getImages() {
-		return images;
-	}
-	public void setImages(String[] images) {
-		this.images = images;
-	}
-	public String getVideo() {
-		return video;
-	}
-	public void setVideo(String video) {
-		this.video = video;
-	}
-	public boolean isFunding() {
-		return funding;
-	}
-	public void setFunding(boolean funding) {
-		this.funding = funding;
-	}
+	
 	public String getProject_status() {
 		return project_status;
 	}
@@ -108,6 +101,36 @@ public class IncubeeResponse {
 	}
 	public void setField(String field) {
 		this.field = field;
+	}
+	public boolean isFunding() {
+		return funding;
+	}
+	public void setFunding(boolean funding) {
+		this.funding = funding;
+	}
+	public MultipartFile[] getImages() {
+		return images;
+	}
+	public void setImages(MultipartFile[] images) {
+		this.images = images;
+	}
+	public MultipartFile getVideo() {
+		return video;
+	}
+	public void setVideo(MultipartFile video) {
+		this.video = video;
+	}
+	@Override
+	public String toString() {
+		return "IncubeeRequest [company_name=" + company_name
+				+ ", company_url=" + company_url + ", logourl=" + logourl
+				+ ", high_concept=" + high_concept + ", description="
+				+ description + ", twitter_url=" + twitter_url + ", video_url="
+				+ video_url + ", founder=" + founder + ", location=" + location
+				+ ", contact_email=" + contact_email + ", token=" + token
+				+ ", project_status=" + project_status + ", field=" + field
+				+ ", funding=" + funding + ", images="
+				+ Arrays.toString(images) + ", video=" + video + "]";
 	}
 	/**
 	 * @return the id
@@ -121,5 +144,6 @@ public class IncubeeResponse {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	
 }

@@ -25,13 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import ee.incub.rest.spring.aws.adaptors.DynamoDBAdaptor;
+import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
-import ee.incub.rest.spring.model.IncubeeRequest;
-import ee.incub.rest.spring.model.IncubeeResponse;
-import ee.incub.rest.spring.model.LoginResponse;
-import ee.incub.rest.spring.model.Token;
-import ee.incub.rest.spring.model.User;
+import ee.incub.rest.spring.model.db.User;
+import ee.incub.rest.spring.model.http.IncubeeRequest;
+import ee.incub.rest.spring.model.http.IncubeeResponse;
+import ee.incub.rest.spring.model.http.LoginResponse;
+import ee.incub.rest.spring.model.http.Token;
 import ee.incub.rest.spring.utils.Utils;
 
 /**
@@ -71,7 +71,7 @@ public class SignupController {
 					HttpStatus.UNAUTHORIZED);
 		}
 		String uuid = "inc_" + UUID.randomUUID().toString();
-		User user = DynamoDBAdaptor.getUserForHandle(token.getId());
+		User user = UserDynamoDB.getUserForHandle(token.getId());
 		if (user == null) {
 			//creating new incubee & user
 			createOrUpdateIncubee(incubee, uuid);
@@ -86,14 +86,14 @@ public class SignupController {
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@ResponseBody
 	public List<IncubeeResponse> getAll() {
-		return Utils.fromIncubeeList(DynamoDBAdaptor.getAllIncubees());
+		return Utils.fromIncubeeList(UserDynamoDB.getAllIncubees());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public IncubeeResponse getForId(@PathVariable("id") String id) {
 		logger.info("Recieved getIncubee for Id: " + id);
-		return Utils.fromIncubee(DynamoDBAdaptor.getIncubee(id));
+		return Utils.fromIncubee(UserDynamoDB.getIncubee(id));
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -103,7 +103,7 @@ public class SignupController {
 		LoginResponse response = new LoginResponse();
 		// retreive the user with the id.
 		if (token != null && token.getId() != null) {
-			User user = DynamoDBAdaptor.getUser(token.getId());
+			User user = UserDynamoDB.getUser(token.getId());
 			if (user == null) {
 				// create user
 				// /boolean createdUser = DynamoDBAdaptor.createUser(token);
@@ -163,11 +163,11 @@ public class SignupController {
 				}
 			}
 		}
-		if(incubee.getId()!=null){
-			DynamoDBAdaptor.updateIncubee(Utils.fromIncubeeRequest(incubee, keyList,
+		if(incubee.getId()!=null && !incubee.getId().isEmpty()){
+			UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee, keyList,
 				video, incubee.getId()));
 		} else{
-			DynamoDBAdaptor.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList,
+			UserDynamoDB.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList,
 				video, uuid));
 		}
 		// check if user already has a company associated to his account.
@@ -190,7 +190,7 @@ public class SignupController {
 			user.setToken(token.getToken());
 			user.setHandle_id(token.getId());
 			user.setLogin_type("google");
-			DynamoDBAdaptor.createUser(user);
+			UserDynamoDB.createUser(user);
 			logger.info("Created User : " + user_id);
 			return true;
 		} else {

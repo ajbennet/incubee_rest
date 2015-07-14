@@ -1,4 +1,4 @@
-package ee.incub.rest.spring.model;
+package ee.incub.rest.spring.model.db;
 
 public class User {
 	

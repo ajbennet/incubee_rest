@@ -38,24 +38,24 @@ import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 
-import ee.incub.rest.spring.model.Incubee;
-import ee.incub.rest.spring.model.User;
+import ee.incub.rest.spring.model.db.Incubee;
+import ee.incub.rest.spring.model.db.User;
 import ee.incub.rest.spring.utils.Constants;
 import ee.incub.rest.spring.utils.Utils;
 
-public class DynamoDBAdaptor {
+public class MessagesDynamoDB {
 
 	static DynamoDB dynamoDB = new DynamoDB(new AmazonDynamoDBClient(
 			new ProfileCredentialsProvider()));
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static final Logger logger = LoggerFactory
-			.getLogger(DynamoDBAdaptor.class);
+			.getLogger(MessagesDynamoDB.class);
 	static {
 		initializeAndCreateTables();
 	}
 
-	public static void loadIncubee(Incubee incubee) {
+	public static void loadConversation(Incubee incubee) {
 
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 
@@ -284,64 +284,45 @@ public class DynamoDBAdaptor {
 		}
 	}
 
-	public static List<Incubee> getAllIncubees() {
-//		long twoWeeksAgoMilli = (new Date()).getTime()
-//				- (15L * 24L * 60L * 60L * 1000L);
-//		Date twoWeeksAgo = new Date();
-//		twoWeeksAgo.setTime(twoWeeksAgoMilli);
-//		SimpleDateFormat df = new SimpleDateFormat(
-//				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//		String twoWeeksAgoStr = df.format(twoWeeksAgo);
-
-		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
-				new ProfileCredentialsProvider());
-		ScanRequest scanRequest = new ScanRequest()
-				.withTableName(Constants.INCUBEE_TABLE);
-		List<Incubee> list = new ArrayList<Incubee>();
-		ScanResult result = client.scan(scanRequest);
-		for (Map<String, AttributeValue> item : result.getItems()) {
-			list.add(Utils.fromItem(item));
-		}
-		logger.info("Incubee List :" + list);
-		return list;
-	}
-
 	static void initializeAndCreateTables() {
 
 		TableCollection<ListTablesResult> tables = dynamoDB.listTables();
 		Iterator<Table> iterator = tables.iterator();
 
 		logger.debug("Listing table names");
-		boolean createUserTable = true;
-		boolean createIncubeeTable = true;
+		boolean createConvTable = true;
+		boolean createMsgTable = true;
 		while (iterator.hasNext()) {
 			Table table = iterator.next();
 			logger.debug("Table : " + table.getTableName());
-			if (table.getTableName().equals(Constants.INCUBEE_TABLE)) {
-				createIncubeeTable = false;
-			} else if (table.getTableName().equals(Constants.USER_TABLE)) {
-				createUserTable = false;
+			if (table.getTableName().equals(Constants.CONVERSATION_TABLE)) {
+				createMsgTable = false;
+			} else if (table.getTableName().equals(Constants.MESSAGES_TABLE)) {
+				createConvTable = false;
 			}
 		}
-		if (createUserTable) {
-			createUserTable();
+		if (createConvTable) {
+			createConversationTable();
 		}
-		if (createIncubeeTable) {
-			createIncubeeTable();
+		if (createMsgTable) {
+			createMessagesTable();
 		}
 	}
 
-	static void createUserTable() {
-		String tableName = Constants.USER_TABLE;
+	static void createConversationTable() {
+		String tableName = Constants.CONVERSATION_TABLE;
 		try {
 
 			ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
 			attributeDefinitions.add(new AttributeDefinition()
-					.withAttributeName("id").withAttributeType("S"));
-
+					.withAttributeName("user_id").withAttributeType("S"));
+			attributeDefinitions.add(new AttributeDefinition()
+				.withAttributeName("conv_date").withAttributeType("S"));
 			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-			keySchema.add(new KeySchemaElement().withAttributeName("id")
+			keySchema.add(new KeySchemaElement().withAttributeName("user_id")
 					.withKeyType(KeyType.HASH));
+			keySchema.add(new KeySchemaElement().withAttributeName("conv_date")
+							.withKeyType(KeyType.RANGE));
 
 			CreateTableRequest request = new CreateTableRequest()
 					.withTableName(tableName)
@@ -364,20 +345,22 @@ public class DynamoDBAdaptor {
 			System.err.println("CreateTable request failed for " + tableName);
 			System.err.println(e.getMessage());
 		}
-
 	}
-
-	static void createIncubeeTable() {
-		String tableName = Constants.INCUBEE_TABLE;
+	
+	static void createMessagesTable() {
+		String tableName = Constants.MESSAGES_TABLE;
 		try {
 
 			ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
 			attributeDefinitions.add(new AttributeDefinition()
-					.withAttributeName("id").withAttributeType("S"));
-
+					.withAttributeName("conv_id").withAttributeType("S"));
+			attributeDefinitions.add(new AttributeDefinition()
+				.withAttributeName("msg_date").withAttributeType("S"));
 			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-			keySchema.add(new KeySchemaElement().withAttributeName("id")
+			keySchema.add(new KeySchemaElement().withAttributeName("conv_id")
 					.withKeyType(KeyType.HASH));
+			keySchema.add(new KeySchemaElement().withAttributeName("msg_date")
+							.withKeyType(KeyType.RANGE));
 
 			CreateTableRequest request = new CreateTableRequest()
 					.withTableName(tableName)
@@ -400,9 +383,8 @@ public class DynamoDBAdaptor {
 			System.err.println("CreateTable request failed for " + tableName);
 			System.err.println(e.getMessage());
 		}
-
 	}
-
+	
 	public static void updateIncubee( Incubee incubee) {
 
 	        Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);

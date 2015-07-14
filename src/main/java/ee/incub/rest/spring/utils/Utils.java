@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-import ee.incub.rest.spring.aws.adaptors.DynamoDBAdaptor;
-import ee.incub.rest.spring.model.Incubee;
-import ee.incub.rest.spring.model.IncubeeRequest;
-import ee.incub.rest.spring.model.IncubeeResponse;
+import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
+import ee.incub.rest.spring.model.db.Incubee;
+import ee.incub.rest.spring.model.http.IncubeeRequest;
+import ee.incub.rest.spring.model.http.IncubeeResponse;
 
 public class Utils {
 	private static final Logger logger = LoggerFactory

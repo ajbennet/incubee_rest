@@ -7,4 +7,6 @@ public class Constants {
 	public static final String S3_IMAGE_URL = Config.getProperty("s3_url");
 	public static final String APPS_DOMAIN_NAME = Config.getProperty("apps_domain_name");
 	public static final String CLIENT_ID = Config.getProperty("client_id");
+	public static final String CONVERSATION_TABLE = Config.getProperty("conversation_table");
+	public static final String MESSAGES_TABLE = Config.getProperty("messages_table");
 }
