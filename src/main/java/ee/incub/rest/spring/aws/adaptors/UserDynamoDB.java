@@ -117,17 +117,20 @@ public class UserDynamoDB {
 
 			Item item = new Item()
 					.withPrimaryKey("id", user.getHandle_id())
-					.withString("handle_id", user.getHandle_id())					
-					.withString("company_id", user.getCompany_id())
+					.withString("handle_id", user.getHandle_id())
 					.withString("email", user.getEmail())
-					.withString("name", user.getName())
 					.withString("login_type", user.getLogin_type())
 					.withString("added_time",
 							(dateFormatter.format(new Date())))
 					.withString("updated_time",
 							(dateFormatter.format(new Date())));
-			if(user.getImage_url()!=null)
+			if (user.getImage_url() != null && !user.getImage_url().isEmpty())
 				item.withString("img_url", user.getImage_url());
+			if (user.getName() != null && !user.getName().isEmpty())
+				item.withString("name", user.getName());
+			if (user.getCompany_id() != null && !user.getCompany_id().isEmpty())
+				item.withString("company_id", user.getCompany_id());
+
 			table.putItem(item);
 			logger.info("Added user  :" + user);
 			return true;
@@ -286,13 +289,13 @@ public class UserDynamoDB {
 	}
 
 	public static List<Incubee> getAllIncubees() {
-//		long twoWeeksAgoMilli = (new Date()).getTime()
-//				- (15L * 24L * 60L * 60L * 1000L);
-//		Date twoWeeksAgo = new Date();
-//		twoWeeksAgo.setTime(twoWeeksAgoMilli);
-//		SimpleDateFormat df = new SimpleDateFormat(
-//				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//		String twoWeeksAgoStr = df.format(twoWeeksAgo);
+		// long twoWeeksAgoMilli = (new Date()).getTime()
+		// - (15L * 24L * 60L * 60L * 1000L);
+		// Date twoWeeksAgo = new Date();
+		// twoWeeksAgo.setTime(twoWeeksAgoMilli);
+		// SimpleDateFormat df = new SimpleDateFormat(
+		// "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		// String twoWeeksAgoStr = df.format(twoWeeksAgo);
 
 		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
 				new ProfileCredentialsProvider());
@@ -403,7 +406,7 @@ public class UserDynamoDB {
 		}
 
 	}
-	
+
 	static void createConversationTable() {
 		String tableName = Constants.CONVERSATION_TABLE;
 		try {
@@ -412,12 +415,12 @@ public class UserDynamoDB {
 			attributeDefinitions.add(new AttributeDefinition()
 					.withAttributeName("user_id").withAttributeType("S"));
 			attributeDefinitions.add(new AttributeDefinition()
-				.withAttributeName("conv_date").withAttributeType("S"));
+					.withAttributeName("conv_date").withAttributeType("S"));
 			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
 			keySchema.add(new KeySchemaElement().withAttributeName("user_id")
 					.withKeyType(KeyType.HASH));
 			keySchema.add(new KeySchemaElement().withAttributeName("conv_date")
-							.withKeyType(KeyType.RANGE));
+					.withKeyType(KeyType.RANGE));
 
 			CreateTableRequest request = new CreateTableRequest()
 					.withTableName(tableName)
@@ -441,7 +444,7 @@ public class UserDynamoDB {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	static void createMessagesTable() {
 		String tableName = Constants.MESSAGES_TABLE;
 		try {
@@ -450,12 +453,12 @@ public class UserDynamoDB {
 			attributeDefinitions.add(new AttributeDefinition()
 					.withAttributeName("conv_id").withAttributeType("S"));
 			attributeDefinitions.add(new AttributeDefinition()
-				.withAttributeName("msg_date").withAttributeType("S"));
+					.withAttributeName("msg_date").withAttributeType("S"));
 			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
 			keySchema.add(new KeySchemaElement().withAttributeName("conv_id")
 					.withKeyType(KeyType.HASH));
 			keySchema.add(new KeySchemaElement().withAttributeName("msg_date")
-							.withKeyType(KeyType.RANGE));
+					.withKeyType(KeyType.RANGE));
 
 			CreateTableRequest request = new CreateTableRequest()
 					.withTableName(tableName)
@@ -479,63 +482,83 @@ public class UserDynamoDB {
 			System.err.println(e.getMessage());
 		}
 	}
-	
-	public static void updateIncubee( Incubee incubee) {
 
-	        Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+	public static void updateIncubee(Incubee incubee) throws Exception {
 
-	        try {
+		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 
-	        	NameMap nameMap = new NameMap().with("#loc", "location");
-	        	ValueMap valueMap = new ValueMap()
-	                .with(":company_name", incubee.getCompany_name())
-	                .with(":company_url", incubee.getCompany_url())
-	                .with(":logo_url", incubee.getLogo_url())
-	                .with(":location", incubee.getLocation())
-	                .with(":high_concept", incubee.getHigh_concept())
-	                .with(":description", incubee.getDescription())
-	                .with(":field", incubee.getField())
-	                .with(":twitter_url",incubee.getTwitter_url())
-	                .with(":project_status",incubee.getProject_status())
-	                .with(":video_url", incubee.getVideo_url())
-	                .withBoolean(":funding", incubee.isFunding());
-	        	if(incubee.getImages()!=null){
-	        		valueMap.withStringSet(":photos", incubee.getImages());
-	        	}	
-	        	if(incubee.getVideo()!=null){
-	        		valueMap.with(":video", incubee.getVideo());
-	        	}
-	            UpdateItemSpec updateItemSpec = new UpdateItemSpec()
-		            .withPrimaryKey("id", incubee.getId())
-		            .withReturnValues(ReturnValue.ALL_NEW)
-		            .withUpdateExpression("set funding=:funding "
-		            		+ ",company_name = :company_name"
-		            		+ ",company_url = :company_url "
-		            		+ ",logo_url = :logo_url "
-		            		+ ",#loc = :location "
-		            		+ ",high_concept = :high_concept "
-		            		+ ",description = :description "
-		            		+ ",field = :field "
-		            		+ ",twitter_url =  :twitter_url "
-		            		+ ",project_status = :project_status "
-		            		+ ",video_url = :video_url "
-		            		+ ",photos = :photos "
-		            		+ ",video = :video")
-		            .withNameMap(nameMap)
-		            .withValueMap(valueMap)
-	            ;
+		try {
+			NameMap nameMap = new NameMap().with("#loc", "location");
+			ValueMap valueMap = new ValueMap()
+					.withBoolean(":funding", incubee.isFunding());
+			
+			String updateExpression = "set funding=:funding ";
+			if (incubee.getCompany_name() != null && !incubee.getCompany_name().isEmpty()){
+				updateExpression = updateExpression + ",company_name = :company_name";
+				valueMap.with(":company_name", incubee.getCompany_name());
+			}
+			if (incubee.getCompany_url() != null && !incubee.getCompany_url().isEmpty()){
+				updateExpression = updateExpression + ",company_url = :company_url ";
+				valueMap.with(":company_url", incubee.getCompany_url());
+			}
+			if (incubee.getLogo_url() != null && !incubee.getLogo_url().isEmpty()){
+				updateExpression = updateExpression + ",logo_url = :logo_url ";
+				valueMap.with(":logo_url", incubee.getLogo_url());
+			}
+			if (incubee.getLocation() != null && !incubee.getLocation().isEmpty()){
+				updateExpression = updateExpression + ",#loc = :location ";
+				valueMap.with(":location", incubee.getLocation());
+			}
+			if (incubee.getHigh_concept() != null && !incubee.getHigh_concept().isEmpty()){
+				updateExpression = updateExpression + ",high_concept = :high_concept ";
+				valueMap.with(":high_concept", incubee.getHigh_concept());
+			}
+			if (incubee.getDescription() != null && !incubee.getDescription().isEmpty()){
+				updateExpression = updateExpression + ",description = :description ";
+				valueMap.with(":description", incubee.getDescription());
+			}
+			if (incubee.getField() != null && !incubee.getField().isEmpty()){
+				updateExpression = updateExpression + ",field = :field ";
+				valueMap.with(":field", incubee.getField());
+			}
+			if (incubee.getTwitter_url() != null && !incubee.getTwitter_url().isEmpty()){
+				updateExpression = updateExpression + ",twitter_url =  :twitter_url ";
+				valueMap.with(":twitter_url", incubee.getTwitter_url());
+			}
+			if (incubee.getProject_status() != null && !incubee.getProject_status().isEmpty()){
+				updateExpression = updateExpression + ",project_status = :project_status ";
+				valueMap.with(":project_status", incubee.getProject_status());
+			}
+			if (incubee.getVideo_url() != null && !incubee.getVideo_url().isEmpty()){
+				updateExpression = updateExpression + ",video_url = :video_url ";
+				valueMap.with(":video_url", incubee.getVideo_url());
+			}
+			if (incubee.getImages() != null && incubee.getImages().length>0){
+				updateExpression = updateExpression + ",photos = :photos ";
+				valueMap.withStringSet(":photos", incubee.getImages());
+			}
+			if (incubee.getVideo() != null && !incubee.getVideo().isEmpty()){
+				updateExpression = updateExpression + ",video = :video";
+				valueMap.with(":video", incubee.getVideo());
+			}
+			UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+					.withPrimaryKey("id", incubee.getId())
+					.withReturnValues(ReturnValue.ALL_NEW)
+					.withUpdateExpression(updateExpression)
+					.withNameMap(nameMap).withValueMap(valueMap);
 
-	            UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+			UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
 
-	            // Check the response.
-	            logger.info("Printing item after updating it");
-	            logger.info(outcome.getItem().toJSONPretty());
+			// Check the response.
+			logger.info("Printing item after updating it");
+			logger.info(outcome.getItem().toJSONPretty());
 
-	        } catch (Exception e) {
-	            logger.error("Error updating item in " + Constants.INCUBEE_TABLE);
-	            logger.error(e.getMessage());
-	        }
-	    }
+		} catch (Exception e) {
+			logger.error("Error updating item in " + Constants.INCUBEE_TABLE, e);
+			logger.error(e.getMessage());
+			throw e;
+		}
+	}
 
 	static void getTableInformation(String tableName) {
 

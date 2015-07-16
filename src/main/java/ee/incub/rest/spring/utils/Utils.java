@@ -180,4 +180,12 @@ public class Utils {
 		}
 		return null;
 	}
+	
+	public static String setUpdateExpression(boolean isfirst, String string){
+		if (isfirst)
+			string = " "+string;
+		else
+			string = ","+string;
+		return string;
+	}
 }

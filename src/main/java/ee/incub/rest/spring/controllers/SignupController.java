@@ -43,7 +43,6 @@ public class SignupController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SignupController.class);
 
-
 	@RequestMapping(value = "/handle", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> handleRequest(IncubeeRequest incubee) {
@@ -73,13 +72,16 @@ public class SignupController {
 		String uuid = "inc_" + UUID.randomUUID().toString();
 		User user = UserDynamoDB.getUserForHandle(token.getId());
 		if (user == null) {
-			//creating new incubee & user
+			// creating new incubee & user
 			createOrUpdateIncubee(incubee, uuid);
 			createUser(token, uuid);
-			return new ResponseEntity<String>("User & Startup Created", HttpStatus.CREATED);
+			return new ResponseEntity<String>("User & Startup Created",
+					HttpStatus.CREATED);
 		} else {
-			createOrUpdateIncubee(incubee, uuid);
-			return new ResponseEntity<String>("Incubee Updated", HttpStatus.OK);
+			if (createOrUpdateIncubee(incubee, uuid))
+				return new ResponseEntity<String>("Incubee Updated", HttpStatus.OK);
+			else
+				return new ResponseEntity<String>("Failed to update Incubee", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -111,22 +113,26 @@ public class SignupController {
 				response.setStatusMessage("User not found");
 				return new ResponseEntity<LoginResponse>(response,
 						HttpStatus.NOT_FOUND);
-			}
-			else {
-				//Incubee incubee = DynamoDBAdaptor.getIncubee(user.getCompany_id());
+			} else {
+				// Incubee incubee =
+				// DynamoDBAdaptor.getIncubee(user.getCompany_id());
 				response.setStatusCode(LoginResponse.SUCCESS);
 				response.setStatusMessage("Success");
-				Map<String, Object> map = new HashMap<String,Object>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("company_id", user.getCompany_id());
 				response.setServicedata(map);
-				//return new ResponseEntity<String>("{\"company_id\":\""+user.getCompany_id()+"\"}", HttpStatus.OK);
-				return new ResponseEntity<LoginResponse>(response, HttpStatus.OK);
+				// return new
+				// ResponseEntity<String>("{\"company_id\":\""+user.getCompany_id()+"\"}",
+				// HttpStatus.OK);
+				return new ResponseEntity<LoginResponse>(response,
+						HttpStatus.OK);
 			}
 		}
 		// DynamoDBAdaptor.getIncubee(incubee_id);
 		response.setStatusCode(LoginResponse.TOKEN_NOT_FOUND);
 		response.setStatusMessage("Token not found");
-		return new ResponseEntity<LoginResponse>(response, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<LoginResponse>(response,
+				HttpStatus.BAD_REQUEST);
 	}
 
 	private boolean createOrUpdateIncubee(IncubeeRequest incubee, String uuid) {
@@ -139,7 +145,7 @@ public class SignupController {
 			keyList = new String[fileList.length];
 			for (int i = 0; i < fileList.length; i++) {
 				try {
-					if(!fileList[i].isEmpty())
+					if (!fileList[i].isEmpty())
 						keyList[i] = adaptor.uploadFile(fileList[i], "img");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -148,13 +154,17 @@ public class SignupController {
 				}
 			}
 		}
+		//adding this because multipartfile has a null entry even if no file is uploaded.
+		if (keyList!=null && keyList.length==1 && keyList[0]==null){
+			keyList=null;
+		}
 		String video = null;
 		if (incubee.getVideo() != null) {
 			S3Adaptor adaptor = new S3Adaptor();
 			MultipartFile file = incubee.getVideo();
 			if (file != null) {
 				try {
-					if(!file.isEmpty())
+					if (!file.isEmpty())
 						video = adaptor.uploadFile(file, "vid");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -163,16 +173,23 @@ public class SignupController {
 				}
 			}
 		}
-		if(incubee.getId()!=null && !incubee.getId().isEmpty()){
-			UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee, keyList,
-				video, incubee.getId()));
-		} else{
-			UserDynamoDB.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList,
-				video, uuid));
+		try {
+			if (incubee.getId() != null && !incubee.getId().isEmpty()) {
+
+				UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee,
+						keyList, video, incubee.getId()));
+
+			} else {
+				UserDynamoDB.loadIncubee(Utils.fromIncubeeRequest(incubee,
+						keyList, video, uuid));
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return false;
 		}
 		// check if user already has a company associated to his account.
 		isCreated = true;
-		logger.info("Incubee Created : " + incubee.getCompany_name());
+		logger.info("Incubee Created/Updated : " + incubee.getCompany_name());
 		return isCreated;
 	}
 
@@ -198,8 +215,7 @@ public class SignupController {
 			return false;
 		}
 	}
-	
-	
+
 	/**
 	 * Upload single file using Spring Controller
 	 */
