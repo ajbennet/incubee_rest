@@ -107,7 +107,7 @@ public class UserDynamoDB {
 
 	}
 
-	public static boolean createUser(User user) {
+	public static boolean createUser(User user) throws Exception {
 
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 
@@ -138,8 +138,9 @@ public class UserDynamoDB {
 			e.printStackTrace();
 			logger.error("Failed to create item in " + Constants.INCUBEE_TABLE);
 			logger.error(e.getMessage());
+			throw e;
 		}
-		return false;
+		
 	}
 
 	// public static Incubee getIncubee(String incubee_id) {
