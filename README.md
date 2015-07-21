@@ -161,7 +161,7 @@ Messaging states
 | B reads message               | mid: 2324, dir: O,     	| mid: 2324_1, dir: I,      |
 |                               | status: RRE                   | status: REA               |
 |                               |                               |                           |
-| B deletes message             | mid: 2324_1, dir: O,     	| Message deleted           |
+| B deletes message             | mid: 2324, dir: O,     	| Message deleted           |
 |                               | status: RRE                   |                           |
 
 
