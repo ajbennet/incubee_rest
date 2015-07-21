@@ -1,7 +1,7 @@
 # Incubee Rest
 Rest Server for Incubee
  
-# Login API 
+## Login API 
 If user already present it returns the company ID associated with the user for founders.
 If not, it returns a 404 . 
 
@@ -41,7 +41,7 @@ User not found Response
 {"statusMessage":"User not found","statusCode":"LOG_1003","servicedata":null}
 ```
 
-# Signup API 
+## Signup API 
 If user already present it returns the company ID associated with the user for founders.
 If not, it returns a 404. 
 
@@ -68,7 +68,7 @@ Payload
 Success Response
 ```sh
 httpCode : 201 Created
-body
+
 {  
    "statusMessage":"Success",
    "statusCode":"SIGN_1000"
@@ -81,4 +81,97 @@ http code: 409 Conflict
 {
 	"statusMessage":"User already found with that User ID please login","statusCode":"SIGN_1004"}
 ```
+
+## Send Message API
+
+Send a message to another user.
+
+Request
+```sh
+POST http://www.incub.ee/rest/msg/{uid}
+```
+Requestbody
+```sh
+{
+	"body":"Hi I like this idea",
+	"from":"{uid}",
+	"fromName": "{name}",
+	"to": "{touid}",
+	"longitude": 914,
+	"latitude" : 323
+}
+```
+
+Response
+
+```sh
+httpCode : 200 OK
+{  
+   "statusMessage":"Success",
+   "statusCode":"MSG_1000"
+}
+```
+
+## Get Messages API
+```sh
+GET http://www.incub.ee/rest/msg/all/{uid}
+```
+
+Response
+
+```sh
+httpCode : 200 OK
+{  
+   "statusMessage":"Success",
+   "statusCode":"MSG_1000"
+   "messages" : [ {
+        "body" : "Hi hows it going.",
+        "dir" : "I",
+        "mid" : 2333,
+        "name" : "Mark Cuban",
+        "status" : "N",
+        "stime" : 1301419911000,
+        "time" : 1301419912000,
+        "to" : "2345452643643",
+        "type" : "umsg"
+      },
+      { "body" : "Im good you",
+        "dir" : "O",
+        "mid" : 23432,
+        "name" : "Abs",
+        "status" : "N",
+        "stime" : 1301370381000,
+        "time" : 1301370381000,
+        "to" : "14083984358",
+        "type" : "umsg"
+} ],
+}
+```
+
+Messaging states
+
+|-------------------------------|---------------------------|
+| A Inbox                       |       B Inbox			    |
+|-------------------------------|---------------------------|
+| A sends a message to B		|							|
+| 								|							|
+| mid: 2324,  dir: O,    		|	mid: 2324_1, dir: I,	|
+| status: NEW					|	status: NEW				|
+|-------------------------------|---------------------------|
+| B receives message			|							|
+| 								|							|
+| mid: 2324,  dir: O,    		|	mid: 2324_1, dir: I,    |
+| status: RRV					|	status: NEW   			|
+|-------------------------------|---------------------------|
+| B reads message				|							| 
+| 								|							|
+| mid: 2324, dir: O,     		|	mid: 2324_1, dir: I,	|
+| status: RRE					|	status: REA				|
+|-------------------------------|---------------------------|
+| B deletes message				|							|
+| 								|							|
+| mid: 2324_1, dir: O,     		|	Message deleted			|
+| status: RRE					|							|
+|-------------------------------|---------------------------|
+
 
