@@ -150,34 +150,19 @@ httpCode : 200 OK
 
 Messaging states
 
-|-------------------------------|---------------------------|
-| A Inbox                       |       B Inbox			    |
-|-------------------------------|---------------------------|
-| A sends a message to B		|							|
-| 								|							|
-| mid: 2324,  dir: O,    		|	mid: 2324_1, dir: I,	|
-| status: NEW					|	status: NEW				|
-|-------------------------------|---------------------------|
-| B receives message			|							|
-| 								|							|
-| mid: 2324,  dir: O,    		|	mid: 2324_1, dir: I,    |
-| status: RRV					|	status: NEW   			|
-|-------------------------------|---------------------------|
-| B reads message				|							| 
-| 								|							|
-| mid: 2324, dir: O,     		|	mid: 2324_1, dir: I,	|
-| status: RRE					|	status: REA				|
-|-------------------------------|---------------------------|
-| B deletes message				|							|
-| 								|							|
-| mid: 2324_1, dir: O,     		|	Message deleted			|
-| status: RRE					|							|
-|-------------------------------|---------------------------|
+| Action                        | A Inbox                       |       B Inbox		    |
+|-------------------------------|-------------------------------|---------------------------|
+| A sends a message to B        |  mid: 2324,  dir: O,          | mid: 2324_1, dir: I,      |
+|                               |   status: NEW                 | status: NEW               |
+|                               |                               |                           |
+| B receives message            | mid: 2324,  dir: O,     	| mid: 2324_1, dir: I,      |
+|                               | status: RRV                   | status: NEW               |
+|                               |                               |                           |
+| B reads message               | mid: 2324, dir: O,     	| mid: 2324_1, dir: I,      |
+|                               | status: RRE                   | status: REA               |
+|                               |                               |                           |
+| B deletes message             | mid: 2324_1, dir: O,     	| Message deleted           |
+|                               | status: RRE                   |                           |
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
 
 
