@@ -1,11 +1,13 @@
 package ee.incub.rest.spring.utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +16,10 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.model.db.Incubee;
+import ee.incub.rest.spring.model.db.Message;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
+import ee.incub.rest.spring.model.http.MessageRequest;
 
 public class Utils {
 	private static final Logger logger = LoggerFactory
@@ -181,11 +185,52 @@ public class Utils {
 		return null;
 	}
 	
+	public static Message outboundMsgfromMsgRequest(MessageRequest messageRequest, String mid){
+		Message message = new Message();
+		message.setMid(mid);
+		message.setEid(messageRequest.getEid());
+		message.setName(messageRequest.getName());
+		message.setBody(messageRequest.getBody());
+		message.setDir(Message.OUTBOUND);
+		message.setLattitude(messageRequest.getLatitude());
+		message.setLongitude(messageRequest.getLongitude());
+		message.setTime(new Date());
+		message.setStime(new Date());
+		message.setMedia(messageRequest.getMedia());
+		message.setStatus(Message.NEW);
+		message.setTo(messageRequest.getTo());
+		message.setType(messageRequest.getType());
+		return message;
+	}
+	
+	public static Message inboundMsgfromMsgRequest(MessageRequest messageRequest, String mid){
+		Message message = new Message();
+		message.setMid(mid);
+		//swapping the UID and To fields
+		message.setEid(messageRequest.getTo());
+		message.setTo(messageRequest.getEid());
+		
+		message.setBody(messageRequest.getBody());
+		message.setDir(Message.INBOUND);
+		message.setLattitude(messageRequest.getLatitude());
+		message.setLongitude(messageRequest.getLongitude());
+		message.setTime(new Date());
+		message.setStime(new Date());
+		message.setMedia(messageRequest.getMedia());
+		message.setStatus(Message.NEW);
+		message.setType(messageRequest.getType());
+		return message;
+	}
+	
 	public static String setUpdateExpression(boolean isfirst, String string){
 		if (isfirst)
 			string = " "+string;
 		else
 			string = ","+string;
 		return string;
+	}
+	
+	public static final String generateID (String prefix, int size){
+		return prefix.toLowerCase() + RandomStringUtils.randomAlphanumeric(size).toLowerCase();
 	}
 }

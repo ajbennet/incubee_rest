@@ -94,8 +94,8 @@ Requestbody
 ```sh
 {
 	"body":"Hi I like this idea",
-	"from":"{uid}",
-	"fromName": "{name}",
+	"uid":"{uid}",
+	"name": "{name}",
 	"to": "{touid}",
 	"longitude": 914,
 	"latitude" : 323
@@ -114,7 +114,7 @@ httpCode : 200 OK
 
 ## Get Messages API
 ```sh
-GET http://www.incub.ee/rest/msg/all/{uid}
+GET http://www.incub.ee/rest/msg/all/{eid}
 ```
 
 Response
@@ -150,19 +150,39 @@ httpCode : 200 OK
 
 Messaging states
 
-| Action                        | A Inbox                       |       B Inbox		    |
-|-------------------------------|-------------------------------|---------------------------|
-| A sends a message to B        |  mid: 2324,  dir: O,          | mid: 2324_1, dir: I,      |
-|                               |   status: NEW                 | status: NEW               |
-|                               |                               |                           |
-| B receives message            | mid: 2324,  dir: O,     	| mid: 2324_1, dir: I,      |
-|                               | status: RRV                   | status: NEW               |
-|                               |                               |                           |
-| B reads message               | mid: 2324, dir: O,     	| mid: 2324_1, dir: I,      |
-|                               | status: RRE                   | status: REA               |
-|                               |                               |                           |
-| B deletes message             | mid: 2324, dir: O,     	| Message deleted           |
-|                               | status: RRE                   |                           |
+1) User A sends a message to Company B
+
+| Action                        | A Inbox                       |       B Inbox		           |
+|-------------------------------|-------------------------------|------------------------------|
+| A sends  message to           |  mid: 2324,  dir: O,          | mid: 2324_1, dir: I,         |
+| company B                     |  status: NEW,  type: USR      | status: NEW, type: USR       |
+|                               | to: companyID(B),eid: uid(A)  | eid: companyID(B) to: uid(A) |
+|                               |                               |                              |
+| B receives message            | mid: 2324,  dir: O,       	| mid: 2324_1, dir: I,         |
+|                               | status: RRV                   | status: NEW                  |
+|                               |                               |                              |
+| B reads message               | mid: 2324, dir: O,        	| mid: 2324_1, dir: I,         |
+|                               | status: RRE                   | status: REA                  |
+|                               |                               |                              |
+| B deletes message             | mid: 2324, dir: O,        	| Message deleted              |
+|                               | status: RRE                   |                              |
 
 
+2) Company B sends a message to User A
+
+
+| Action                        | A Inbox                       |       B Inbox		           |
+|-------------------------------|-------------------------------|------------------------------|
+| Company B sends  message to   |  mid: 2325,  dir: O,          | mid: 2325_1, dir: I,         |
+| User A                        |  status: NEW,  type: INC      | status: NEW, type: INC       |
+|                               | to:uid(A)  ,eid: companyID(B) | eid:uid(A)  to:  companyID(B)|
+|                               |                               |                              |
+| B receives message            | mid: 2325,  dir: O,       	| mid: 2325_1, dir: I,         |
+|                               | status: RRV                   | status: NEW                  |
+|                               |                               |                              |
+| B reads message               | mid: 2325, dir: O,        	| mid: 2325_1, dir: I,         |
+|                               | status: RRE                   | status: REA                  |
+|                               |                               |                              |
+| B deletes message             | mid: 2325, dir: O,        	| Message deleted              |
+|                               | status: RRE                   |                              |
 

@@ -5,7 +5,7 @@ import ee.incub.rest.spring.model.http.Token;
 
 public class GoogleVerificationController {
 
-	public static boolean verifyToken(Token user) {
+	public static boolean verifyToken(String token) {
 		/*GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
 				transport, jsonFactory).setAudience(Arrays.asList(Constants.CLIENT_ID))
 				.build();

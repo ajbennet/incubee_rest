@@ -65,7 +65,7 @@ public class FounderController {
 			}
 		}
 
-		if (token == null || !GoogleVerificationController.verifyToken(token)) {
+		if (token == null || !GoogleVerificationController.verifyToken(token.getToken())) {
 			return new ResponseEntity<String>("Please sign-in with Google",
 					HttpStatus.UNAUTHORIZED);
 		}
