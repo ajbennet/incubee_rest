@@ -76,7 +76,7 @@ public class MessagesController {
 	@RequestMapping(value = "/msg/{mid}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<MessageResponse> getForId(@PathVariable("mid") String mid, @RequestParam("eid") String eid) {
-		logger.info("Recieved getIncubee for Id: " + mid + " for eid :" + eid);
+		logger.info("Recieved GetMesssafe for mId: " + mid + " for eid :" + eid);
 		try {
 			MessageResponse messageResponse = new MessageResponse();
 			messageResponse.setStatusMessage("Success");

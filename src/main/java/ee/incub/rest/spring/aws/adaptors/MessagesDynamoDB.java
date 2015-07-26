@@ -12,6 +12,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Index;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
@@ -98,6 +99,7 @@ public class MessagesDynamoDB {
 
 	public static Message getMessageForMessageID(String mid, String eid) throws Exception {
 		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
+		Index index = table.getIndex(Constants.MID_INDEX);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"eid = :eid and mid =:mid").withValueMap(new ValueMap()
@@ -106,18 +108,17 @@ public class MessagesDynamoDB {
 					)
 			// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
 			;
-			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			ItemCollection<QueryOutcome> items = index.query(querySpec);
 			Iterator<Item> iterator = items.iterator();
 
 			System.out.println("Query: printing results...: ");
 			Message message = null;
 			while (iterator.hasNext()) {
-				if (message == null) {
-					message = new Message();
-				}
+				
 				Item item = iterator.next();
 				logger.info("Message from DB for mid: " + mid + " - "
-						+ item.toJSONPretty());
+						+ item.toJSONPretty() );
+				message = Utils.messageFromItem(item);
 			}
 			return message;
 		} catch (AmazonServiceException e) {
@@ -182,7 +183,7 @@ public class MessagesDynamoDB {
 			Projection projection = new Projection().withProjectionType(ProjectionType.ALL);
 			
 			LocalSecondaryIndex localSecondaryIndex = new LocalSecondaryIndex()
-			    .withIndexName("midIndex").withKeySchema(indexKeySchema).withProjection(projection);
+			    .withIndexName(Constants.MID_INDEX).withKeySchema(indexKeySchema).withProjection(projection);
 			
 			ArrayList<LocalSecondaryIndex> localSecondaryIndexes = new ArrayList<LocalSecondaryIndex>();
 			localSecondaryIndexes.add(localSecondaryIndex);
@@ -283,45 +284,4 @@ public class MessagesDynamoDB {
 				tableDescription.getProvisionedThroughput()
 						.getWriteCapacityUnits());
 	}
-
-	// public static Incubee getIncubee(String incubee_id) {
-	// Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
-	// QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
-	// "id = :v1 ").withValueMap(
-	// new ValueMap().withString(":v1", incubee_id))
-	// //
-	// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
-	// ;
-	// ItemCollection<QueryOutcome> items = table.query(querySpec);
-	// Iterator<Item> iterator = items.iterator();
-	//
-	// System.out.println("Query: printing results...");
-	// Incubee incubee = null;
-	// while (iterator.hasNext()) {
-	// if (incubee == null) {
-	// incubee = new Incubee();
-	// }
-	// Item item = iterator.next();
-	// logger.info("Incubee from DB for company: " + incubee_id + " - "
-	// + item.toJSONPretty());
-	//
-	// incubee.setCompany_name(item.getString("incubee_id"));
-	// incubee.setCompany_url(item.getString("company_url"));
-	// incubee.setImages((String[]) item.getStringSet("photos").toArray());
-	// incubee.setHigh_concept(item.getString("high_concept"));
-	// incubee.setDescription(item.getString("description"));
-	// incubee.setVideo(item.getString("video"));
-	// incubee.setFounder(item.getString("founder"));
-	// incubee.setLogo_url(item.getString("logo_url"));
-	// incubee.setTwitter_url(item.getString("twitter_url"));
-	// incubee.setLocation(item.getString("location"));
-	// incubee.setVideo_url(item.getString("video_url"));
-	// incubee.setFunding(item.getBoolean("funding"));
-	// incubee.setProject_status(item.getString("project_status"));
-	// incubee.setField(item.getString("field"));
-	//
-	// }
-	// return incubee;
-	// }
-
 }

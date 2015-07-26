@@ -8,4 +8,5 @@ public class Constants {
 	public static final String APPS_DOMAIN_NAME = Config.getProperty("apps_domain_name");
 	public static final String CLIENT_ID = Config.getProperty("client_id");
 	public static final String MESSAGE_TABLE = Config.getProperty("message_table");
+	public static final String MID_INDEX = Config.getProperty("mid_index");
 }
