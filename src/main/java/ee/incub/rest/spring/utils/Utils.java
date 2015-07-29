@@ -269,7 +269,7 @@ public class Utils {
 		// swapping the UID and To fields
 		message.setEid(messageRequest.getTo());
 		message.setTo(messageRequest.getEid());
-
+		message.setName(messageRequest.getName());
 		message.setBody(messageRequest.getBody());
 		message.setDir(Message.INBOUND);
 		message.setLattitude(messageRequest.getLatitude());

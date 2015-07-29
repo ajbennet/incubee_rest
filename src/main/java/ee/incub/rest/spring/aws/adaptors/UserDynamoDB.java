@@ -55,7 +55,7 @@ public class UserDynamoDB {
 		initializeAndCreateTables();
 	}
 
-	public static void loadIncubee(Incubee incubee) {
+	public static void loadIncubee(Incubee incubee) throws Exception {
 
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 
@@ -69,7 +69,7 @@ public class UserDynamoDB {
 			if (incubee.getCompany_url() != null)
 				item.withString("company_url", incubee.getCompany_url());
 			// need to hash this.
-			if (incubee.getCompany_name() != null)
+			if (incubee.getImages() != null)
 				item.withStringSet("photos",
 						new HashSet<String>(Arrays.asList(incubee.getImages())));
 			if (incubee.getVideo() != null)
@@ -98,9 +98,9 @@ public class UserDynamoDB {
 			table.putItem(item);
 			logger.info("Added data for company :" + incubee.getCompany_name());
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Failed to create item in " + Constants.INCUBEE_TABLE);
 			logger.error(e.getMessage());
+			throw e;
 		}
 
 	}
@@ -181,7 +181,7 @@ public class UserDynamoDB {
 	// return incubee;
 	// }
 
-	public static User getUser(String user_id) {
+	public static User getUser(String user_id) throws AmazonServiceException{
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -210,17 +210,18 @@ public class UserDynamoDB {
 				user.setUser_type(item.getString("user_type"));
 				user.setName(item.getString("name"));
 				user.setHandle_id(item.getString("handle_id"));
+				user.setAdmin((item.isNull("is_admin")||
+						!item.isPresent("is_admin")?false:item.getBoolean("is_admin")));
 
 			}
 			return user;
 		} catch (AmazonServiceException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			throw e;
 		}
-
 	}
 
-	public static User getUserForHandle(String handle_id) {
+	public static User getUserForHandle(String handle_id) throws AmazonServiceException{
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -249,17 +250,18 @@ public class UserDynamoDB {
 				user.setUser_type(item.getString("user_type"));
 				user.setName(item.getString("name"));
 				user.setHandle_id(handle_id);
-
+				user.setAdmin((item.isNull("is_admin")||
+						!item.isPresent("is_admin")?false:item.getBoolean("is_admin")));
 			}
 			return user;
 		} catch (AmazonServiceException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			throw e;
 		}
 
 	}
 
-	public static Incubee getIncubee(String incubee_id) {
+	public static Incubee getIncubee(String incubee_id) throws AmazonServiceException{
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -283,7 +285,7 @@ public class UserDynamoDB {
 			return incubee;
 		} catch (AmazonServiceException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			throw e;
 		}
 	}
 

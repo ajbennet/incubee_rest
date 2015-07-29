@@ -44,18 +44,25 @@ public class SignupController {
 				return new ResponseEntity<LoginResponse>(response,
 						HttpStatus.NOT_FOUND);
 			} else {
-				// Incubee incubee =
-				// DynamoDBAdaptor.getIncubee(user.getCompany_id());
-				response.setStatusCode(LoginResponse.SUCCESS);
-				response.setStatusMessage("Success");
-				Map<String, Object> map = new HashMap<String, Object>();
-				if(user.getCompany_id()!=null && !user.getCompany_id().isEmpty()){
-					map.put("company_id", user.getCompany_id());
-					response.setServicedata(map);
+				
+				if (user.isAdmin()){
+					response.setStatusCode(LoginResponse.SUCCESS);
+					response.setStatusMessage("Success");
+					Map<String, Object> map = new HashMap<String, Object>();
+					if(user.getCompany_id()!=null && !user.getCompany_id().isEmpty()){
+						map.put("is_admin", new Boolean(true));
+						response.setServicedata(map);
+					}
+				}else{
+				
+					response.setStatusCode(LoginResponse.SUCCESS);
+					response.setStatusMessage("Success");
+					Map<String, Object> map = new HashMap<String, Object>();
+					if(user.getCompany_id()!=null && !user.getCompany_id().isEmpty()){
+						map.put("company_id", user.getCompany_id());
+						response.setServicedata(map);
+					}
 				}
-				// return new
-				// ResponseEntity<String>("{\"company_id\":\""+user.getCompany_id()+"\"}",
-				// HttpStatus.OK);
 				return new ResponseEntity<LoginResponse>(response,
 						HttpStatus.OK);
 			}

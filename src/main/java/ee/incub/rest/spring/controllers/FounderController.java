@@ -1,12 +1,7 @@
 package ee.incub.rest.spring.controllers;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.codehaus.jackson.JsonParseException;
@@ -18,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +23,6 @@ import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
 import ee.incub.rest.spring.model.db.User;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
-import ee.incub.rest.spring.model.http.LoginResponse;
 import ee.incub.rest.spring.model.http.Token;
 import ee.incub.rest.spring.utils.Utils;
 
@@ -75,7 +67,7 @@ public class FounderController {
 			
 			boolean isSuccess = false;
 			// creating new incubee & user
-			isSuccess = createOrUpdateIncubee(incubee, uuid);
+			isSuccess = createOrUpdateIncubee(incubee, uuid, false);
 			if (isSuccess){
 				boolean isCreated = false;
 				try {
@@ -97,7 +89,7 @@ public class FounderController {
 			}
 			
 		} else {
-			if (createOrUpdateIncubee(incubee, uuid))
+			if (createOrUpdateIncubee(incubee, uuid, user.isAdmin()))
 				return new ResponseEntity<String>("Incubee Updated", HttpStatus.OK);
 			else
 				return new ResponseEntity<String>("Failed to update Incubee", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -116,8 +108,14 @@ public class FounderController {
 		logger.info("Recieved getIncubee for Id: " + id);
 		return Utils.fromIncubee(UserDynamoDB.getIncubee(id));
 	}
-
-	private boolean createOrUpdateIncubee(IncubeeRequest incubee, String uuid) {
+	/**
+	 * 
+	 * @param incubee
+	 * @param uuid
+	 * @param isAdmin - Admins can only create startups and can have multiple startups under their name
+	 * @return
+	 */
+	private boolean createOrUpdateIncubee(IncubeeRequest incubee, String uuid, boolean isAdmin) {
 		boolean isCreated = false;
 		logger.info("Creating new Incubee : " + incubee + " with id :" + uuid);
 		String[] keyList = null;
@@ -156,7 +154,7 @@ public class FounderController {
 			}
 		}
 		try {
-			if (incubee.getId() != null && !incubee.getId().isEmpty()) {
+			if (incubee.getId() != null && !incubee.getId().isEmpty() && !isAdmin) {
 	
 				UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee,
 						keyList, video, incubee.getId()));

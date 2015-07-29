@@ -1,9 +1,5 @@
 function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile();
-	/* console.log('ID: ' + profile.getId());
-	console.log('Name: ' + profile.getName());
-	console.log('Image URL: ' + profile.getImageUrl());
-	console.log('Email: ' + profile.getEmail()); */
 	var id_token = googleUser.getAuthResponse().id_token;
 	var token = {
 		"name" : profile.getName(),
@@ -40,10 +36,33 @@ function login(token){
 		cache : false,
 		processData : false,
 		success : function(data) {
-			//alert('Form Submitted!' + data);
 			console.log("retrieved " + data);
 			if(data && data.servicedata && data.servicedata.company_id){
 				getCompany(data.servicedata.company_id);
+			}
+		},
+		error : function(data) {
+			console.error("error in login form submission" + data);
+		}
+	});
+};
+
+function signup(token){
+	$.ajax({
+		url : 'rest/signup',
+		type : 'POST',
+		data: JSON.stringify(token),
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+		async : true,
+		cache : false,
+		processData : false,
+		success : function(data) {
+			console.log("retrieved " + data);
+			if(data && data.servicedata && data.servicedata.company_id){
+				getCompany(data.servicedata.company_id);
+			}else if(data && data.servicedata && data.servicedata.is_admin){
+				console.log("logged in as admin user");
 			}
 		},
 		error : function(data) {

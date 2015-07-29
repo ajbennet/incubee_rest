@@ -2,6 +2,17 @@ package ee.incub.rest.spring.model.db;
 
 public class User {
 	
+	private String handle_id;
+	private String id;
+	private String login_type;
+	private String token;
+	private String user_type;
+	private String company_id;
+	private String image_url;
+	private String email;
+	private String name;
+	private boolean isAdmin;
+	
 	public String getId() {
 		return id;
 	}
@@ -65,22 +76,22 @@ public class User {
 		this.handle_id = handle_id;
 	}
 
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+
 	@Override
 	public String toString() {
 		return "User [handle_id=" + handle_id + ", id=" + id + ", login_type="
 				+ login_type + ", token=" + token + ", user_type=" + user_type
 				+ ", company_id=" + company_id + ", image_url=" + image_url
-				+ ", email=" + email + ", name=" + name + "]";
+				+ ", email=" + email + ", name=" + name + ", isAdmin="
+				+ isAdmin + "]";
 	}
 
-	private String handle_id;
-	private String id;
-	private String login_type;
-	private String token;
-	private String user_type;
-	private String company_id;
-	private String image_url;
-	private String email;
-	private String name;
-	
+
 }
