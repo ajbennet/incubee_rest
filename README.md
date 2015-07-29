@@ -124,7 +124,7 @@ Success Response
 }
 ```
 
-###Get All Incubees
+##Get All Incubees
 ```sh
 GET http://www.incub.ee/rest/all
 ```
@@ -223,7 +223,7 @@ http
 ```
 
 
-#3 Get All Likes
+## Get All Likes
 ```sh
 GET http://www.incub.ee/rest/like?id={user_id}
 
