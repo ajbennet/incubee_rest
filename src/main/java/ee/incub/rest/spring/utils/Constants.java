@@ -9,4 +9,6 @@ public class Constants {
 	public static final String CLIENT_ID = Config.getProperty("client_id");
 	public static final String MESSAGE_TABLE = Config.getProperty("message_table");
 	public static final String MID_INDEX = Config.getProperty("mid_index");
+	public static final String LIKE_TABLE = Config.getProperty("like_table");
+	public static final String CUSTOMER_TABLE = Config.getProperty("customer_table");
 }

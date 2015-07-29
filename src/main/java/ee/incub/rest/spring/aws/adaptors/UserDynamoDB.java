@@ -97,8 +97,6 @@ public class UserDynamoDB {
 			item.withString("updated_time", (dateFormatter.format(new Date())));
 			table.putItem(item);
 			logger.info("Added data for company :" + incubee.getCompany_name());
-			System.out.println("Added data for company :"
-					+ incubee.getCompany_name());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed to create item in " + Constants.INCUBEE_TABLE);
@@ -154,7 +152,7 @@ public class UserDynamoDB {
 	// ItemCollection<QueryOutcome> items = table.query(querySpec);
 	// Iterator<Item> iterator = items.iterator();
 	//
-	// System.out.println("Query: printing results...");
+	// logger.info("Query: printing results...");
 	// Incubee incubee = null;
 	// while (iterator.hasNext()) {
 	// if (incubee == null) {
@@ -194,7 +192,7 @@ public class UserDynamoDB {
 			ItemCollection<QueryOutcome> items = table.query(querySpec);
 			Iterator<Item> iterator = items.iterator();
 
-			System.out.println("Query: printing results...: ");
+			logger.info("Query: printing results...: ");
 			User user = null;
 			while (iterator.hasNext()) {
 				if (user == null) {
@@ -233,7 +231,7 @@ public class UserDynamoDB {
 			ItemCollection<QueryOutcome> items = table.query(querySpec);
 			Iterator<Item> iterator = items.iterator();
 
-			System.out.println("Query: printing results...: ");
+			logger.info("Query: printing results...: ");
 			User user = null;
 			while (iterator.hasNext()) {
 				if (user == null) {
@@ -272,7 +270,7 @@ public class UserDynamoDB {
 			ItemCollection<QueryOutcome> items = table.query(querySpec);
 			Iterator<Item> iterator = items.iterator();
 
-			System.out.println("Query: printing results...: ");
+			logger.info("Query: printing results...: ");
 			Incubee incubee = null;
 			while (iterator.hasNext()) {
 
@@ -356,18 +354,18 @@ public class UserDynamoDB {
 							new ProvisionedThroughput().withReadCapacityUnits(
 									20L).withWriteCapacityUnits(10L));
 
-			System.out.println("Issuing CreateTable request for " + tableName);
+			logger.info("Issuing CreateTable request for " + tableName);
 			Table table = dynamoDB.createTable(request);
 
-			System.out.println("Waiting for " + tableName
+			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
 			table.waitForActive();
 
 			getTableInformation(tableName);
 
 		} catch (Exception e) {
-			System.err.println("CreateTable request failed for " + tableName);
-			System.err.println(e.getMessage());
+			logger.error("CreateTable request failed for " + tableName);
+			logger.error(e.getMessage());
 		}
 
 	}
@@ -392,18 +390,18 @@ public class UserDynamoDB {
 							new ProvisionedThroughput().withReadCapacityUnits(
 									20L).withWriteCapacityUnits(10L));
 
-			System.out.println("Issuing CreateTable request for " + tableName);
+			logger.info("Issuing CreateTable request for " + tableName);
 			Table table = dynamoDB.createTable(request);
 
-			System.out.println("Waiting for " + tableName
+			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
 			table.waitForActive();
 
 			getTableInformation(tableName);
 
 		} catch (Exception e) {
-			System.err.println("CreateTable request failed for " + tableName);
-			System.err.println(e.getMessage());
+			logger.error("CreateTable request failed for " + tableName);
+			logger.error(e.getMessage());
 		}
 
 	}
@@ -489,7 +487,7 @@ public class UserDynamoDB {
 
 	static void getTableInformation(String tableName) {
 
-		System.out.println("Describing " + tableName);
+		logger.info("Describing " + tableName);
 
 		TableDescription tableDescription = dynamoDB.getTable(tableName)
 				.describe();
@@ -514,7 +512,7 @@ public class UserDynamoDB {
 	// ItemCollection<QueryOutcome> items = table.query(querySpec);
 	// Iterator<Item> iterator = items.iterator();
 	//
-	// System.out.println("Query: printing results...");
+	// logger.info("Query: printing results...");
 	// Incubee incubee = null;
 	// while (iterator.hasNext()) {
 	// if (incubee == null) {

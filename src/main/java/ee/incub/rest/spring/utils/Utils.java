@@ -176,11 +176,11 @@ public class Utils {
 				message.setStime(null);
 			}
 			try {
-				message.setTime(item.getString("time") != null ? dateFormatter
-						.parse(item.getString("time")) : null);
+				message.setTime(item.getString("updated_time") != null ? dateFormatter
+						.parse(item.getString("updated_time")) : null);
 			} catch (ParseException e) {
 
-				logger.error("Error Parsing date : " + item.getString("time"),
+				logger.error("Error Parsing date : " + item.getString("updated_time"),
 						e);
 				message.setTime(null);
 			}
@@ -240,6 +240,8 @@ public class Utils {
 		}
 		return null;
 	}
+	
+	
 
 	public static Message outboundMsgfromMsgRequest(
 			MessageRequest messageRequest, String mid) {

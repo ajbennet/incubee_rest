@@ -63,7 +63,7 @@ public class MessagesDynamoDB {
 
 			Item item = new Item().withPrimaryKey("eid", message.getEid());
 			item.withKeyComponent("mid", message.getMid())
-			.withKeyComponent("time",dateFormatter.format(new Date()));
+			.withKeyComponent("updated_time",dateFormatter.format(new Date()));
 			if (message.getBody() != null)
 				item.withString("body", message.getBody());
 			if (message.getDir() != null)
@@ -95,7 +95,34 @@ public class MessagesDynamoDB {
 
 	}
 
+	public static Message getMessagesForUser(String eid) throws Exception {
+		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
+		try {
+			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+					"eid = :eid").withValueMap(new ValueMap()
+					.withString(":eid", eid)
+					)
+			// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
+			;
+			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			Iterator<Item> iterator = items.iterator();
 
+			System.out.println("Query: printing results...: ");
+			Message message = null;
+			while (iterator.hasNext()) {
+				
+				Item item = iterator.next();
+				logger.info("Message from DB for eid: " + eid + " - "
+						+ item.toJSONPretty() );
+				message = Utils.messageFromItem(item);
+			}
+			return message;
+		} catch (AmazonServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
+
+	}
 
 	public static Message getMessageForMessageID(String mid, String eid) throws Exception {
 		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
@@ -158,13 +185,13 @@ public class MessagesDynamoDB {
 			attributeDefinitions.add(new AttributeDefinition()
 				.withAttributeName("eid").withAttributeType("S"));
 			attributeDefinitions.add(new AttributeDefinition()
-				.withAttributeName("time").withAttributeType("S"));
+				.withAttributeName("updated_time").withAttributeType("S"));
 			attributeDefinitions.add(new AttributeDefinition()
 				.withAttributeName("mid").withAttributeType("S"));
 			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
 			keySchema.add(new KeySchemaElement().withAttributeName("eid")
 					.withKeyType(KeyType.HASH));
-			keySchema.add(new KeySchemaElement().withAttributeName("time")
+			keySchema.add(new KeySchemaElement().withAttributeName("updated_time")
 							.withKeyType(KeyType.RANGE));
 			CreateTableRequest createTableRequest = new CreateTableRequest()
 					.withTableName(tableName)
@@ -231,7 +258,7 @@ public class MessagesDynamoDB {
 				valueMap.with(":stime", dateFormatter.format(message.getStime()));
 			}
 			if (message.getTime() != null){
-				updateExpression = updateExpression + ",time = :time ";
+				updateExpression = updateExpression + ",updated_time = :time ";
 				valueMap.with(":time", dateFormatter.format(message.getTime()));
 			}
 			if (message.getTo() != null && !message.getTo().isEmpty()){

@@ -79,8 +79,85 @@ User already present Response
 ```sh
 http code: 409 Conflict
 {
-	"statusMessage":"User already found with that User ID please login","statusCode":"SIGN_1004"}
+	"statusMessage":"User already found with that User ID please login",
+	"statusCode":"SIGN_1004"
+}
 ```
+
+
+## Like API 
+API called when a user likes a startup
+
+```sh
+POST http://www.incub.ee/rest/like/{StartupId}?uid={uid}
+```
+
+Success Response
+```sh
+http
+{  
+   "statusMessage":"Success",
+   "statusCode":"LIK_1000",
+}
+```
+
+#3 Get All Likes
+```sh
+GET http://www.incub.ee/rest/like?uid={uid}
+```
+
+Success Response
+```sh
+http
+{  
+   "statusMessage":"Success",
+   "statusCode":"LIK_1000",
+   "likedIncubees":[
+   {incubeeId1},
+   {incubeeId2},
+   {incubeeId3},
+   {incubeeId4},
+   {incubeeId5},
+   {incubeeId6}
+   ]
+}
+```
+## Customer API 
+API called when a user likes a startup
+
+```sh
+POST http://www.incub.ee/rest/customer/{StartupId}?uid={uid}
+```
+
+Success Response
+```sh
+http
+{  
+   "statusMessage":"Success",
+   "statusCode":"CUS_1000",
+}
+```
+
+#3 Get All Customers
+```sh
+GET http://www.incub.ee/rest/customer?uid={uid}
+```
+
+Success Response
+```sh
+http
+{  
+   "statusMessage":"Success",
+   "statusCode":"CUS_1000",
+   "likedIncubees":[
+   {incubeeId1},
+   {incubeeId2},
+   {incubeeId3},
+   {incubeeId4},
+   {incubeeId5},
+   {incubeeId6}
+   ]
+}
 
 ## Send Message API
 
