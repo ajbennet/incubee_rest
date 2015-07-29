@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.model.db.User;
@@ -72,6 +73,19 @@ public class SignupController {
 		response.setStatusMessage("Token not found");
 		return new ResponseEntity<LoginResponse>(response,
 				HttpStatus.BAD_REQUEST);
+	}
+	
+	@RequestMapping(value = "/user", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteUser(@RequestParam("uid")  String userid) {
+		logger.info("Recieved delete user with id : " + userid);
+		try {
+			UserDynamoDB.deleteUser(userid);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<String>("User Deleted",
+				HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -138,4 +152,5 @@ public class SignupController {
 			return false;
 		}
 	}
+	
 }

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
@@ -22,6 +23,7 @@ import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.TableCollection;
 import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
@@ -212,7 +214,6 @@ public class UserDynamoDB {
 				user.setHandle_id(item.getString("handle_id"));
 				user.setAdmin((item.isNull("is_admin")||
 						!item.isPresent("is_admin")?false:item.getBoolean("is_admin")));
-
 			}
 			return user;
 		} catch (AmazonServiceException e) {
@@ -260,6 +261,29 @@ public class UserDynamoDB {
 		}
 
 	}
+	
+	public static void deleteUser(String userid) throws Exception{
+
+        Table table = dynamoDB.getTable(Constants.USER_TABLE);
+
+        try {
+
+            DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
+            .withPrimaryKey("id", userid)
+            .withReturnValues(ReturnValue.ALL_OLD);
+
+            DeleteItemOutcome outcome = table.deleteItem(deleteItemSpec);
+
+            // Check the response.
+           logger.info("Printing item that was deleted...");
+           logger.info(outcome.getItem().toJSONPretty());
+
+        } catch (Exception e) {
+            logger.error("Error deleting item in " + Constants.USER_TABLE);
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
 
 	public static Incubee getIncubee(String incubee_id) throws AmazonServiceException{
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);

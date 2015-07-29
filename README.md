@@ -83,13 +83,134 @@ http code: 409 Conflict
 	"statusCode":"SIGN_1004"
 }
 ```
+##Delete User API
+```sh
+DELETE http://www.incub.ee/rest/user?uid={uid}
+```
+Success Response
+```sh
+http Code: 200 
+Message: User Deleted
+````
+
+##Get Incubee
+```sh
+GET http://www.incub.ee/rest/{incubee_id}
+```
+Success Response
+```sh
+{
+   "company_name":"Socigo",
+   "company_url":"www.socigo.com",
+   "logo_url":null,
+   "high_concept":"A New Generation Open Source Gaming Platform",
+   "description":"Socigo rethinks the way gaming platform for the modern gamers.",
+   "twitter_url":"https://twitter.com/socigo",
+   "video_url":null,
+   "founder":"Mark Cuban",
+   "location":"Belgium",
+   "contact_email":null,
+   "images":[
+      "https://incubee-images.s3.amazonaws.com/img_246b5df9-bd5d-46be-ba4f-301c971c1b5b",
+      "https://incubee-images.s3.amazonaws.com/img_246c39af-d880-40b7-937a-242227be220b",
+      "https://incubee-images.s3.amazonaws.com/img_4a9c58b5-fc53-4323-9b10-8c4f7a3328da",
+      "https://incubee-images.s3.amazonaws.com/img_54099163-d0bc-4931-9eca-697884633629"
+   ],
+   "video":"https://incubee-images.s3.amazonaws.com/vid_78fab564-c311-4cdd-8589-d4390673440e",
+   "funding":true,
+   "project_status":"Just-launched",
+   "field":"Gaming",
+   "id":"inc_952745e0-ea2e-4365-83b3-cd379072ce57"
+}
+```
+
+###Get All Incubees
+```sh
+GET http://www.incub.ee/rest/all
+```
+
+Success Response
+```sh
+[
+   {
+      "company_name":"Socigo",
+      "company_url":"www.socigo.com",
+      "logo_url":null,
+      "high_concept":"A New Generation Open Source Gaming Platform",
+      "description":"Socigo rethinks the way gaming platform for the modern gamers.",
+      "twitter_url":"https://twitter.com/socigo",
+      "video_url":null,
+      "founder":"Mark Cuban",
+      "location":"Belgium",
+      "contact_email":null,
+      "images":[
+         "https://incubee-images.s3.amazonaws.com/img_246b5df9-bd5d-46be-ba4f-301c971c1b5b",
+         "https://incubee-images.s3.amazonaws.com/img_246c39af-d880-40b7-937a-242227be220b",
+         "https://incubee-images.s3.amazonaws.com/img_4a9c58b5-fc53-4323-9b10-8c4f7a3328da",
+         "https://incubee-images.s3.amazonaws.com/img_54099163-d0bc-4931-9eca-697884633629"
+      ],
+      "video":"https://incubee-images.s3.amazonaws.com/vid_78fab564-c311-4cdd-8589-d4390673440e",
+      "funding":true,
+      "project_status":"Just-launched",
+      "field":"Gaming",
+      "id":"inc_952745e0-ea2e-4365-83b3-cd379072ce57"
+   },
+   {
+      "company_name":"Hipmunk",
+      "company_url":"www.hipmunk.com",
+      "logo_url":null,
+      "high_concept":"Search flights and hotels faster ",
+      "description":"Fastest way to travel and Hipmunk makes it easier.",
+      "twitter_url":"http://twitter.com/hipmunk",
+      "video_url":null,
+      "founder":"Elon Musk",
+      "location":"WA",
+      "contact_email":null,
+      "images":[
+         "https://incubee-images.s3.amazonaws.com/img_3233ac62-7e66-4f50-b5ed-99260ed08cdb",
+         "https://incubee-images.s3.amazonaws.com/img_9d3cb74d-dde2-4234-8981-6e6582099492",
+         "https://incubee-images.s3.amazonaws.com/img_ad648878-2185-4f78-8682-42f286d75f93",
+         "https://incubee-images.s3.amazonaws.com/img_dfc833ce-d07b-43ce-94b3-df61b0482058"
+      ],
+      "video":"https://incubee-images.s3.amazonaws.com/vid_9a1bf404-da5d-419f-95ca-6446988268e2",
+      "funding":true,
+      "project_status":"Launched-with-customers",
+      "field":"Travel",
+      "id":"inc_68237436-bedf-4aa8-8cd9-321893d1255c"
+   },
+   {
+      "company_name":"DollarShaveClub",
+      "company_url":"http://www.dollarshaveclub.com/",
+      "logo_url":null,
+      "high_concept":"Get a shaving kit for just a dollar a month.",
+      "description":"A great shave for a few bucks no commitments. no fees. Do it.",
+      "twitter_url":"https://twitter.com/dollarshaveclub",
+      "video_url":null,
+      "founder":"Michael Dubin",
+      "location":"Venice, CA",
+      "contact_email":null,
+      "images":[
+         "https://incubee-images.s3.amazonaws.com/img_2b7c82a1-02f6-41bc-97f2-c77aa3881876",
+         "https://incubee-images.s3.amazonaws.com/img_4a783486-efbd-4e6f-9a98-136dc91d4e36",
+         "https://incubee-images.s3.amazonaws.com/img_d8078fd9-58c3-41d1-9a2d-eac995cbe7b6",
+         "https://incubee-images.s3.amazonaws.com/img_f4b23aa8-fb22-4d84-9255-5fee63490b5b"
+      ],
+      "video":"https://incubee-images.s3.amazonaws.com/vid_ee73895c-a4cf-4220-8cbf-10df8b2b4091",
+      "funding":false,
+      "project_status":"Launched-with-customers",
+      "field":"ecommerce",
+      "id":"inc_e14651b7-1f65-460f-8841-5cb716236704"
+   }
+]
+```
+
 
 
 ## Like API 
 API called when a user likes a startup
 
 ```sh
-POST http://www.incub.ee/rest/like/{StartupId}?uid={uid}
+POST http://www.incub.ee/rest/like/{incubee_id}?uid={uid}
 ```
 
 Success Response
@@ -101,18 +222,20 @@ http
 }
 ```
 
+
 #3 Get All Likes
 ```sh
-GET http://www.incub.ee/rest/like?uid={uid}
+GET http://www.incub.ee/rest/like?id={user_id}
+
 ```
 
 Success Response
 ```sh
-http
+http Code: 200
 {  
    "statusMessage":"Success",
    "statusCode":"LIK_1000",
-   "likedIncubees":[
+   "incubeeList":[
    {incubeeId1},
    {incubeeId2},
    {incubeeId3},
@@ -122,11 +245,13 @@ http
    ]
 }
 ```
+
+
 ## Customer API 
 API called when a user likes a startup
 
 ```sh
-POST http://www.incub.ee/rest/customer/{StartupId}?uid={uid}
+POST http://www.incub.ee/rest/customer/{incubee_id}?uid={user_id}
 ```
 
 Success Response
@@ -140,7 +265,7 @@ http
 
 #3 Get All Customers
 ```sh
-GET http://www.incub.ee/rest/customer?uid={uid}
+GET http://www.incub.ee/rest/customer?id={incubee_id}
 ```
 
 Success Response
@@ -149,7 +274,7 @@ http
 {  
    "statusMessage":"Success",
    "statusCode":"CUS_1000",
-   "likedIncubees":[
+   "incubeeList":[
    {incubeeId1},
    {incubeeId2},
    {incubeeId3},
