@@ -316,37 +316,67 @@ httpCode : 200 OK
 
 ## Get Messages API
 ```sh
-GET http://www.incub.ee/rest/msg/all/{eid}
+GET http://www.incub.ee/rest/msg/all?eid={eid}
 ```
 
 Response
 
 ```sh
 httpCode : 200 OK
-{  
+{
    "statusMessage":"Success",
-   "statusCode":"MSG_1000"
-   "messages" : [ {
-        "body" : "Hi hows it going.",
-        "dir" : "I",
-        "mid" : 2333,
-        "name" : "Mark Cuban",
-        "status" : "N",
-        "stime" : 1301419911000,
-        "time" : 1301419912000,
-        "to" : "2345452643643",
-        "type" : "umsg"
-      },
-      { "body" : "Im good you",
-        "dir" : "O",
-        "mid" : 23432,
-        "name" : "Abs",
-        "status" : "N",
-        "stime" : 1301370381000,
-        "time" : 1301370381000,
-        "to" : "14083984358",
-        "type" : "umsg"
-} ],
+   "statusCode":"MSGS_1000",
+   "messages":[
+      {
+         "mid":"msg_zbnhto3a4tubsz9",
+         "to":"110310242727937004157",
+         "eid":"110489314263267697974",
+         "time":1438140708801,
+         "stime":1438140708801,
+         "status":"NEW",
+         "name":"Abinathab Bennet",
+         "body":"Hi I like this idea",
+         "type":"USR",
+         "dir":"O",
+         "lattitude":323,
+         "longitude":914,
+         "media":null
+      }
+    ]
+}
+```
+
+## Get Message for Message ID
+```sh
+GET http://www.incub.ee/rest/msg/{mid}?eid={eid}
+
+eg: http://www.incub.ee/rest/msg/msg_zbnhto3a4tubsz9?eid=110489314263267697974
+```
+
+Response
+
+```sh
+httpCode : 200 OK
+{
+   "statusMessage":"Success",
+   "statusCode":"MSG_1000",
+   "messages":[
+      {
+         "mid":"msg_zbnhto3a4tubsz9",
+         "to":"110310242727937004157",
+         "eid":"110489314263267697974",
+         "time":1438140708801,
+         "stime":1438140708801,
+         "status":"NEW",
+         "name":"Abinathab Bennet",
+         "body":"Hi I like this idea",
+         "type":"USR",
+         "dir":"O",
+         "lattitude":323,
+         "longitude":914,
+         "media":null
+      }
+    ]
 }
 ```
 

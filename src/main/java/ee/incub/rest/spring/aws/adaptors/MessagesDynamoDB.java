@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,28 +96,28 @@ public class MessagesDynamoDB {
 
 	}
 
-	public static Message getMessagesForUser(String eid) throws Exception {
+	public static Message[] getMessagesForUser(String eid) throws Exception {
 		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"eid = :eid").withValueMap(new ValueMap()
 					.withString(":eid", eid)
 					)
-			// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
 			;
 			ItemCollection<QueryOutcome> items = table.query(querySpec);
 			Iterator<Item> iterator = items.iterator();
 
 			System.out.println("Query: printing results...: ");
-			Message message = null;
+			List<Message> messageList = new ArrayList<Message>();
+			
 			while (iterator.hasNext()) {
 				
 				Item item = iterator.next();
 				logger.info("Message from DB for eid: " + eid + " - "
 						+ item.toJSONPretty() );
-				message = Utils.messageFromItem(item);
+				messageList.add( Utils.messageFromItem(item));
 			}
-			return message;
+			return messageList.toArray(new Message[messageList.size()]);
 		} catch (AmazonServiceException e) {
 			logger.error(e.getMessage(), e);
 			throw e;

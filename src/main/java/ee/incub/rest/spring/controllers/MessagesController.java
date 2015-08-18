@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ee.incub.rest.spring.aws.adaptors.MessagesDynamoDB;
 import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.model.db.Message;
+import ee.incub.rest.spring.model.http.AllMessagesResponse;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
 import ee.incub.rest.spring.model.http.MessageRequest;
 import ee.incub.rest.spring.model.http.MessageResponse;
@@ -75,7 +76,7 @@ public class MessagesController {
 	}
 	@RequestMapping(value = "/msg/{mid}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<MessageResponse> getForId(@PathVariable("mid") String mid, @RequestParam("eid") String eid) {
+	public ResponseEntity<MessageResponse> getMessageForMid(@PathVariable("mid") String mid, @RequestParam("eid") String eid) {
 		logger.info("Recieved GetMesssafe for mId: " + mid + " for eid :" + eid);
 		try {
 			MessageResponse messageResponse = new MessageResponse();
@@ -87,9 +88,31 @@ public class MessagesController {
 		} catch (Exception e) {
 			logger.error("Exception getMessage for Id: " + mid + " for eid :" + eid,e);
 			MessageResponse messageResponse = new MessageResponse();
-			messageResponse.setStatusMessage("Ger Message failed");
+			messageResponse.setStatusMessage("Get Message failed");
 			messageResponse.setStatusCode(MessageResponse.GET_FAILED);
 			return new ResponseEntity<MessageResponse>(messageResponse,
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@RequestMapping(value = "/msg/all", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<AllMessagesResponse> getAllMessages(@RequestParam("eid") String eid) {
+		logger.info("Recieved GetAllMesssages for eid :" + eid);
+		try {
+			AllMessagesResponse messageResponse = new AllMessagesResponse();
+			Message[] messages = MessagesDynamoDB.getMessagesForUser( eid);
+			
+			messageResponse.setStatusMessage("Success");
+			messageResponse.setStatusCode(AllMessagesResponse.SUCCESS);
+			messageResponse.setMessages(messages);
+			return new ResponseEntity<AllMessagesResponse>(messageResponse,
+					HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception getAllMessages for eid :" + eid,e);
+			AllMessagesResponse messageResponse = new AllMessagesResponse();
+			messageResponse.setStatusMessage("Get all Messages failed");
+			messageResponse.setStatusCode(AllMessagesResponse.GET_FAILED);
+			return new ResponseEntity<AllMessagesResponse>(messageResponse,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

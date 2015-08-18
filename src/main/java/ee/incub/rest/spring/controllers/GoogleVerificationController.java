@@ -1,31 +1,38 @@
 package ee.incub.rest.spring.controllers;
 
 
+import java.util.Arrays;
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+
 import ee.incub.rest.spring.model.http.Token;
+import ee.incub.rest.spring.utils.Constants;
 
 public class GoogleVerificationController {
 
-	public static boolean verifyToken(String token) {
-		/*GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
-				transport, jsonFactory).setAudience(Arrays.asList(Constants.CLIENT_ID))
-				.build();
-
-		// (Receive idTokenString by HTTPS POST)
-
-		GoogleIdToken idToken = verifier.verify(idTokenString);
-		if (idToken != null) {
-			Payload payload = idToken.getPayload();
-			if (payload.getHostedDomain().equals(Constants.APPS_DOMAIN_NAME)
-			// If multiple clients access the backend server:
-			//		&& Arrays.asList(ANDROID_CLIENT_ID, IOS_CLIENT_ID)
-							.contains(payload.getAuthorizedParty())) {
-				System.out.println("User ID: " + payload.getSubject());
-			} else {
-				System.out.println("Invalid ID token.");
-			}
-		} else {
-			System.out.println("Invalid ID token.");
-		}*/
+	public static boolean verifyToken(String idTokenString) {
+//		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+//				transport, jsonFactory).setAudience(Arrays.asList(Constants.CLIENT_ID))
+//				.build();
+//
+//		// (Receive idTokenString by HTTPS POST)
+//
+//		GoogleIdToken idToken = verifier.verify(idTokenString);
+//		if (idToken != null) {
+//			Payload payload = idToken.getPayload();
+//			if (payload.getHostedDomain().equals(Constants.APPS_DOMAIN_NAME)
+//			// If multiple clients access the backend server:
+//					&& Arrays.asList(ANDROID_CLIENT_ID, IOS_CLIENT_ID)
+//							.contains(payload.getAuthorizedParty())) {
+//				System.out.println("User ID: " + payload.getSubject());
+//			} else {
+//				System.out.println("Invalid ID token.");
+//			}
+//		} else {
+//			System.out.println("Invalid ID token.");
+//		}
 		return true;
 	}
 	
