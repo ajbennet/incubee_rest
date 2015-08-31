@@ -130,8 +130,8 @@ public class Utils {
 					.getS() : null);
 			List<String> photos = item.get("photos") != null ? item.get(
 					"photos").getSS() : null;
-			String[] photosStr = new String[photos.size()];
 			if (photos != null) {
+				String[] photosStr = new String[photos.size()];
 				incubee.setImages(photos.toArray(photosStr));
 			}
 			incubee.setFunding(item.get("funding") != null ? item
