@@ -283,6 +283,7 @@ http
    {incubeeId6}
    ]
 }
+```
 
 ## Send Message API
 
@@ -290,17 +291,18 @@ Send a message to another user.
 
 Request
 ```sh
-POST http://www.incub.ee/rest/msg/{uid}
+POST http://www.incub.ee/rest/msg?eid={uid}
 ```
 Requestbody
 ```sh
 {
 	"body":"Hi I like this idea",
-	"uid":"{uid}",
-	"name": "{name}",
-	"to": "{touid}",
-	"longitude": 914,
-	"latitude" : 323
+	"eid":{uid},
+	"name":"Abinathab Bennet",
+	"to":"{to_uid}",
+	"longitude":914,
+	"latitude":323,
+	"type":"USR"
 }
 ```
 
