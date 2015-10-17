@@ -1,4 +1,4 @@
-package ee.incub.rest.spring.controllers;
+package ee.incub.rest.spring.controllers.v010;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -24,12 +24,12 @@ import ee.incub.rest.spring.utils.GoogleVerificationController;
  * Handles requests for the application file upload requests
  */
 @Controller
-public class UserStoreController {
+public class UserStoreController_V10 {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(UserStoreController.class);
+			.getLogger(UserStoreController_V10.class);
 
-	@RequestMapping(value = "/like/{incubeeId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/v1.0/like/{incubeeId}", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> like(@PathVariable("incubeeId") String incubeeId,
 				@RequestParam("uid") String uid
@@ -57,7 +57,7 @@ public class UserStoreController {
 	
 	}
 	
-	@RequestMapping(value = "/customer/{incubeeId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/v1.0/customer/{incubeeId}", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> customer(@PathVariable("incubeeId") String incubeeId,
 				@RequestParam("uid") String uid
@@ -83,7 +83,7 @@ public class UserStoreController {
 	}
 
 
-	@RequestMapping(value = "/like", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/like", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<LikeResponse> getLikesForId(@RequestParam("id") String id) {
 		logger.info("Recieved getLikes for  for Id: " + id);
@@ -102,7 +102,7 @@ public class UserStoreController {
 		}
 	}
 	
-	@RequestMapping(value = "/customer", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/customer", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<CustomerResponse> getCustomersForId(@RequestParam("id") String id) {
 		logger.info("Recieved getLikes for  for Id: " + id);

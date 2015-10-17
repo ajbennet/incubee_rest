@@ -1,4 +1,4 @@
-package ee.incub.rest.spring.controllers;
+package ee.incub.rest.spring.utils;
 
 
 import java.util.Arrays;
@@ -8,7 +8,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 
 import ee.incub.rest.spring.model.http.Token;
-import ee.incub.rest.spring.utils.Constants;
 
 public class GoogleVerificationController {
 

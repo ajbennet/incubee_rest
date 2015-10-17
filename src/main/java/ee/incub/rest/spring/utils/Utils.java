@@ -224,8 +224,8 @@ public class Utils {
 					.getString("video") : null);
 			Set<String> photos = item.getStringSet("photos") != null ? item
 					.getStringSet("photos") : null;
-			String[] photosStr = new String[photos.size()];
 			if (photos != null) {
+				String[] photosStr = new String[photos.size()];
 				incubee.setImages(photos.toArray(photosStr));
 			}
 			incubee.setFunding(item.getBoolean("funding") ? item

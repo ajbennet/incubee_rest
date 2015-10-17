@@ -11,10 +11,10 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
          
 	<context:component-scan base-package="ee.incub.rest.spring.controllers" />
- 	<mvc:annotation-driven />
+ 	<mvc:annotation-driven /> 
  	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
  	 <!-- setting maximum upload size -->
 		<property name="maxUploadSize" value="100000000" />
 	</bean>
-	
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 </beans>

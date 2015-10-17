@@ -1,4 +1,4 @@
-package ee.incub.rest.spring.controllers;
+package ee.incub.rest.spring.controllers.v010;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,12 +31,12 @@ import ee.incub.rest.spring.utils.Utils;
  * Handles requests for the application file upload requests
  */
 @Controller
-public class FounderController {
+public class FounderController_V10 {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(FounderController.class);
+			.getLogger(FounderController_V10.class);
 
-	@RequestMapping(value = "/handle", method = RequestMethod.POST)
+	@RequestMapping(value = "/v1.0/handle", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> handleRequest(IncubeeRequest incubee) {
 		logger.info("Incubee Object" + incubee);
@@ -97,13 +97,13 @@ public class FounderController {
 		}
 	}
 
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/all", method = RequestMethod.GET)
 	@ResponseBody
 	public List<IncubeeResponse> getAll() {
 		return Utils.fromIncubeeList(UserDynamoDB.getAllIncubees());
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public IncubeeResponse getForId(@PathVariable("id") String id) {
 		logger.info("Recieved getIncubee for Id: " + id);

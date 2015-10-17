@@ -1,4 +1,4 @@
-package ee.incub.rest.spring.controllers;
+package ee.incub.rest.spring.controllers.v010;
 
 import java.io.IOException;
 
@@ -33,12 +33,12 @@ import ee.incub.rest.spring.utils.Utils;
  * Handles requests for the application Messages Requests
  */
 @Controller
-public class MessagesController {
+public class MessagesController_V10 {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(MessagesController.class);
+			.getLogger(MessagesController_V10.class);
 
-	@RequestMapping(value = "/msg", method = RequestMethod.POST)
+	@RequestMapping(value = "/v1.0/msg", method = RequestMethod.POST)
 	public ResponseEntity<MessageResponse> sendMessage(@RequestBody MessageRequest messageRequest
 			,@RequestHeader("token") String token
 			//,@PathVariable String eid
@@ -75,7 +75,7 @@ public class MessagesController {
 		return new ResponseEntity<MessageResponse>(messageResponse,
 				HttpStatus.OK);
 	}
-	@RequestMapping(value = "/msg/{mid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/msg/{mid}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<MessageResponse> getMessageForMid(@PathVariable("mid") String mid, @RequestParam("eid") String eid) {
 		logger.info("Recieved GetMesssafe for mId: " + mid + " for eid :" + eid);
@@ -95,7 +95,7 @@ public class MessagesController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@RequestMapping(value = "/msg/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/msg/all", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<AllMessagesResponse> getAllMessages(@RequestParam("eid") String eid) {
 		logger.info("Recieved GetAllMesssages for eid :" + eid);
