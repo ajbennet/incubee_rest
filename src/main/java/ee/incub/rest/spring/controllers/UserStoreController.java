@@ -45,14 +45,14 @@ public class UserStoreController {
 		try {
 			if (UserStoreDynamoDB.loadLike(uid, incubeeId))
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-							+ "\"statusCode\":\"LIK_1000\",}", HttpStatus.OK);
+							+ "\"statusCode\":\"LIK_1000\"}", HttpStatus.OK);
 			else
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Server Error\","
-							+ "\"statusCode\":\"LIK_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+							+ "\"statusCode\":\"LIK_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-					+ "\"statusCode\":\"LIK_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+					+ "\"statusCode\":\"LIK_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	
 	}
@@ -71,14 +71,14 @@ public class UserStoreController {
 		try {
 			if (UserStoreDynamoDB.loadCustomer(uid, incubeeId))
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-							+ "\"statusCode\":\"CUS_1000\",}", HttpStatus.OK);
+							+ "\"statusCode\":\"CUS_1000\"}", HttpStatus.OK);
 			else
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Server Error\","
-							+ "\"statusCode\":\"CUS_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+							+ "\"statusCode\":\"CUS_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-					+ "\"statusCode\":\"CUS_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+					+ "\"statusCode\":\"CUS_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class UserStoreController {
 	@RequestMapping(value = "/like", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<LikeResponse> getLikesForId(@RequestParam("id") String id) {
-		logger.info("Recieved getLikes for  for Id: " + id);
+		logger.info("Recieved getLikes for Id: " + id);
 		String [] incubeeList = UserStoreDynamoDB.getLikedIncubees(id);
 		if (incubeeList!=null){
 			LikeResponse response = new LikeResponse();
@@ -105,7 +105,7 @@ public class UserStoreController {
 	@RequestMapping(value = "/customer", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<CustomerResponse> getCustomersForId(@RequestParam("id") String id) {
-		logger.info("Recieved getLikes for  for Id: " + id);
+		logger.info("Recieved getCustomers for Id: " + id);
 		String [] incubeeList = UserStoreDynamoDB.getCustomeredIncubees(id);
 		if (incubeeList!=null){
 			CustomerResponse response = new CustomerResponse();

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,7 @@ import com.amazonaws.services.dynamodbv2.model.TableDescription;
 
 import ee.incub.rest.spring.model.db.Incubee;
 import ee.incub.rest.spring.model.db.User;
+import ee.incub.rest.spring.model.http.Customer;
 import ee.incub.rest.spring.utils.Constants;
 import ee.incub.rest.spring.utils.Utils;
 
@@ -140,7 +142,7 @@ public class UserDynamoDB {
 			logger.error(e.getMessage());
 			throw e;
 		}
-		
+
 	}
 
 	// public static Incubee getIncubee(String incubee_id) {
@@ -183,7 +185,7 @@ public class UserDynamoDB {
 	// return incubee;
 	// }
 
-	public static User getUser(String user_id) throws AmazonServiceException{
+	public static User getUser(String user_id) throws AmazonServiceException {
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -207,13 +209,14 @@ public class UserDynamoDB {
 				user.setId(item.getString("id"));
 				user.setCompany_id(item.getString("company_id"));
 				user.setEmail(item.getString("email"));
-				user.setImage_url(item.getString("image_url"));
+				user.setImage_url(item.getString("img_url"));
 				user.setLogin_type(item.getString("login_type"));
 				user.setUser_type(item.getString("user_type"));
 				user.setName(item.getString("name"));
 				user.setHandle_id(item.getString("handle_id"));
-				user.setAdmin((item.isNull("is_admin")||
-						!item.isPresent("is_admin")?false:item.getBoolean("is_admin")));
+				user.setAdmin((item.isNull("is_admin")
+						|| !item.isPresent("is_admin") ? false : item
+						.getBoolean("is_admin")));
 			}
 			return user;
 		} catch (AmazonServiceException e) {
@@ -222,7 +225,8 @@ public class UserDynamoDB {
 		}
 	}
 
-	public static User getUserForHandle(String handle_id) throws AmazonServiceException{
+	public static User getUserForHandle(String handle_id)
+			throws AmazonServiceException {
 		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -246,46 +250,98 @@ public class UserDynamoDB {
 				user.setId(item.getString("id"));
 				user.setCompany_id(item.getString("company_id"));
 				user.setEmail(item.getString("email"));
-				user.setImage_url(item.getString("image_url"));
+				user.setImage_url(item.getString("img_url"));
 				user.setLogin_type(item.getString("login_type"));
 				user.setUser_type(item.getString("user_type"));
 				user.setName(item.getString("name"));
 				user.setHandle_id(handle_id);
-				user.setAdmin((item.isNull("is_admin")||
-						!item.isPresent("is_admin")?false:item.getBoolean("is_admin")));
+				user.setAdmin((item.isNull("is_admin")
+						|| !item.isPresent("is_admin") ? false : item
+						.getBoolean("is_admin")));
 			}
 			return user;
 		} catch (AmazonServiceException e) {
 			logger.error(e.getMessage(), e);
 			throw e;
 		}
-
 	}
-	
-	public static void deleteUser(String userid) throws Exception{
 
-        Table table = dynamoDB.getTable(Constants.USER_TABLE);
+	public static Customer[] getCustomerDetailsforIds(Set<String> userIdSet)
+			throws AmazonServiceException {
+		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		List<Customer> customerList = null;
+		Iterator<String> userIterator = userIdSet.iterator();
+		try {
+			while (userIdSet != null && userIterator.hasNext()) {
+				QuerySpec querySpec = new QuerySpec()
+						.withKeyConditionExpression("id = :v1")
+						// .withProjectionExpression("id, email, image_url, #n")
+						.withValueMap(
+								new ValueMap().withString(":v1", userIterator.next()))
+				// .withAttributesToGet("id","email","image_url", "name")
+				// .withNameMap(new NameMap().with("#n", "name"))
+				;
+				ItemCollection<QueryOutcome> items = table.query(querySpec);
+				Iterator<Item> iterator = items.iterator();
 
-        try {
+				logger.info("Query: printing results...: ");
+				while (iterator.hasNext()) {
+					if (customerList == null) {
+						customerList = new ArrayList<Customer>();
+					}
+					Customer customer = new Customer();
 
-            DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
-            .withPrimaryKey("id", userid)
-            .withReturnValues(ReturnValue.ALL_OLD);
+					Item item = iterator.next();
+					logger.info("Customers from DB for user IDs: " + userIdSet
+							+ " - " + item.toJSONPretty());
 
-            DeleteItemOutcome outcome = table.deleteItem(deleteItemSpec);
+					customer.setId(item.getString("id"));
+					if(item.getString("email")!=null)
+						customer.setEmail(item.getString("email"));
+					if(item.getString("img_url")!=null)
+						customer.setImage_url(item.getString("img_url"));
+					if(item.getString("name")!=null)
+						customer.setName(item.getString("name"));
+					customerList.add(customer);
+				}
+			}
+			Customer[] customerArray = null;
+			if (customerList != null) {
+				customerArray = customerList.toArray(new Customer[customerList
+						.size()]);
+			}
+			return customerArray;
+		} catch (AmazonServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
+	}
 
-            // Check the response.
-           logger.info("Printing item that was deleted...");
-           logger.info(outcome.getItem().toJSONPretty());
+	public static void deleteUser(String userid) throws Exception {
 
-        } catch (Exception e) {
-            logger.error("Error deleting item in " + Constants.USER_TABLE);
-            logger.error(e.getMessage());
-            throw e;
-        }
-    }
+		Table table = dynamoDB.getTable(Constants.USER_TABLE);
 
-	public static Incubee getIncubee(String incubee_id) throws AmazonServiceException{
+		try {
+
+			DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
+					.withPrimaryKey("id", userid).withReturnValues(
+							ReturnValue.ALL_OLD);
+
+			DeleteItemOutcome outcome = table.deleteItem(deleteItemSpec);
+
+			// Check the response.
+			logger.info("Printing item that was deleted...");
+			logger.info(outcome.getItem().toJSONPretty());
+
+		} catch (Exception e) {
+			logger.error("Error deleting item in " + Constants.USER_TABLE);
+			logger.error(e.getMessage());
+			throw e;
+		}
+	}
+
+	public static Incubee getIncubee(String incubee_id)
+			throws AmazonServiceException {
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -432,63 +488,77 @@ public class UserDynamoDB {
 
 	}
 
-
-
 	public static void updateIncubee(Incubee incubee) throws Exception {
 
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
 
 		try {
 			NameMap nameMap = new NameMap().with("#loc", "location");
-			ValueMap valueMap = new ValueMap()
-					.withBoolean(":funding", incubee.isFunding());
-			
+			ValueMap valueMap = new ValueMap().withBoolean(":funding",
+					incubee.isFunding());
+
 			String updateExpression = "set funding=:funding ";
-			if (incubee.getCompany_name() != null && !incubee.getCompany_name().isEmpty()){
-				updateExpression = updateExpression + ",company_name = :company_name";
+			if (incubee.getCompany_name() != null
+					&& !incubee.getCompany_name().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",company_name = :company_name";
 				valueMap.with(":company_name", incubee.getCompany_name());
 			}
-			if (incubee.getCompany_url() != null && !incubee.getCompany_url().isEmpty()){
-				updateExpression = updateExpression + ",company_url = :company_url ";
+			if (incubee.getCompany_url() != null
+					&& !incubee.getCompany_url().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",company_url = :company_url ";
 				valueMap.with(":company_url", incubee.getCompany_url());
 			}
-			if (incubee.getLogo_url() != null && !incubee.getLogo_url().isEmpty()){
+			if (incubee.getLogo_url() != null
+					&& !incubee.getLogo_url().isEmpty()) {
 				updateExpression = updateExpression + ",logo_url = :logo_url ";
 				valueMap.with(":logo_url", incubee.getLogo_url());
 			}
-			if (incubee.getLocation() != null && !incubee.getLocation().isEmpty()){
+			if (incubee.getLocation() != null
+					&& !incubee.getLocation().isEmpty()) {
 				updateExpression = updateExpression + ",#loc = :location ";
 				valueMap.with(":location", incubee.getLocation());
 			}
-			if (incubee.getHigh_concept() != null && !incubee.getHigh_concept().isEmpty()){
-				updateExpression = updateExpression + ",high_concept = :high_concept ";
+			if (incubee.getHigh_concept() != null
+					&& !incubee.getHigh_concept().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",high_concept = :high_concept ";
 				valueMap.with(":high_concept", incubee.getHigh_concept());
 			}
-			if (incubee.getDescription() != null && !incubee.getDescription().isEmpty()){
-				updateExpression = updateExpression + ",description = :description ";
+			if (incubee.getDescription() != null
+					&& !incubee.getDescription().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",description = :description ";
 				valueMap.with(":description", incubee.getDescription());
 			}
-			if (incubee.getField() != null && !incubee.getField().isEmpty()){
+			if (incubee.getField() != null && !incubee.getField().isEmpty()) {
 				updateExpression = updateExpression + ",field = :field ";
 				valueMap.with(":field", incubee.getField());
 			}
-			if (incubee.getTwitter_url() != null && !incubee.getTwitter_url().isEmpty()){
-				updateExpression = updateExpression + ",twitter_url =  :twitter_url ";
+			if (incubee.getTwitter_url() != null
+					&& !incubee.getTwitter_url().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",twitter_url =  :twitter_url ";
 				valueMap.with(":twitter_url", incubee.getTwitter_url());
 			}
-			if (incubee.getProject_status() != null && !incubee.getProject_status().isEmpty()){
-				updateExpression = updateExpression + ",project_status = :project_status ";
+			if (incubee.getProject_status() != null
+					&& !incubee.getProject_status().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",project_status = :project_status ";
 				valueMap.with(":project_status", incubee.getProject_status());
 			}
-			if (incubee.getVideo_url() != null && !incubee.getVideo_url().isEmpty()){
-				updateExpression = updateExpression + ",video_url = :video_url ";
+			if (incubee.getVideo_url() != null
+					&& !incubee.getVideo_url().isEmpty()) {
+				updateExpression = updateExpression
+						+ ",video_url = :video_url ";
 				valueMap.with(":video_url", incubee.getVideo_url());
 			}
-			if (incubee.getImages() != null && incubee.getImages().length>0){
+			if (incubee.getImages() != null && incubee.getImages().length > 0) {
 				updateExpression = updateExpression + ",photos = :photos ";
 				valueMap.withStringSet(":photos", incubee.getImages());
 			}
-			if (incubee.getVideo() != null && !incubee.getVideo().isEmpty()){
+			if (incubee.getVideo() != null && !incubee.getVideo().isEmpty()) {
 				updateExpression = updateExpression + ",video = :video";
 				valueMap.with(":video", incubee.getVideo());
 			}

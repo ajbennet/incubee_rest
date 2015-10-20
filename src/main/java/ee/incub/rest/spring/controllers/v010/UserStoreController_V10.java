@@ -1,7 +1,9 @@
 package ee.incub.rest.spring.controllers.v010;
 
-import java.io.IOException;
-import java.util.UUID;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.aws.adaptors.UserStoreDynamoDB;
-import ee.incub.rest.spring.model.http.CustomerResponse;
+import ee.incub.rest.spring.model.http.v010.CustomerResponse;
 import ee.incub.rest.spring.model.http.LikeResponse;
 import ee.incub.rest.spring.utils.GoogleVerificationController;
 
@@ -45,14 +48,14 @@ public class UserStoreController_V10 {
 		try {
 			if (UserStoreDynamoDB.loadLike(uid, incubeeId))
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-							+ "\"statusCode\":\"LIK_1000\",}", HttpStatus.OK);
+							+ "\"statusCode\":\"LIK_1000\"}", HttpStatus.OK);
 			else
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Server Error\","
-							+ "\"statusCode\":\"LIK_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+							+ "\"statusCode\":\"LIK_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-					+ "\"statusCode\":\"LIK_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+					+ "\"statusCode\":\"LIK_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	
 	}
@@ -71,14 +74,14 @@ public class UserStoreController_V10 {
 		try {
 			if (UserStoreDynamoDB.loadCustomer(uid, incubeeId))
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-							+ "\"statusCode\":\"CUS_1000\",}", HttpStatus.OK);
+							+ "\"statusCode\":\"CUS_1000\"}", HttpStatus.OK);
 			else
 					return new ResponseEntity<String>("{  \"statusMessage\":\"Server Error\","
-							+ "\"statusCode\":\"CUS_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+							+ "\"statusCode\":\"CUS_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			return new ResponseEntity<String>("{  \"statusMessage\":\"Success\","
-					+ "\"statusCode\":\"CUS_1003\",}", HttpStatus.INTERNAL_SERVER_ERROR);
+					+ "\"statusCode\":\"CUS_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -111,7 +114,8 @@ public class UserStoreController_V10 {
 			CustomerResponse response = new CustomerResponse();
 			response.setStatusCode(CustomerResponse.SUCCESS);
 			response.setStatusMessage("Success");
-			response.setIncubeeList(incubeeList);
+			Set<String> incubeeSet = new HashSet<String>(Arrays.asList(incubeeList));
+			response.setIncubeeList(UserDynamoDB.getCustomerDetailsforIds(incubeeSet));
 			return new ResponseEntity<CustomerResponse>(response, HttpStatus.OK);
 		}else{
 			CustomerResponse response = new CustomerResponse();

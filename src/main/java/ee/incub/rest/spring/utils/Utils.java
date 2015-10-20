@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.model.db.Incubee;
 import ee.incub.rest.spring.model.db.Message;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
