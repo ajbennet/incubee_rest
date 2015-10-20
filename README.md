@@ -419,7 +419,7 @@ Messaging states
 | B deletes message             | mid: 2325, dir: O,        	| Message deleted              |
 |                               | status: RRE                   |                              |
 
-## Get Message for Message ID
+## Get Customer Details for User ID
 ```sh
 GET http://www.incub.ee/rest/v1.0/customer/details?id={userid}
 
