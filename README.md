@@ -7,7 +7,7 @@ If not, it returns a 404 .
 
 Request
 ```sh
-POST http://www.incub.ee/rest/login 
+POST http://www.incub.ee/rest/v1.0/login 
 ```
 
 Headers
@@ -47,7 +47,7 @@ If not, it returns a 404.
 
 Request
 ```sh
-POST http://www.incub.ee/rest/signup 
+POST http://www.incub.ee/rest/v1.0/signup 
 ```
 
 Headers
@@ -85,7 +85,7 @@ http code: 409 Conflict
 ```
 ##Delete User API
 ```sh
-DELETE http://www.incub.ee/rest/user?uid={uid}
+DELETE http://www.incub.ee/rest/v1.0/user?uid={uid}
 ```
 Success Response
 ```sh
@@ -95,7 +95,7 @@ Message: User Deleted
 
 ##Get Incubee
 ```sh
-GET http://www.incub.ee/rest/{incubee_id}
+GET http://www.incub.ee/rest/v1.0/{incubee_id}
 ```
 Success Response
 ```sh
@@ -126,7 +126,7 @@ Success Response
 
 ##Get All Incubees
 ```sh
-GET http://www.incub.ee/rest/all
+GET http://www.incub.ee/rest/v1.0/all
 ```
 
 Success Response
@@ -210,7 +210,7 @@ Success Response
 API called when a user likes a startup
 
 ```sh
-POST http://www.incub.ee/rest/like/{incubee_id}?uid={uid}
+POST http://www.incub.ee/rest/v1.0/like/{incubee_id}?uid={uid}
 ```
 
 Success Response
@@ -225,7 +225,7 @@ http
 
 ## Get All Likes
 ```sh
-GET http://www.incub.ee/rest/like?id={user_id}
+GET http://www.incub.ee/rest/v1.0/like?id={user_id}
 
 ```
 
@@ -251,7 +251,7 @@ http Code: 200
 API called when a user likes a startup
 
 ```sh
-POST http://www.incub.ee/rest/customer/{incubee_id}?uid={user_id}
+POST http://www.incub.ee/rest/v1.0/customer/{incubee_id}?uid={user_id}
 ```
 
 Success Response
@@ -265,22 +265,21 @@ http
 
 #3 Get All Customers
 ```sh
-GET http://www.incub.ee/rest/customer?id={incubee_id}
+GET http://www.incub.ee/rest/v1.0/customer?id={incubee_id}
 ```
 
 Success Response
 ```sh
-http
-{  
+{
    "statusMessage":"Success",
    "statusCode":"CUS_1000",
-   "incubeeList":[
-   {incubeeId1},
-   {incubeeId2},
-   {incubeeId3},
-   {incubeeId4},
-   {incubeeId5},
-   {incubeeId6}
+   "customerList":[
+      {
+         "id":"11442342337697974",
+         "image_url":"https://lh4.googleusercontent.com/-CL6coBFm9VE/AAAdsdsAAAAAI/AAAAAAAAHCk/ngCxGax3Tcc/s96-c/photo.jpg",
+         "email":"john@gmail.com",
+         "name":"John Doe"
+      }
    ]
 }
 ```
@@ -291,7 +290,7 @@ Send a message to another user.
 
 Request
 ```sh
-POST http://www.incub.ee/rest/msg?eid={uid}
+POST http://www.incub.ee/rest/v1.0/msg?eid={uid}
 ```
 Requestbody
 ```sh
@@ -318,7 +317,7 @@ httpCode : 200 OK
 
 ## Get Messages API
 ```sh
-GET http://www.incub.ee/rest/msg/all?eid={eid}
+GET http://www.incub.ee/rest/v1.0/msg/all?eid={eid}
 ```
 
 Response
@@ -350,9 +349,9 @@ httpCode : 200 OK
 
 ## Get Message for Message ID
 ```sh
-GET http://www.incub.ee/rest/msg/{mid}?eid={eid}
+GET http://www.incub.ee/rest/v1.0/msg/{mid}?eid={eid}
 
-eg: http://www.incub.ee/rest/msg/msg_zbnhto3a4tubsz9?eid=110489314263267697974
+eg: http://www.incub.ee/rest/v1.0/msg/msg_zbnhto3a4tubsz9?eid=110489314263267697974
 ```
 
 Response
@@ -419,4 +418,29 @@ Messaging states
 |                               |                               |                              |
 | B deletes message             | mid: 2325, dir: O,        	| Message deleted              |
 |                               | status: RRE                   |                              |
+
+## Get Message for Message ID
+```sh
+GET http://www.incub.ee/rest/v1.0/customer/details?id={userid}
+
+eg: GET http://www.incub.ee/rest/v1.0/customer/details?id=110489432434234974
+```
+
+Response
+
+```sh
+httpCode : 200 OK
+{
+   "statusMessage":"Success",
+   "statusCode":"CUS_1000",
+   "customerList":[
+      {
+         "id":"110483234342397974",
+         "image_url":"https://lh4.googleusercontent.com/-CL6coBFm9VE/AADAAAAAAAI/AAAAAAAAHCk/ngCxGax3Tcc/s96-c/photo.jpg",
+         "email":"john@gmail.com",
+         "name":"John Doe"
+      }
+   ]
+}
+```
 
