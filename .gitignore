@@ -1,1 +1,6 @@
-/target/
+/target/classes/
+/target/test-classes/
+/target/generated-sources/
+/target/m2e-wtp/
+/target/incubee/
+/target/maven-archiver/

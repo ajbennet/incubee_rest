@@ -77,7 +77,7 @@ public class UserStoreDynamoDB {
 			return false;
 		}
 		//check if the like already exists
-		if(Arrays.asList(getCustomeredIncubees(incubeeId)).contains(userId)){
+		if(Arrays.asList(getCustomeredUsersforIncubees(incubeeId)).contains(userId)){
 			logger.info("User already customered");
 			return true;
 		}
@@ -96,7 +96,7 @@ public class UserStoreDynamoDB {
 		}
 	}
 		
-	public static String[] getCustomeredIncubees(String incubee_id) {
+	public static String[] getCustomeredUsersforIncubees(String incubee_id) {
 		Table table = dynamoDB.getTable(Constants.CUSTOMER_TABLE);
 		 long fiveYearsAgoMilli = (new Date()).getTime()
 				 - (15L * 365L * 24L * 60L * 60L * 1000L);

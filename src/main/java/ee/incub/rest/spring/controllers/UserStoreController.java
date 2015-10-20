@@ -106,7 +106,7 @@ public class UserStoreController {
 	@ResponseBody
 	public ResponseEntity<CustomerResponse> getCustomersForId(@RequestParam("id") String id) {
 		logger.info("Recieved getCustomers for Id: " + id);
-		String [] incubeeList = UserStoreDynamoDB.getCustomeredIncubees(id);
+		String [] incubeeList = UserStoreDynamoDB.getCustomeredUsersforIncubees(id);
 		if (incubeeList!=null){
 			CustomerResponse response = new CustomerResponse();
 			response.setStatusCode(CustomerResponse.SUCCESS);

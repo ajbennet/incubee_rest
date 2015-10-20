@@ -12,9 +12,10 @@ public class CustomerResponse {
 		
 		private String statusMessage;
 		private String statusCode;
-		private Customer[] incubeeList;
+		private Customer[] customerList;
 		
 		public final static String SUCCESS = "CUS_1000";
+		public final static String BAD_REQUEST = "CUS_1001";
 		public final static String SERVER_FAILURE = "CUS_1003";
 		public final static String NO_CUSTOMERS_YET="CUS_1004";
 		public final static String TOKEN_NOT_FOUND = "CUS_1099";
@@ -32,17 +33,17 @@ public class CustomerResponse {
 		public void setStatusCode(String statusCode) {
 			this.statusCode = statusCode;
 		}
-		public Customer[] getIncubeeList() {
-			return incubeeList;
+		public Customer[] getCustomerList() {
+			return customerList;
 		}
-		public void setIncubeeList(Customer[] incubeeList) {
-			this.incubeeList = incubeeList;
+		public void setCustomerList(Customer[] incubeeList) {
+			this.customerList = incubeeList;
 		}
 		@Override
 		public String toString() {
 			return "CustomerResponse [statusMessage=" + statusMessage
-					+ ", statusCode=" + statusCode + ", incubeeList="
-					+ Arrays.toString(incubeeList) + "]";
+					+ ", statusCode=" + statusCode + ", customerList="
+					+ Arrays.toString(customerList) + "]";
 		}
 		
 }
