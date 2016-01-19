@@ -1,10 +1,6 @@
 package ee.incub.rest.spring.controllers.v010;
 
-import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,13 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.incub.rest.spring.aws.adaptors.MessagesDynamoDB;
-import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
 import ee.incub.rest.spring.model.db.Message;
 import ee.incub.rest.spring.model.http.AllMessagesResponse;
-import ee.incub.rest.spring.model.http.IncubeeResponse;
 import ee.incub.rest.spring.model.http.MessageRequest;
 import ee.incub.rest.spring.model.http.MessageResponse;
-import ee.incub.rest.spring.model.http.Token;
 import ee.incub.rest.spring.utils.GoogleVerificationController;
 import ee.incub.rest.spring.utils.Utils;
 

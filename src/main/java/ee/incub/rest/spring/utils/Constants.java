@@ -11,4 +11,6 @@ public class Constants {
 	public static final String MID_INDEX = Config.getProperty("mid_index");
 	public static final String LIKE_TABLE = Config.getProperty("like_table");
 	public static final String CUSTOMER_TABLE = Config.getProperty("customer_table");
+	public static final String REVIEW_TABLE = Config.getProperty("review_table");
+	public static final String REPLY_TABLE = Config.getProperty("reply_table");
 }

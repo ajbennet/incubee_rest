@@ -18,9 +18,11 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import ee.incub.rest.spring.model.db.Incubee;
 import ee.incub.rest.spring.model.db.Message;
+import ee.incub.rest.spring.model.db.Review;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
 import ee.incub.rest.spring.model.http.MessageRequest;
+import ee.incub.rest.spring.model.http.v010.ReviewRequest;
 
 public class Utils {
 	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
@@ -280,6 +282,24 @@ public class Utils {
 		message.setType(messageRequest.getType());
 		return message;
 	}
+	
+	public static Review reviewFromReviewRequest(
+			ReviewRequest reviewRequest) {
+		Review review = new Review();
+		review.setIncubee_id(reviewRequest.getIncubee_id());
+		review.setUser_id(reviewRequest.getUser_id());
+		review.setTitle(reviewRequest.getTitle());
+		review.setDescription(reviewRequest.getDescription());
+		review.setRating(reviewRequest.getRating());
+		review.setLast_replied_date(new Date());
+		review.setMeeting(reviewRequest.getMeeting());
+		review.setLikes(0);
+		review.setDislikes(0);
+		review.setViews(1);
+		review.setReplies(0);
+		return review;
+	}
+
 
 	public static String setUpdateExpression(boolean isfirst, String string) {
 		if (isfirst)
