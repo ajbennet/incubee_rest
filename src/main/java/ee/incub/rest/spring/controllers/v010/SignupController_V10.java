@@ -45,25 +45,32 @@ public class SignupController_V10 {
 				return new ResponseEntity<LoginResponse>(response,
 						HttpStatus.NOT_FOUND);
 			} else {
-				
+				Map<String, Object> map = new HashMap<String, Object>();
+
+				String user_type = user.getUser_type();
+				if (user_type !=null){
+					map.put("user_type", user_type);
+				}
+				else{
+					map.put("user_type", "U");
+				}
 				if (user.isAdmin()){
 					response.setStatusCode(LoginResponse.SUCCESS);
 					response.setStatusMessage("Success");
-					Map<String, Object> map = new HashMap<String, Object>();
+					
 					if(user.getCompany_id()!=null && !user.getCompany_id().isEmpty()){
 						map.put("is_admin", new Boolean(true));
-						response.setServicedata(map);
 					}
 				}else{
 				
 					response.setStatusCode(LoginResponse.SUCCESS);
 					response.setStatusMessage("Success");
-					Map<String, Object> map = new HashMap<String, Object>();
 					if(user.getCompany_id()!=null && !user.getCompany_id().isEmpty()){
 						map.put("company_id", user.getCompany_id());
-						response.setServicedata(map);
+						
 					}
 				}
+				response.setServicedata(map);
 				return new ResponseEntity<LoginResponse>(response,
 						HttpStatus.OK);
 			}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.incub.rest.spring.aws.adaptors.ReviewDynamoDB;
 import ee.incub.rest.spring.model.db.Review;
+import ee.incub.rest.spring.model.http.v010.BaseResponse;
 import ee.incub.rest.spring.model.http.v010.ReviewRequest;
 import ee.incub.rest.spring.model.http.v010.ReviewResponse;
 import ee.incub.rest.spring.utils.GoogleVerificationController;
@@ -31,17 +32,17 @@ public class ReviewController_V10 {
 			.getLogger(ReviewController_V10.class);
 
 	@RequestMapping(value = "/v1.0/review", method = RequestMethod.POST)
-	public ResponseEntity<ReviewResponse> addReview(@RequestBody ReviewRequest reviewRequest,@RequestParam("uid") String uid
+	public ResponseEntity<BaseResponse> addReview(@RequestBody ReviewRequest reviewRequest,@RequestParam("uid") String uid
 			,@RequestHeader("token") String token
 			) 
 			{
 		logger.info("Review Object" + reviewRequest);
 		
 		if (token == null || !GoogleVerificationController.verifyToken(token)) {
-			ReviewResponse reviewResponse = new ReviewResponse();
+			BaseResponse reviewResponse = new BaseResponse();
 			reviewResponse.setStatusMessage("Token not found");
 			reviewResponse.setStatusCode(ReviewResponse.TOKEN_NOT_FOUND);
-			return new ResponseEntity<ReviewResponse>(reviewResponse,
+			return new ResponseEntity<BaseResponse>(reviewResponse,
 					HttpStatus.UNAUTHORIZED);
 		}
 		try{
@@ -49,20 +50,20 @@ public class ReviewController_V10 {
 			Review review = ReviewDynamoDB.getReviewForIncubeeByUser(reviewRequest.getIncubee_id(), uid);
 			
 			if (review!=null){
-				ReviewResponse reviewResponse = new ReviewResponse();
+				BaseResponse reviewResponse = new BaseResponse();
 				reviewResponse.setStatusMessage("Review for user already found, please update");
 				reviewResponse.setStatusCode(ReviewResponse.REVIEW_ALREADY_FOUND);
-				return new ResponseEntity<ReviewResponse>(reviewResponse,
+				return new ResponseEntity<BaseResponse>(reviewResponse,
 						HttpStatus.CONFLICT);
 			}
 				
 		} catch (Exception e) {
 			logger.error("Error creating Review :" + e.getMessage(), e);
 			e.printStackTrace();
-			ReviewResponse reviewResponse = new ReviewResponse();
+			BaseResponse reviewResponse = new BaseResponse();
 			reviewResponse.setStatusMessage("Create Review Failed");
 			reviewResponse.setStatusCode(ReviewResponse.REVIEW_POST_FAILED);
-			return new ResponseEntity<ReviewResponse>(reviewResponse,
+			return new ResponseEntity<BaseResponse>(reviewResponse,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -73,16 +74,16 @@ public class ReviewController_V10 {
 		} catch (Exception e) {
 			logger.error("Error creating Review :" + e.getMessage(), e);
 			e.printStackTrace();
-			ReviewResponse reviewResponse = new ReviewResponse();
+			BaseResponse reviewResponse = new BaseResponse();
 			reviewResponse.setStatusMessage("Create Review Failed");
 			reviewResponse.setStatusCode(ReviewResponse.REVIEW_POST_FAILED);
-			return new ResponseEntity<ReviewResponse>(reviewResponse,
+			return new ResponseEntity<BaseResponse>(reviewResponse,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		ReviewResponse reviewResponse = new ReviewResponse();
+		BaseResponse reviewResponse = new BaseResponse();
 		reviewResponse.setStatusMessage("Success");
 		reviewResponse.setStatusCode(ReviewResponse.SUCCESS);
-		return new ResponseEntity<ReviewResponse>(reviewResponse,
+		return new ResponseEntity<BaseResponse>(reviewResponse,
 				HttpStatus.OK);
 	}
 	
@@ -95,6 +96,7 @@ public class ReviewController_V10 {
 			reviewResponse.setStatusMessage("Success");
 			reviewResponse.setStatusCode(ReviewResponse.SUCCESS);
 			reviewResponse.setReviews( ReviewDynamoDB.getReviewsForIncubee(incubee_id));
+			reviewResponse.setReviewData(Utils.getReviewData(reviewResponse.getReviews()));
 			return new ResponseEntity<ReviewResponse>(reviewResponse,
 					HttpStatus.OK);
 		} catch (Exception e) {

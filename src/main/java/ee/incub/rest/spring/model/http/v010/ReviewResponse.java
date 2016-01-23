@@ -3,9 +3,9 @@ package ee.incub.rest.spring.model.http.v010;
 import ee.incub.rest.spring.model.db.Review;
 
 
-public class ReviewResponse {
-	private String statusMessage;
-	private String statusCode;
+public class ReviewResponse extends BaseResponse {
+
+	private ReviewData reviewData;
 	private Review[] reviews;
 	public final static String SUCCESS = "REV_1000";
 	public final static String REVIEW_POST_FAILED = "REV_1003";
@@ -14,17 +14,12 @@ public class ReviewResponse {
 	public final static String GET_FAILED = "REV_1005";
 	public final static String REVIEW_ALREADY_FOUND = "REV_1006";
 	
-	public String getStatusMessage() {
-		return statusMessage;
+
+	public ReviewData getReviewData() {
+		return reviewData;
 	}
-	public void setStatusMessage(String statusMessage) {
-		this.statusMessage = statusMessage;
-	}
-	public String getStatusCode() {
-		return statusCode;
-	}
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
+	public void setReviewData(ReviewData reviewData) {
+		this.reviewData = reviewData;
 	}
 	public Review[] getReviews() {
 		return reviews;
@@ -32,4 +27,7 @@ public class ReviewResponse {
 	public void setReviews(Review[] reviews) {
 		this.reviews = reviews;
 	}
+	
 }
+
+

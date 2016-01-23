@@ -22,13 +22,31 @@ import ee.incub.rest.spring.model.db.Review;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
 import ee.incub.rest.spring.model.http.MessageRequest;
+import ee.incub.rest.spring.model.http.v010.ReviewData;
 import ee.incub.rest.spring.model.http.v010.ReviewRequest;
+import ee.incub.rest.spring.model.http.v010.ReviewResponse;
 
 public class Utils {
 	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
+	
+	public static ReviewData getReviewData(Review[] reviews){
+		if (reviews == null || reviews.length<=0){
+			return null;
+		}
+		ReviewData reviewData = new ReviewData();
+		int sum =0;
+		for (int i = 0; i < reviews.length; i++) {
+			sum =sum+ reviews[i].getRating();
+			int[] noOfStars = reviewData.getNoOfStars();
+			noOfStars[reviews[i].getRating()-1]++;
+			reviewData.setNoOfStars(noOfStars);					
+		}
+		reviewData.setAverageRating(sum/reviews.length);
+		reviewData.setNoOfRatings(reviews.length);
+		return reviewData;
+	}
 	public static Incubee fromIncubeeRequest(IncubeeRequest request,
 			String[] images, String video, String uuid) {
 		if (request == null) {
@@ -206,7 +224,7 @@ public class Utils {
 					.getString("title") : null);
 			review.setRating(item.getInt("rating"));
 			review.setLikes(item.getInt("likes"));
-			review.setRating(item.getInt("dislikes"));
+			review.setDislikes(item.getInt("dislikes"));
 			review.setReplies(item.getInt("replies"));
 			review.setStatus(item.getString("status") != null ? item
 					.getString("status") : null);

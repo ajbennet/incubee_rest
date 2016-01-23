@@ -4,6 +4,7 @@ Rest Server for Incubee
 ## Login API 
 If user already present it returns the company ID associated with the user for founders.
 If not, it returns a 404 . 
+user_type - can have values I/U/F corresponding to Investor/User/Founder respectively
 
 Request
 ```sh
@@ -27,11 +28,12 @@ Payload
 
 Success Response
 ```sh
-{  
+{
    "statusMessage":"Success",
    "statusCode":"LOG_1000",
-   "servicedata":{  
-      "company_id":"inc_952745e0-ea2e-4365-83b3-cd379072ce57\n"
+   "servicedata":{
+      "user_type":"I",
+      "company_id":"inc_952745e0-ea2e-4365-83b3-cd379072ce57"
    }
 }
 ```
@@ -442,5 +444,100 @@ httpCode : 200 OK
       }
    ]
 }
+```
+
+## Get Customer Details for User ID
+```sh
+GET http://www.incub.ee/rest/v1.0/customer/details?id={userid}
+
+eg: GET http://www.incub.ee/rest/v1.0/customer/details?id=110489432434234974
+```
+
+Response
+
+```sh
+httpCode : 200 OK
+{
+   "statusMessage":"Success",
+   "statusCode":"CUS_1000",
+   "customerList":[
+      {
+         "id":"110483234342397974",
+         "image_url":"https://lh4.googleusercontent.com/-CL6coBFm9VE/AADAAAAAAAI/AAAAAAAAHCk/ngCxGax3Tcc/s96-c/photo.jpg",
+         "email":"john@gmail.com",
+         "name":"John Doe"
+      }
+   ]
+}
+```
+
+## Create Review
+
+```sh
+POST http://www.incub.ee/incubee/rest/v1.0/review?uid=110489314263267697974
+
+POST data:
+{
+	"title":"Loved It",
+	"description":"The team looks sharp and the product has great potential",
+	"incubee_id":"inc_551573ad-563b-40cc-b3a8-5a8ad57b1506",
+	"rating":4,
+	"meeting":"PER",
+	"status":"INT"
+}
+
+```
+
+Response
+
+```sh
+{"statusMessage":"Success","statusCode":"REV_1000","reviews":null}
+
+```
+
+
+## Get All Reviews for Incubee
+
+```sh
+GET http://www.incub.ee/incubee/rest/v1.0/review/{incubee_id}
+
+Eg: GET http://www.incub.ee/incubee/rest/v1.0/review/inc_551573ad-563b-40cc-b3a8-5a8ad57b1506
+```
+
+Response
+
+```sh
+{
+   "statusMessage":"Success",
+   "statusCode":"REV_1000",
+   "reviewData":{
+      "noOfRatings":1,
+      "averageRating":4.0,
+      "noOfStars":[
+         0,
+         0,
+         0,
+         1,
+         0
+      ]
+   },
+   "reviews":[
+      {
+         "incubee_id":"inc_551573ad-563b-40cc-b3a8-5a8ad57b1506",
+         "title":"Loved It",
+         "description":"The team looks sharp and the product has great potential",
+         "rating":4,
+         "user_id":"110489314263267697974",
+         "meeting":"PER",
+         "status":"INT",
+         "date":1453543191808,
+         "replies":0,
+         "views":0,
+         "likes":0,
+         "dislikes":0
+      }
+   ]
+}
+
 ```
 
