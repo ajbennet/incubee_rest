@@ -194,7 +194,42 @@ public class Utils {
 		}
 		return null;
 	}
+	
+	public static Review reviewFromItem(Item item) {
+		if (item != null) {
+			Review review = new Review();
+			review.setIncubee_id(item.getString("incubee_id") != null ? item
+					.getString("incubee_id") : null);
+			review.setDescription(item.getString("description") != null ? item
+					.getString("description") : null);
+			review.setTitle(item.getString("title") != null ? item
+					.getString("title") : null);
+			review.setRating(item.getInt("rating"));
+			review.setLikes(item.getInt("likes"));
+			review.setRating(item.getInt("dislikes"));
+			review.setReplies(item.getInt("replies"));
+			review.setStatus(item.getString("status") != null ? item
+					.getString("status") : null);
+			review.setMeeting(item.getString("meeting") != null ? item
+							.getString("meeting") : null);
+			try {
+				review.setDate(item.getString("date") != null ? dateFormatter
+						.parse(item.getString("date")) : null);
+			} catch (ParseException e) {
 
+				logger.error("Error Parsing date : " + item.getString("stime"),
+						e);
+				review.setDate(null);
+			}
+
+		
+			review.setUser_id(item.getString("user_id") != null ? item
+					.getString("user_id") : null);
+			return review;
+		}
+		return null;
+	}
+	
 	public static Incubee fromItem(Item item) {
 		if (item != null) {
 			Incubee incubee = new Incubee();
@@ -284,15 +319,16 @@ public class Utils {
 	}
 	
 	public static Review reviewFromReviewRequest(
-			ReviewRequest reviewRequest) {
+			ReviewRequest reviewRequest, String uid) {
 		Review review = new Review();
 		review.setIncubee_id(reviewRequest.getIncubee_id());
-		review.setUser_id(reviewRequest.getUser_id());
+		review.setUser_id(uid);
 		review.setTitle(reviewRequest.getTitle());
 		review.setDescription(reviewRequest.getDescription());
 		review.setRating(reviewRequest.getRating());
-		review.setLast_replied_date(new Date());
+		review.setDate(new Date());
 		review.setMeeting(reviewRequest.getMeeting());
+		review.setStatus(reviewRequest.getStatus());
 		review.setLikes(0);
 		review.setDislikes(0);
 		review.setViews(1);

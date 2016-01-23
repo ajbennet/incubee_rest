@@ -9,23 +9,34 @@ public class Review {
 	String description;
 	int rating;
 	String user_id;
-	int meeting;
-	int status;
-	Date last_replied_date;
+	String meeting;
+	String status;
+	Date date;
 	int replies;
 	int views;
 	int likes;
 	int dislikes;
 	
+	public static final String INPERSON_MEET ="PER";
+	public static final String TELEPHONIC_MEET = "TEL";
+	public static final String INTERESTED = "INT";
+	public static final String INVESTED = "INV";
+	public static final String PASSED = "PAS";
 	
 	
-	
-	public Date getLast_replied_date() {
-		return last_replied_date;
+	public Date getDate() {
+		return date;
 	}
-	public void setLast_replied_date(Date last_replied_date) {
-		this.last_replied_date = last_replied_date;
+	public void setDate(Date date) {
+		this.date = date;
 	}
+	public String getMeeting() {
+		return meeting;
+	}
+	public void setMeeting(String meeting) {
+		this.meeting = meeting;
+	}
+	
 	public int getReplies() {
 		return replies;
 	}
@@ -80,17 +91,12 @@ public class Review {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-	public int getMeeting() {
-		return meeting;
-	}
-	public void setMeeting(int meeting) {
-		this.meeting = meeting;
-	}
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
+	
 	
 }

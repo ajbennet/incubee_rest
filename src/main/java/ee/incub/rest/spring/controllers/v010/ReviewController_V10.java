@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ee.incub.rest.spring.aws.adaptors.MessagesDynamoDB;
 import ee.incub.rest.spring.aws.adaptors.ReviewDynamoDB;
 import ee.incub.rest.spring.model.db.Review;
-import ee.incub.rest.spring.model.http.MessageResponse;
 import ee.incub.rest.spring.model.http.v010.ReviewRequest;
 import ee.incub.rest.spring.model.http.v010.ReviewResponse;
 import ee.incub.rest.spring.utils.GoogleVerificationController;
@@ -33,7 +31,7 @@ public class ReviewController_V10 {
 			.getLogger(ReviewController_V10.class);
 
 	@RequestMapping(value = "/v1.0/review", method = RequestMethod.POST)
-	public ResponseEntity<ReviewResponse> addReview(@RequestBody ReviewRequest reviewRequest
+	public ResponseEntity<ReviewResponse> addReview(@RequestBody ReviewRequest reviewRequest,@RequestParam("uid") String uid
 			,@RequestHeader("token") String token
 			) 
 			{
@@ -46,7 +44,30 @@ public class ReviewController_V10 {
 			return new ResponseEntity<ReviewResponse>(reviewResponse,
 					HttpStatus.UNAUTHORIZED);
 		}
-		Review review = Utils.reviewFromReviewRequest(reviewRequest);
+		try{
+			//checking if the user already has a review for that incubee
+			Review review = ReviewDynamoDB.getReviewForIncubeeByUser(reviewRequest.getIncubee_id(), uid);
+			
+			if (review!=null){
+				ReviewResponse reviewResponse = new ReviewResponse();
+				reviewResponse.setStatusMessage("Review for user already found, please update");
+				reviewResponse.setStatusCode(ReviewResponse.REVIEW_ALREADY_FOUND);
+				return new ResponseEntity<ReviewResponse>(reviewResponse,
+						HttpStatus.CONFLICT);
+			}
+				
+		} catch (Exception e) {
+			logger.error("Error creating Review :" + e.getMessage(), e);
+			e.printStackTrace();
+			ReviewResponse reviewResponse = new ReviewResponse();
+			reviewResponse.setStatusMessage("Create Review Failed");
+			reviewResponse.setStatusCode(ReviewResponse.REVIEW_POST_FAILED);
+			return new ResponseEntity<ReviewResponse>(reviewResponse,
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		
+		Review review = Utils.reviewFromReviewRequest(reviewRequest, uid);
 		try {
 			ReviewDynamoDB.createReview(review);
 		} catch (Exception e) {
@@ -54,7 +75,7 @@ public class ReviewController_V10 {
 			e.printStackTrace();
 			ReviewResponse reviewResponse = new ReviewResponse();
 			reviewResponse.setStatusMessage("Create Review Failed");
-			reviewResponse.setStatusCode(ReviewResponse.REVIEW_FAILED);
+			reviewResponse.setStatusCode(ReviewResponse.REVIEW_POST_FAILED);
 			return new ResponseEntity<ReviewResponse>(reviewResponse,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -65,23 +86,23 @@ public class ReviewController_V10 {
 				HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/v1.0/review/{mid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1.0/review/{incubee_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<MessageResponse> getMessageForMid(@PathVariable("mid") String mid, @RequestParam("eid") String eid) {
-		logger.info("Recieved getReview for incubeeId: " + mid + " for eid :" + eid);
+	public ResponseEntity<ReviewResponse> getMessageForMid(@PathVariable("incubee_id") String incubee_id) {
+		logger.info("Recieved getReview for incubeeId: " + incubee_id );
 		try {
-			MessageResponse messageResponse = new MessageResponse();
-			messageResponse.setStatusMessage("Success");
-			messageResponse.setStatusCode(MessageResponse.SUCCESS);
-			messageResponse.setMessage( MessagesDynamoDB.getMessageForMessageID(mid, eid));
-			return new ResponseEntity<MessageResponse>(messageResponse,
+			ReviewResponse reviewResponse = new ReviewResponse();
+			reviewResponse.setStatusMessage("Success");
+			reviewResponse.setStatusCode(ReviewResponse.SUCCESS);
+			reviewResponse.setReviews( ReviewDynamoDB.getReviewsForIncubee(incubee_id));
+			return new ResponseEntity<ReviewResponse>(reviewResponse,
 					HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error("Exception getMessage for Id: " + mid + " for eid :" + eid,e);
-			MessageResponse messageResponse = new MessageResponse();
+			logger.error("Exception getMessage for Id: " + incubee_id ,e);
+			ReviewResponse messageResponse = new ReviewResponse();
 			messageResponse.setStatusMessage("Get Message failed");
-			messageResponse.setStatusCode(MessageResponse.GET_FAILED);
-			return new ResponseEntity<MessageResponse>(messageResponse,
+			messageResponse.setStatusCode(ReviewResponse.GET_FAILED);
+			return new ResponseEntity<ReviewResponse>(messageResponse,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

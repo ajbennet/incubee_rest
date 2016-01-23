@@ -32,6 +32,7 @@ import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.GlobalSecondaryIndex;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
@@ -45,6 +46,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 
 import ee.incub.rest.spring.model.db.Incubee;
+import ee.incub.rest.spring.model.db.Message;
 import ee.incub.rest.spring.model.db.Review;
 import ee.incub.rest.spring.model.db.User;
 import ee.incub.rest.spring.model.http.Customer;
@@ -122,19 +124,18 @@ public class ReviewDynamoDB {
 			logger.debug("Adding data to " + Constants.REVIEW_TABLE);
 
 			Item item = new Item()
-					.withPrimaryKey("incubee_id",review.getIncubee_id())
+					.withPrimaryKey("incubee_id", review.getIncubee_id())
 					.withString("user_id", review.getUser_id())
 					.withString("title", review.getTitle())
 					.withString("description", review.getDescription())
-					.withString("date",(dateFormatter.format(new Date())))
-					.withNumber("likes",review.getLikes())
-					.withNumber("meeting", review.getMeeting())
-					.withNumber("status",review.getStatus())
-					.withNumber("rating",review.getRating())
-					.withNumber("dislikes",review.getDislikes())
-					.withNumber("replies",review.getLikes())
-					.withNumber("views",review.getViews())
-			;
+					.withString("date", (dateFormatter.format(new Date())))
+					.withNumber("likes", review.getLikes())
+					.withString("meeting", review.getMeeting())
+					.withString("status", review.getStatus())
+					.withNumber("rating", review.getRating())
+					.withNumber("dislikes", review.getDislikes())
+					.withNumber("replies", review.getLikes())
+					.withNumber("views", review.getViews());
 			table.putItem(item);
 			logger.info("Added Review  :" + review);
 			return true;
@@ -421,9 +422,9 @@ public class ReviewDynamoDB {
 			attributeDefinitions.add(new AttributeDefinition()
 					.withAttributeName("incubee_id").withAttributeType("S"));
 			attributeDefinitions.add(new AttributeDefinition()
-					.withAttributeName("title").withAttributeType("S"));
+					.withAttributeName("user_id").withAttributeType("S"));
 			attributeDefinitions.add(new AttributeDefinition()
-				.withAttributeName("user_id").withAttributeType("S"));
+					.withAttributeName("date").withAttributeType("S"));
 
 			CreateTableRequest createTableRequest = new CreateTableRequest()
 					.withTableName(tableName);
@@ -441,16 +442,16 @@ public class ReviewDynamoDB {
 			tableKeySchema.add(new KeySchemaElement().withAttributeName(
 					"incubee_id").withKeyType(KeyType.HASH)); // Partition key
 			tableKeySchema.add(new KeySchemaElement()
-					.withAttributeName("title").withKeyType(KeyType.RANGE)); // Sort
-																				// key
+					.withAttributeName("user_id").withKeyType(KeyType.RANGE)); // Sort
+																	// key
 
 			createTableRequest.setKeySchema(tableKeySchema);
 
 			ArrayList<KeySchemaElement> indexKeySchema = new ArrayList<KeySchemaElement>();
 			indexKeySchema.add(new KeySchemaElement().withAttributeName(
-					"incubee_id").withKeyType(KeyType.HASH)); // Partition key
-			indexKeySchema.add(new KeySchemaElement().withAttributeName(
-					"user_id").withKeyType(KeyType.RANGE)); // Sort key
+					"user_id").withKeyType(KeyType.HASH)); // Partition key
+			indexKeySchema.add(new KeySchemaElement().withAttributeName("date")
+					.withKeyType(KeyType.RANGE)); // Sort key
 
 			Projection projection = new Projection()
 					.withProjectionType(ProjectionType.INCLUDE);
@@ -463,13 +464,19 @@ public class ReviewDynamoDB {
 			nonKeyAttributes.add("meeting");
 			projection.setNonKeyAttributes(nonKeyAttributes);
 
-			LocalSecondaryIndex localSecondaryIndex = new LocalSecondaryIndex()
-					.withIndexName("review_user_incubee_index")
+			GlobalSecondaryIndex globalSecondaryIndex = new GlobalSecondaryIndex()
+					.withIndexName("review_user_index")
 					.withKeySchema(indexKeySchema).withProjection(projection);
 
-			ArrayList<LocalSecondaryIndex> localSecondaryIndexes = new ArrayList<LocalSecondaryIndex>();
-			localSecondaryIndexes.add(localSecondaryIndex);
-			createTableRequest.setLocalSecondaryIndexes(localSecondaryIndexes);
+			globalSecondaryIndex
+					.setProvisionedThroughput(new ProvisionedThroughput()
+							.withReadCapacityUnits((long) 2)
+							.withWriteCapacityUnits((long) 2));
+
+			ArrayList<GlobalSecondaryIndex> globalSecondaryIndexes = new ArrayList<GlobalSecondaryIndex>();
+			globalSecondaryIndexes.add(globalSecondaryIndex);
+			createTableRequest
+					.setGlobalSecondaryIndexes(globalSecondaryIndexes);
 
 			Table table = dynamoDB.createTable(createTableRequest);
 			logger.info("Creating Table : " + table.getDescription());
@@ -486,7 +493,63 @@ public class ReviewDynamoDB {
 		}
 
 	}
+	
+	public static Review[] getReviewsForIncubee(String incubee_id) throws Exception {
+		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		try {
+			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+					"incubee_id = :incubee_id").withValueMap(new ValueMap()
+					.withString(":incubee_id", incubee_id)
+					)
+			;
+			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			Iterator<Item> iterator = items.iterator();
 
+			List<Review> reviewList = new ArrayList<Review>();
+			
+			while (iterator.hasNext()) {
+				
+				Item item = iterator.next();
+				logger.info("Review from DB for incubee_id: " + incubee_id + " - "
+						+ item.toJSONPretty() );
+				reviewList.add( Utils.reviewFromItem(item));
+			}
+			return reviewList.toArray(new Review[reviewList.size()]);
+		} catch (AmazonServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
+
+	}
+	
+	public static Review getReviewForIncubeeByUser(String incubee_id, String uid) throws Exception {
+		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		try {
+			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+					"incubee_id = :incubee_id and user_id = :user_id").withValueMap(new ValueMap()
+					.withString(":incubee_id", incubee_id)
+					.withString(":user_id", uid)
+					)
+			;
+			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			Iterator<Item> iterator = items.iterator();
+
+			List<Review> reviewList = new ArrayList<Review>();
+			
+			while (iterator.hasNext()) {
+				
+				Item item = iterator.next();
+				logger.info("Review from DB for incubee_id: " + incubee_id + " for user : "+ uid
+						+ item.toJSONPretty() );
+				return Utils.reviewFromItem(item);
+			}
+		} catch (AmazonServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
+		return null;
+	}
+	
 	public static void updateIncubee(Incubee incubee) throws Exception {
 
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
