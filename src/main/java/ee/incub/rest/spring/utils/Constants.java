@@ -13,4 +13,6 @@ public class Constants {
 	public static final String CUSTOMER_TABLE = Config.getProperty("customer_table");
 	public static final String REVIEW_TABLE = Config.getProperty("review_table");
 	public static final String REPLY_TABLE = Config.getProperty("reply_table");
+	public static final String EMAIL_USERNAME = Config.getProperty("email_username");
+	public static final String EMAIL_PASSWORD = Config.getProperty("email_password");
 }
