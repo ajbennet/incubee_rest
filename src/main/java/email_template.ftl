@@ -51,7 +51,7 @@
 			<table width="580"  class="deviceWidth" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#eeeeed" style="margin:0 auto;">
 				<tr>
 					<td valign="top" style="padding:0" bgcolor="#ffffff">
-						<a href="#"><img  class="deviceWidth" src="www.incub.ee/img/headliner.jpg" alt="" border="0" style="display: block; border-radius: 4px;" /></a>
+						<a href="#"><img  class="deviceWidth" src="http://www.incub.ee/img/headliner.jpg" alt="" border="0" style="display: block; border-radius: 4px;" /></a>
 					</td>
 				</tr>
                 <tr>
