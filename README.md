@@ -540,4 +540,17 @@ Response
 }
 
 ```
+## Invite founder
 
+```sh
+POST http://www.incub.ee/incubee/rest/v1.0/invite/{email_id}?uid={uid}
+
+eg: POST http://www.incub.ee/incubee/rest/v1.0/invite/abi@incub.ee?uid=110489314263267697974
+```
+
+Response
+
+```sh
+{  "statusMessage":"Success","statusCode":"INV_1000"}
+
+```
