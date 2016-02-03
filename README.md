@@ -554,3 +554,65 @@ Response
 {  "statusMessage":"Success","statusCode":"INV_1000"}
 
 ```
+
+## Create adhoc Incubee
+
+```sh
+POST http://www.incub.ee/incubee/rest/v1.0/adhocincubee?uid=1104893142263267697974
+
+POST data:
+{
+   "name":"Abi's Startup",
+   "email_id":"abinathab@gmail.com"
+}
+
+```
+
+```sh
+
+{
+   "statusMessage":"Success",
+   "statusCode":"ADH_1000",
+   "incubeeList":[
+      {
+         "id":"adh_a8dacc6b-7857-4ca5-8cc8-1e398ab8a3d2",
+         "email_id":"abinathab@gmail.com",
+         "name":"Abi's Startup",
+         "created_by_id":"110489314263267697974"
+      }
+   ]
+}
+```
+
+## Get all adhoc Incubees
+
+```sh
+GET http://www.incub.ee/incubee/rest/v1.0/adhocincubee
+```
+
+```sh
+{
+   "statusMessage":"Success",
+   "statusCode":"ADH_1000",
+   "incubeeList":[
+      {
+         "id":"adh_2cd40246-cd81-4a74-889b-18071e7aaaaf",
+         "email_id":"abinathab@gmail.com",
+         "name":"Abi's Startup",
+         "created_by_id":"110489314263267697974"
+      },
+      {
+         "id":"adh_f4240614-c55c-42b9-bd3d-8e733283cfb7",
+         "email_id":"abinathab@gmail.com",
+         "name":"Abinathab Bennet",
+         "created_by_id":"110489314263267697974"
+      },
+      {
+         "id":"adh_ef5d5362-8903-4fee-965a-77e621a8a9e4",
+         "email_id":"abinathab@gmail.com",
+         "name":"Abi's Startup",
+         "created_by_id":"110489314263267697974"
+      }
+   ]
+}
+```

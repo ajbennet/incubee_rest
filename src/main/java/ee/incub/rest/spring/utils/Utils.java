@@ -22,9 +22,9 @@ import ee.incub.rest.spring.model.db.Review;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
 import ee.incub.rest.spring.model.http.MessageRequest;
+import ee.incub.rest.spring.model.http.v010.AdhocIncubee;
 import ee.incub.rest.spring.model.http.v010.ReviewData;
 import ee.incub.rest.spring.model.http.v010.ReviewRequest;
-import ee.incub.rest.spring.model.http.v010.ReviewResponse;
 
 public class Utils {
 	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
@@ -161,6 +161,23 @@ public class Utils {
 					.get("project_status").getS() : null);
 
 			logger.debug("Incubee: " + item.toString());
+			return incubee;
+		}
+		return null;
+	}
+	
+	public static AdhocIncubee adhocIncubeeFromItem(Map<String, AttributeValue> item) {
+		if (item != null) {
+			AdhocIncubee incubee = new AdhocIncubee();
+
+			incubee.setName(item.get("name") != null ? item
+					.get("name").getS() : null);
+			incubee.setEmail_id(item.get("email_id") != null ? item.get(
+					"email_id").getS() : null);
+			incubee.setId(item.get("id") != null ? item.get("id").getS() : null);
+			incubee.setCreated_by_id(item.get("created_by_id") != null ? item
+					.get("created_by_id").getS() : null);
+			logger.debug("AdhocIncubee: " + item.toString());
 			return incubee;
 		}
 		return null;

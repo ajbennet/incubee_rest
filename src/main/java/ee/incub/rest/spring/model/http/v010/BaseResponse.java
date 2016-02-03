@@ -6,7 +6,6 @@ public class BaseResponse {
 	private String statusMessage;
 	private String statusCode;
 	
-	
 	public String getStatusMessage() {
 		return statusMessage;
 	}

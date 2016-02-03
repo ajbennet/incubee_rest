@@ -1,5 +1,7 @@
 package ee.incub.rest.spring.model.http.v010;
 
+import java.util.Arrays;
+
 import ee.incub.rest.spring.model.db.Review;
 
 
@@ -26,6 +28,11 @@ public class ReviewResponse extends BaseResponse {
 	}
 	public void setReviews(Review[] reviews) {
 		this.reviews = reviews;
+	}
+	@Override
+	public String toString() {
+		return "ReviewResponse [reviewData=" + reviewData + ", reviews=" + Arrays.toString(reviews)
+				+ ", getStatusMessage()=" + getStatusMessage() + ", getStatusCode()=" + getStatusCode() + "]";
 	}
 	
 }

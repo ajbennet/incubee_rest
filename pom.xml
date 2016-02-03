@@ -184,6 +184,7 @@
 				<directory>src/main/java</directory>
 				<includes>
 					<include>*.properties</include>
+					<include>*.ftl</include>
 				</includes>
 			</resource>
 		</resources>

@@ -1,7 +1,5 @@
 package ee.incub.rest.spring.controllers;
 
-import java.io.IOException;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
