@@ -161,6 +161,8 @@ public class UserDynamoDB {
 				item.withString("name", user.getName());
 			if (user.getCompany_id() != null && !user.getCompany_id().isEmpty())
 				item.withString("company_id", user.getCompany_id());
+			if (user.getUser_type() != null && !user.getUser_type().isEmpty())
+				item.withString("user_type", user.getUser_type());
 
 			table.putItem(item);
 			logger.info("Added user  :" + user);
