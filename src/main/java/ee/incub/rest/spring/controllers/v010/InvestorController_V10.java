@@ -1,15 +1,11 @@
 package ee.incub.rest.spring.controllers.v010;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -36,15 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
-import ee.incub.rest.spring.aws.adaptors.UserStoreDynamoDB;
-import ee.incub.rest.spring.model.http.v010.CustomerResponse;
 import ee.incub.rest.spring.model.db.User;
-import ee.incub.rest.spring.model.http.Customer;
-import ee.incub.rest.spring.model.http.LikeResponse;
 import ee.incub.rest.spring.utils.Constants;
 import ee.incub.rest.spring.utils.GoogleVerificationController;
 import ee.incub.rest.spring.utils.Utils;
-import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -126,10 +117,6 @@ public class InvestorController_V10 {
             Configuration cfg = new Configuration();
             cfg.setClassForTemplateLoading(InvestorController_V10.class, "/");
 
-
-
-//            FileTemplateLoader templateLoader = new FileTemplateLoader(new File("templates"));
-//            cfg.setTemplateLoader(templateLoader);
             Template template = cfg.getTemplate("email_template.ftl");
             Map<String, String> rootMap = new HashMap<String, String>();
             rootMap.put("investor", investor);
@@ -143,8 +130,6 @@ public class InvestorController_V10 {
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(body);
  
-            
-            
             message.setContent(multipart, "text/html");
 			
 			Transport.send(message);

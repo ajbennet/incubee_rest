@@ -15,4 +15,5 @@ public class Constants {
 	public static final String REPLY_TABLE = Config.getProperty("reply_table");
 	public static final String EMAIL_USERNAME = Config.getProperty("email_username");
 	public static final String EMAIL_PASSWORD = Config.getProperty("email_password");
+	public static final String ADHOC_INCUBEE_TABLE =Config.getProperty("adhoc_incubee_table_name");
 }

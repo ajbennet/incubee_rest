@@ -44,6 +44,7 @@ import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import ee.incub.rest.spring.model.db.Incubee;
 import ee.incub.rest.spring.model.db.User;
 import ee.incub.rest.spring.model.http.Customer;
+import ee.incub.rest.spring.model.http.v010.AdhocIncubee;
 import ee.incub.rest.spring.utils.Constants;
 import ee.incub.rest.spring.utils.Utils;
 
@@ -108,6 +109,34 @@ public class UserDynamoDB {
 		}
 
 	}
+	
+	public static void createAdhocIncubee(String incubeeId, String name, String emailId , String createdById) throws Exception {
+
+		Table table = dynamoDB.getTable(Constants.ADHOC_INCUBEE_TABLE);
+
+		try {
+
+			logger.debug("Adding data to " + Constants.ADHOC_INCUBEE_TABLE);
+
+			Item item = new Item().withPrimaryKey("id", incubeeId);
+			if (name != null)
+				item.withString("name", name);
+			if (emailId != null)
+				item.withString("email_id", emailId);
+			if (createdById != null)
+				item.withString("created_by_id", createdById);
+			
+			item.withString("added_time", (dateFormatter.format(new Date())));
+			item.withString("updated_time", (dateFormatter.format(new Date())));
+			table.putItem(item);
+			logger.info("Added adhoc incubee data for company :" + name);
+		} catch (Exception e) {
+			logger.error("Failed to create item in " + Constants.ADHOC_INCUBEE_TABLE);
+			logger.error(e.getMessage());
+			throw e;
+		}
+
+	}
 
 	public static boolean createUser(User user) throws Exception {
 
@@ -132,6 +161,8 @@ public class UserDynamoDB {
 				item.withString("name", user.getName());
 			if (user.getCompany_id() != null && !user.getCompany_id().isEmpty())
 				item.withString("company_id", user.getCompany_id());
+			if (user.getUser_type() != null && !user.getUser_type().isEmpty())
+				item.withString("user_type", user.getUser_type());
 
 			table.putItem(item);
 			logger.info("Added user  :" + user);
@@ -391,6 +422,28 @@ public class UserDynamoDB {
 		return list;
 	}
 
+	public static List<AdhocIncubee> getAllAdhocIncubees() {
+		// long twoWeeksAgoMilli = (new Date()).getTime()
+		// - (15L * 24L * 60L * 60L * 1000L);
+		// Date twoWeeksAgo = new Date();
+		// twoWeeksAgo.setTime(twoWeeksAgoMilli);
+		// SimpleDateFormat df = new SimpleDateFormat(
+		// "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		// String twoWeeksAgoStr = df.format(twoWeeksAgo);
+
+		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
+				new ProfileCredentialsProvider());
+		ScanRequest scanRequest = new ScanRequest()
+				.withTableName(Constants.ADHOC_INCUBEE_TABLE);
+		List<AdhocIncubee> list = new ArrayList<AdhocIncubee>();
+		ScanResult result = client.scan(scanRequest);
+		for (Map<String, AttributeValue> item : result.getItems()) {
+			list.add(Utils.adhocIncubeeFromItem(item));
+		}
+		logger.info("Adhoc Incubee List :" + list);
+		return list;
+	}
+	
 	static void initializeAndCreateTables() {
 
 		TableCollection<ListTablesResult> tables = dynamoDB.listTables();
@@ -399,6 +452,7 @@ public class UserDynamoDB {
 		logger.debug("Listing table names");
 		boolean createUserTable = true;
 		boolean createIncubeeTable = true;
+		boolean createAdhocIncubeeTable = true;
 		while (iterator.hasNext()) {
 			Table table = iterator.next();
 			logger.debug("Table : " + table.getTableName());
@@ -406,6 +460,8 @@ public class UserDynamoDB {
 				createIncubeeTable = false;
 			} else if (table.getTableName().equals(Constants.USER_TABLE)) {
 				createUserTable = false;
+			}else if (table.getTableName().equals(Constants.ADHOC_INCUBEE_TABLE)) {
+				createAdhocIncubeeTable = false;
 			}
 		}
 		if (createUserTable) {
@@ -414,6 +470,10 @@ public class UserDynamoDB {
 		if (createIncubeeTable) {
 			createIncubeeTable();
 		}
+		if (createAdhocIncubeeTable) {
+			createAdhocIncubeeTable();
+		}
+		
 	}
 
 	static void createUserTable() {
@@ -487,7 +547,43 @@ public class UserDynamoDB {
 		}
 
 	}
+	
+	static void createAdhocIncubeeTable() {
+		String tableName = Constants.ADHOC_INCUBEE_TABLE;
+		try {
 
+			ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
+			attributeDefinitions.add(new AttributeDefinition()
+					.withAttributeName("id").withAttributeType("S"));
+
+			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
+			keySchema.add(new KeySchemaElement().withAttributeName("id")
+					.withKeyType(KeyType.HASH));
+
+			CreateTableRequest request = new CreateTableRequest()
+					.withTableName(tableName)
+					.withKeySchema(keySchema)
+					.withAttributeDefinitions(attributeDefinitions)
+					.withProvisionedThroughput(
+							new ProvisionedThroughput().withReadCapacityUnits(
+									2L).withWriteCapacityUnits(2L));
+
+			logger.info("Issuing CreateTable request for " + tableName);
+			Table table = dynamoDB.createTable(request);
+
+			logger.info("Waiting for " + tableName
+					+ " to be created...this may take a while...");
+			table.waitForActive();
+
+			getTableInformation(tableName);
+
+		} catch (Exception e) {
+			logger.error("CreateTable request failed for " + tableName);
+			logger.error(e.getMessage());
+		}
+
+	}
+	
 	public static void updateIncubee(Incubee incubee) throws Exception {
 
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);

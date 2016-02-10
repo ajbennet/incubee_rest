@@ -1,6 +1,7 @@
 package ee.incub.rest.spring.controllers.v010;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,8 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +28,9 @@ import ee.incub.rest.spring.model.db.User;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
 import ee.incub.rest.spring.model.http.IncubeeResponse;
 import ee.incub.rest.spring.model.http.Token;
+import ee.incub.rest.spring.model.http.v010.AdhocIncubee;
+import ee.incub.rest.spring.model.http.v010.AdhocIncubeeRequest;
+import ee.incub.rest.spring.model.http.v010.AdhocIncubeeResponse;
 import ee.incub.rest.spring.utils.GoogleVerificationController;
 import ee.incub.rest.spring.utils.Utils;
 
@@ -33,8 +40,7 @@ import ee.incub.rest.spring.utils.Utils;
 @Controller
 public class FounderController_V10 {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(FounderController_V10.class);
+	private static final Logger logger = LoggerFactory.getLogger(FounderController_V10.class);
 
 	@RequestMapping(value = "/v1.0/handle", method = RequestMethod.POST)
 	@ResponseBody
@@ -44,8 +50,7 @@ public class FounderController_V10 {
 
 		if (incubee.getToken() != null) {
 			try {
-				token = new ObjectMapper().readValue(incubee.getToken(),
-						Token.class);
+				token = new ObjectMapper().readValue(incubee.getToken(), Token.class);
 			} catch (JsonParseException e) {
 				logger.error(e.getMessage());
 				e.printStackTrace();
@@ -59,17 +64,16 @@ public class FounderController_V10 {
 		}
 
 		if (token == null || !GoogleVerificationController.verifyToken(token.getToken())) {
-			return new ResponseEntity<String>("Please sign-in with Google",
-					HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<String>("Please sign-in with Google", HttpStatus.UNAUTHORIZED);
 		}
 		String uuid = "inc_" + UUID.randomUUID().toString();
 		User user = UserDynamoDB.getUserForHandle(token.getId());
 		if (user == null) {
-			
+
 			boolean isSuccess = false;
 			// creating new incubee & user
 			isSuccess = createOrUpdateIncubee(incubee, uuid, false);
-			if (isSuccess){
+			if (isSuccess) {
 				boolean isCreated = false;
 				try {
 					isCreated = createUser(token, uuid);
@@ -77,18 +81,16 @@ public class FounderController_V10 {
 					logger.error("Error Creating User ", e);
 					e.printStackTrace();
 				}
-				if (isCreated){
-					return new ResponseEntity<String>("User & Startup Created",
-							HttpStatus.CREATED);
-				}else {
+				if (isCreated) {
+					return new ResponseEntity<String>("User & Startup Created", HttpStatus.CREATED);
+				} else {
 					return new ResponseEntity<String>("Incubee Created, but user creation failed",
 							HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			} else {
-				return new ResponseEntity<String>("Incubee Creation/Updation failed",
-						HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<String>("Incubee Creation/Updation failed", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			
+
 		} else {
 			if (createOrUpdateIncubee(incubee, uuid, user.isAdmin()))
 				return new ResponseEntity<String>("Incubee Updated", HttpStatus.OK);
@@ -109,11 +111,85 @@ public class FounderController_V10 {
 		logger.info("Recieved getIncubee for Id: " + id);
 		return Utils.fromIncubee(UserDynamoDB.getIncubee(id));
 	}
+	
+	@RequestMapping(value = "/v1.0/adhocincubee", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<AdhocIncubeeResponse> getAllAdhocIncubees(@RequestHeader("token") String token) {
+		List<AdhocIncubee> adhocList = null;
+		if (token == null || !GoogleVerificationController.verifyToken(token)) {
+			AdhocIncubeeResponse adhocResponse = new AdhocIncubeeResponse();
+			adhocResponse.setStatusMessage("Token not found");
+			adhocResponse.setStatusCode(AdhocIncubeeResponse.TOKEN_NOT_FOUND);
+			return new ResponseEntity<AdhocIncubeeResponse>(adhocResponse,
+					HttpStatus.UNAUTHORIZED);
+		}
+		
+		try {
+			adhocList = UserDynamoDB.getAllAdhocIncubees();
+		} catch (Exception e) {
+			logger.error("Error creating Review :" + e.getMessage(), e);
+			e.printStackTrace();
+			AdhocIncubeeResponse adhocResponse = new AdhocIncubeeResponse();
+			adhocResponse.setStatusMessage("Create Review Failed");
+			adhocResponse.setStatusCode(AdhocIncubeeResponse.GET_FAILED);
+			return new ResponseEntity<AdhocIncubeeResponse>(adhocResponse,
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		AdhocIncubeeResponse adhocResponse = new AdhocIncubeeResponse();
+		adhocResponse.setStatusMessage("Success");
+		adhocResponse.setStatusCode(AdhocIncubeeResponse.SUCCESS);
+		adhocResponse.setIncubeeList(adhocList);
+		return new ResponseEntity<AdhocIncubeeResponse>(adhocResponse,
+				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/v1.0/adhocincubee", method = RequestMethod.POST)
+	public ResponseEntity<AdhocIncubeeResponse> createAdhocIncubee(@RequestBody AdhocIncubeeRequest incubee,
+			@RequestParam("uid") String uid,
+			@RequestHeader("token") String token ) {
+		logger.info("Create Adhoc Incubee : " + incubee);
+
+		if (token == null || !GoogleVerificationController.verifyToken(token)) {
+			AdhocIncubeeResponse adhocIncResponse = new AdhocIncubeeResponse();
+			adhocIncResponse.setStatusMessage("Token not found");
+			adhocIncResponse.setStatusCode(AdhocIncubeeResponse.TOKEN_NOT_FOUND);
+			return new ResponseEntity<AdhocIncubeeResponse>(adhocIncResponse, HttpStatus.UNAUTHORIZED);
+		}
+		String uuid = "adh_" + UUID.randomUUID().toString();
+
+		// creating adhoc incubee
+		try {
+			UserDynamoDB.createAdhocIncubee(uuid, incubee.getName(), incubee.getEmail_id(), uid);
+			AdhocIncubeeResponse adhocIncResponse = new AdhocIncubeeResponse();
+			adhocIncResponse.setStatusMessage("Success");
+			adhocIncResponse.setStatusCode(AdhocIncubeeResponse.SUCCESS);
+			AdhocIncubee adhocIncubee = new AdhocIncubee();
+			adhocIncubee.setCreated_by_id(uid);
+			adhocIncubee.setId(uuid);
+			adhocIncubee.setEmail_id( incubee.getEmail_id());
+			adhocIncubee.setName(incubee.getName());
+			List<AdhocIncubee> list = new ArrayList<AdhocIncubee>();
+			list.add(adhocIncubee);
+			adhocIncResponse.setIncubeeList(list);
+			logger.info("Adhoc Incubee creation successful :" + adhocIncResponse);
+			return new ResponseEntity<AdhocIncubeeResponse>(adhocIncResponse, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Adhoc Incubee Creation failed - " + e.getLocalizedMessage(), e);
+			AdhocIncubeeResponse adhocIncResponse = new AdhocIncubeeResponse();
+			adhocIncResponse.setStatusMessage("Create Review Failed");
+			adhocIncResponse.setStatusCode(AdhocIncubeeResponse.ADHOC_INCUBEE_CREATION_FAILED);
+			return new ResponseEntity<AdhocIncubeeResponse>(adhocIncResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 	/**
 	 * 
 	 * @param incubee
 	 * @param uuid
-	 * @param isAdmin - Admins can only create startups and can have multiple startups under their name
+	 * @param isAdmin
+	 *            - Admins can only create startups and can have multiple
+	 *            startups under their name
 	 * @return
 	 */
 	private boolean createOrUpdateIncubee(IncubeeRequest incubee, String uuid, boolean isAdmin) {
@@ -135,9 +211,10 @@ public class FounderController_V10 {
 				}
 			}
 		}
-		//adding this because multipartfile has a null entry even if no file is uploaded.
-		if (keyList!=null && keyList.length==1 && keyList[0]==null){
-			keyList=null;
+		// adding this because multipartfile has a null entry even if no file is
+		// uploaded.
+		if (keyList != null && keyList.length == 1 && keyList[0] == null) {
+			keyList = null;
 		}
 		String video = null;
 		if (incubee.getVideo() != null) {
@@ -156,16 +233,14 @@ public class FounderController_V10 {
 		}
 		try {
 			if (incubee.getId() != null && !incubee.getId().isEmpty() && !isAdmin) {
-	
-				UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee,
-						keyList, video, incubee.getId()));
-	
+
+				UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee, keyList, video, incubee.getId()));
+
 			} else {
-				UserDynamoDB.loadIncubee(Utils.fromIncubeeRequest(incubee,
-						keyList, video, uuid));
+				UserDynamoDB.loadIncubee(Utils.fromIncubeeRequest(incubee, keyList, video, uuid));
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
+			logger.error(e.getMessage(), e);
 			return false;
 		}
 		// check if user already has a company associated to his account.
@@ -176,8 +251,7 @@ public class FounderController_V10 {
 
 	private boolean createUser(Token token, String company_id) throws Exception {
 		if (token != null && company_id != null) {
-			logger.info("Creating User with : " + token + " for company :"
-					+ company_id);
+			logger.info("Creating User with : " + token + " for company :" + company_id);
 			User user = new User();
 			String user_id = "usr_" + UUID.randomUUID().toString();
 			user.setId(user_id);
@@ -197,5 +271,4 @@ public class FounderController_V10 {
 		}
 	}
 
-	
 }

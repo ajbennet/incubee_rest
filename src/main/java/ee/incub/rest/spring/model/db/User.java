@@ -13,6 +13,9 @@ public class User {
 	private String name;
 	private boolean isAdmin;
 	
+	public static final String INVESTOR = "I";
+	public static final String FOUNDER = "F";
+	
 	public String getId() {
 		return id;
 	}
