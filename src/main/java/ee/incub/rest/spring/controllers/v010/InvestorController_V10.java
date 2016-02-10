@@ -76,7 +76,7 @@ public class InvestorController_V10 {
 			if (user!=null){
 				
 				String email_token = Utils.generateID("inv", 15);
-				sendEmail(emailId,"Alison", email_token);
+				sendEmail(emailId,user.getName(), email_token);
 				return new ResponseEntity<String>(
 						"{  \"statusMessage\":\"Success\","
 								+ "\"statusCode\":\"INV_1000\"}", HttpStatus.OK);
