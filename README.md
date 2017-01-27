@@ -472,6 +472,9 @@ httpCode : 200 OK
 ```
 
 ## Create Review
+## 	‘meeting’ parameter can take these values "PER","PHO" which corresponds to In-Person meeting and Phone meeting.
+## 	‘status’ parameter can take these values "INT","INV,"PAS" which corresponds to Interested, Invested, Passed.
+
 
 ```sh
 POST http://www.incub.ee/incubee/rest/v1.0/review?uid=110489314263267697974
