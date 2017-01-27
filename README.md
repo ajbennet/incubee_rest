@@ -472,8 +472,8 @@ httpCode : 200 OK
 ```
 
 ## Create Review
-## 	‘meeting’ parameter can take these values "PER","PHO" which corresponds to In-Person meeting and Phone meeting.
-## 	‘status’ parameter can take these values "INT","INV,"PAS" which corresponds to Interested, Invested, Passed.
+ 	‘meeting’ parameter can take these values "PER","PHO" which corresponds to In-Person meeting and Phone meeting.
+ 	‘status’ parameter can take these values "INT","INV,"PAS" which corresponds to Interested, Invested, Passed.
 
 
 ```sh
