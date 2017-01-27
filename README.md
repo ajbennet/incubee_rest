@@ -43,6 +43,7 @@ Success Response
 ```
 
 User not found Response
+
 ```sh
 {"statusMessage":"User not found","statusCode":"LOG_1003","servicedata":null}
 ```
@@ -52,15 +53,18 @@ If user already present it returns the company ID associated with the user for f
 If not, it returns a 404. 
 
 Request
+
 ```sh
 POST http://www.incub.ee/rest/v1.0/signup 
 ```
 
 Headers
+
 ```sh
 Content-Type: application/json; 
 ```
 Payload
+
 ```sh
 {
    "name":"Abinathab Bennet",
@@ -72,6 +76,7 @@ Payload
 ```
 
 Success Response
+
 ```sh
 httpCode : 201 Created
 
@@ -82,6 +87,7 @@ httpCode : 201 Created
 ```
 
 User already present Response
+
 ```sh
 http code: 409 Conflict
 {
@@ -90,20 +96,24 @@ http code: 409 Conflict
 }
 ```
 ##Delete User API
+
 ```sh
 DELETE http://www.incub.ee/rest/v1.0/user?uid={uid}
 ```
 Success Response
+
 ```sh
 http Code: 200 
 Message: User Deleted
 ```
 
 ##Get Incubee
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/{incubee_id}
 ```
 Success Response
+
 ```sh
 {
    "company_name":"Socigo",
@@ -131,11 +141,13 @@ Success Response
 ```
 
 ##Get All Incubees
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/all
 ```
 
 Success Response
+
 ```sh
 [
    {
@@ -213,6 +225,7 @@ Success Response
 
 
 ## Like API 
+
 API called when a user likes a startup
 
 ```sh
@@ -220,6 +233,7 @@ POST http://www.incub.ee/rest/v1.0/like/{incubee_id}?uid={uid}
 ```
 
 Success Response
+
 ```sh
 http
 {  
@@ -230,12 +244,14 @@ http
 
 
 ## Get All Likes
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/like?id={user_id}
 
 ```
 
 Success Response
+
 ```sh
 http Code: 200
 {  
@@ -254,6 +270,7 @@ http Code: 200
 
 
 ## Customer API 
+
 API called when a user likes a startup
 
 ```sh
@@ -271,11 +288,13 @@ http
 ```
 
 #3 Get All Customers
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/customer?id={incubee_id}
 ```
 
 Success Response
+
 ```sh
 {
    "statusMessage":"Success",
@@ -325,6 +344,7 @@ httpCode : 200 OK
 ```
 
 ## Get Messages API
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/msg/all?eid={eid}
 ```
@@ -357,6 +377,7 @@ httpCode : 200 OK
 ```
 
 ## Get Message for Message ID
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/msg/{mid}?eid={eid}
 
@@ -454,6 +475,7 @@ httpCode : 200 OK
 ```
 
 ## Get Customer Details for User ID
+
 ```sh
 GET http://www.incub.ee/rest/v1.0/customer/details?id={userid}
 
@@ -479,6 +501,7 @@ httpCode : 200 OK
 ```
 
 ## Create Review
+
 ‘meeting’ parameter can take these values "PER","PHO" which corresponds to In-Person meeting and Phone meeting.
 ‘status’ parameter can take these values "INT","INV,"PAS" which corresponds to Interested, Invested, Passed.
 
