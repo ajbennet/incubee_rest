@@ -7,15 +7,18 @@ If not, it returns a 404 .
 user_type - can have values I/U/F corresponding to Investor/User/Founder respectively
 
 Request
+
 ```sh
 POST http://www.incub.ee/rest/v1.0/login 
 ```
 
 Headers
+
 ```sh
 Content-Type: application/json; 
 ```
 Payload
+
 ```sh
 {
    "name":"Abinathab Bennet",
@@ -27,6 +30,7 @@ Payload
 ```
 
 Success Response
+
 ```sh
 {
    "statusMessage":"Success",
@@ -257,6 +261,7 @@ POST http://www.incub.ee/rest/v1.0/customer/{incubee_id}?uid={user_id}
 ```
 
 Success Response
+
 ```sh
 http
 {  
@@ -291,10 +296,12 @@ Success Response
 Send a message to another user.
 
 Request
+
 ```sh
 POST http://www.incub.ee/rest/v1.0/msg?eid={uid}
 ```
 Requestbody
+
 ```sh
 {
 	"body":"Hi I like this idea",
