@@ -649,3 +649,86 @@ GET http://www.incub.ee/incubee/rest/v1.0/adhocincubee
    ]
 }
 ```
+
+## Create incubee with images/video
+
+```sh
+POST http://www.incub.ee/rest/handle
+```
+
+Headers
+
+```sh
+
+Accept-Encoding:gzip, deflate
+Accept-Language:en-US,en;q=0.8
+Content-Length:31981
+Content-Type:multipart/form-data; boundary=----WebKitFormBoundarywNk6cpyuLOamnsFg
+
+```
+
+Payload
+
+```sh
+
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="company_name"
+
+Seed Invest
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="company_url"
+
+Investors playground
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="logo_url"
+
+Logo URL
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="high_concept"
+
+High concept or a brief description
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="description"
+
+Description about the company/product
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="twitter_url"
+
+Twitter URL
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="video_url"
+
+Video URL
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="location"
+
+Location
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="founder"
+
+Information about the founder
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="field"
+
+Field
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="images"; filename="SeedInvest_Logo.png"
+Content-Type: image/png
+
+
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="video"; filename=""
+Content-Type: application/octet-stream
+
+
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="token"
+
+{"name":"Abs msft","id":"103142199198521131634","image_url":"https://lh3.googleusercontent.com/-kGTeAHkXY90/AAAAAAAAAAI/AAAAAAAAAAA/AAomvV2ypT8UI5mQFAsFsCQYRGOrQMTeyw/s96-c/photo.jpg","email":"absmsft@gmail.com","token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjcwYWFlMDk3YmUwZmEyYTk5OTg1MmQ1N2E0ODBlNGNhZDZiZGI4MWMifQ.eyJpc3MiOiJhY2NvdW50cy5nb29GUuY29tIiwiaWF0IjoxNDg3OTExMjUyLCJleHAiOjE0ODc5MTQ4NTIsImF0X2hhc2giOiJUemh6Y3B5eEVXX21KamlOZDQ0UG5nIiwiYXVkIjoiMTA3OTIxODM2OTc1My0zZmc5c291NDBrZHJqYjVoc2ZubTBvbzlqajBkb2s5YS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwMzE0MjE5OTE5ODUyMTEzMTYzNCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiIxMDc5MjE4MzY5NzUzLTNmZzlzb3U0MGtkcmpiNWhzZm5tMG9vOWpqMGRvazlhLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiZW1haWwiOiJhYnNtc2Z0QGdtYWlsLmNvbSIsIm5hbWUiOiJBYnMgbXNmdCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vLWtHVGVBSGtYWTkwL0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFBL0FBb212VjJ5cFQ4VUk1bVFGQXNGc0NRWVJHT3JRTVRleXcvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkFicyIsImZhbWlseV9uYW1lIjoibXNmdCIsImxvY2FsZSI6ImVuIn0.J8L1YSPelsPxyGOuBmCIskbqeNM1Yr6avGYZoKQx2MPoc6wdJIXxJZ1rwPl3WjqSYjvUv_FlECOAZpO_Rmdw0qEBMkMw36c9Xcnf9iXVsZUjRtndzoSeG3r1DQu7Y-ZVuQ3xWMljhDJOlw5hjCHJv7PsuA00fbN7KWxiStiL0PmIpvgmjXSk1O_2d4jOljpwQw_jEKi5Ny1Xc223MEEZi7-Xsb1jQHj-WazBe9yXARfzJf4Pv93cIJNvnaOyDRYyluCCd3bGLKBY9aN5o7m-dYk3AK-RgzPdM8JMZ3inrLAtqkzAxhj5aqdU8IYDICvI7xAW9wU7py9e5IG5bQCW_Q"}
+------WebKitFormBoundarywNk6cpyuLOamnsFg
+Content-Disposition: form-data; name="id"
+
+
+------WebKitFormBoundarywNk6cpyuLOamnsFg--
+
+```
