@@ -36,6 +36,7 @@ public class FounderController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(FounderController.class);
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/handle", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> handleRequest(IncubeeRequest incubee) {
@@ -63,12 +64,16 @@ public class FounderController {
 					HttpStatus.UNAUTHORIZED);
 		}
 		String uuid = "inc_" + UUID.randomUUID().toString();
+		boolean isSuccess = false;
 		User user = UserDynamoDB.getUserForHandle(token.getId());
+		// creating new incubee & user
+		boolean isAdmin = (user ==null)? false:user.isAdmin();
+		isSuccess = createOrUpdateIncubee(incubee, uuid, isAdmin);
+		if(isAdmin){
+			return new ResponseEntity<String>("{\"statusMessage\":\"Incubee Created for the admin user\",\"statusCode\":\"INC_1000\"}",
+				HttpStatus.CREATED);
+		}
 		if (user == null) {
-			
-			boolean isSuccess = false;
-			// creating new incubee & user
-			isSuccess = createOrUpdateIncubee(incubee, uuid, false);
 			if (isSuccess){
 				boolean isCreated = false;
 				try {
@@ -78,23 +83,38 @@ public class FounderController {
 					e.printStackTrace();
 				}
 				if (isCreated){
-					return new ResponseEntity<String>("User & Startup Created",
+					return new ResponseEntity<String>("{\"statusMessage\":\"User & Incubee created\",\"statusCode\":\"INC_1000\"}",
 							HttpStatus.CREATED);
 				}else {
-					return new ResponseEntity<String>("Incubee Created, but user creation failed",
+					return new ResponseEntity<String>("{\"statusMessage\":\"Incubee created but user creation failed\",\"statusCode\":\"INC_1001\"}",
 							HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			} else {
-				return new ResponseEntity<String>("Incubee Creation/Updation failed",
+				return new ResponseEntity<String>("{\"statusMessage\":\"Incubee creation or updation failed\",\"statusCode\":\"INC_1002\"}",
 						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 		} else {
-			if (createOrUpdateIncubee(incubee, uuid, user.isAdmin()))
-				return new ResponseEntity<String>("Incubee Updated", HttpStatus.OK);
+			// update user if the user already exists and is not associated with a company
+			if (user.getCompany_id()==null || user.getCompany_id().isEmpty()){
+				boolean isUpdated = false;
+				user.setCompany_id(uuid);
+				try {
+					isUpdated = UserDynamoDB.updateUser(user);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (isUpdated){
+					return new ResponseEntity<String>("{\"statusMessage\":\"Incubee created and user updated with company information\",\"statusCode\":\"INC_1000\"}", HttpStatus.OK);
+				}else{
+					return new ResponseEntity<String>("{\"statusMessage\":\"Incubee created but user failed to update\",\"statusCode\":\"INC_1003\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			}
 			else
-				return new ResponseEntity<String>("Failed to update Incubee", HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<String>("{\"statusMessage\":\"Incubee updated\",\"statusCode\":\"INC_1000\"}", HttpStatus.OK);
 		}
+		
 	}
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -159,19 +179,19 @@ public class FounderController {
 	
 				UserDynamoDB.updateIncubee(Utils.fromIncubeeRequest(incubee,
 						keyList, video, incubee.getId()));
+				logger.info("Incubee Updated : " + incubee.getCompany_name());
 	
 			} else {
 				UserDynamoDB.loadIncubee(Utils.fromIncubeeRequest(incubee,
 						keyList, video, uuid));
+				logger.info("Incubee Created : " + incubee.getCompany_name());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			return false;
 		}
-		// check if user already has a company associated to his account.
-		isCreated = true;
-		logger.info("Incubee Created/Updated : " + incubee.getCompany_name());
-		return isCreated;
+		
+		return true;
 	}
 
 	private boolean createUser(Token token, String company_id) throws Exception {

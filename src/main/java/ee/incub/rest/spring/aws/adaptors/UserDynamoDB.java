@@ -583,7 +583,37 @@ public class UserDynamoDB {
 		}
 
 	}
+	public static boolean updateUser(User user) throws Exception {
+
+		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+
+		try {
+			if (user.getCompany_id() != null
+					&& !user.getCompany_id().isEmpty()) {
+				UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+						.withPrimaryKey("id", user.getId())
+	                    .withUpdateExpression("set company_id = :company_id")
+	                    .withValueMap(new ValueMap()
+	                              .with(":company_id", user.getCompany_id()))
+	                    .withReturnValues(ReturnValue.UPDATED_NEW);
+			
+
+				UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
 	
+				// Check the response.
+				logger.info("Printing user after updating it");
+				logger.info(outcome.getItem().toJSONPretty());
+				return true;
+			} else {
+				logger.warn("User does not have a Company ID, hence user not updated with Company ID");
+			}
+		} catch (Exception e) {
+			logger.error("Error updating item in " + Constants.INCUBEE_TABLE, e);
+			logger.error(e.getMessage());
+			throw e;
+		}
+		return false;
+	}
 	public static void updateIncubee(Incubee incubee) throws Exception {
 
 		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);

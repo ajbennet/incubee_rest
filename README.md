@@ -732,3 +732,51 @@ Content-Disposition: form-data; name="id"
 ------WebKitFormBoundarywNk6cpyuLOamnsFg--
 
 ```
+
+Possible success responses
+
+```sh
+{
+	"statusMessage":"User & Incubee created",
+	"statusCode":"INC_1000"
+}
+```
+
+```sh
+{
+	"statusMessage":"Incubee created and user updated with company information",
+	"statusCode":"INC_1000"
+}
+```
+```sh
+{
+	"statusMessage":"Incubee Created for the admin user",
+	"statusCode":"INC_1000"
+}
+```
+```sh
+{
+	"statusMessage":"Incubee Updated",
+	"statusCode":"INC_1000"
+}
+```
+Possible failure responses
+
+```sh
+{
+	"statusMessage":"Incubee created but user creation failed",
+	"statusCode":"INC_1001"
+}
+```
+```sh
+{
+	"statusMessage":"Incubee creation or updation failed",
+	"statusCode":"INC_1002"
+}
+```
+```sh
+{
+	"statusMessage":"Incubee created but user failed to update",
+	"statusCode":"INC_1003"
+}
+```
