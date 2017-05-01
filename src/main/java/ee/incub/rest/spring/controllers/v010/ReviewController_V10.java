@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ee.incub.rest.spring.aws.adaptors.ReviewDynamoDB;
+import ee.incub.rest.spring.aws.adaptors.UserStoreDynamoDB;
 import ee.incub.rest.spring.model.db.Review;
 import ee.incub.rest.spring.model.http.v010.BaseResponse;
 import ee.incub.rest.spring.model.http.v010.ReviewRequest;
@@ -83,6 +84,16 @@ public class ReviewController_V10 {
 		BaseResponse reviewResponse = new BaseResponse();
 		reviewResponse.setStatusMessage("Success");
 		reviewResponse.setStatusCode(ReviewResponse.SUCCESS);
+		
+		//Like the incubee if the investor left a review for the user.
+		try {
+			UserStoreDynamoDB.loadLike(uid, review.getIncubee_id());
+			logger.info("Added like for the review: UID: " + uid + " IncubeeID: " + review.getIncubee_id());
+		} catch (Exception e) {
+			logger.error("Error adding a like, when reviewed : UID: " + uid + " IncubeeID: " +  review.getIncubee_id() +" \nError " + e.getMessage(), e);
+			e.printStackTrace();
+		}
+		
 		return new ResponseEntity<BaseResponse>(reviewResponse,
 				HttpStatus.OK);
 	}

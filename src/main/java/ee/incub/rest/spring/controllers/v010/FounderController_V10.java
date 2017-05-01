@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import ee.incub.rest.spring.aws.adaptors.UserDynamoDB;
+import ee.incub.rest.spring.aws.adaptors.UserStoreDynamoDB;
 import ee.incub.rest.spring.aws.adaptors.S3Adaptor;
 import ee.incub.rest.spring.model.db.User;
 import ee.incub.rest.spring.model.http.IncubeeRequest;
@@ -160,6 +161,17 @@ public class FounderController_V10 {
 		// creating adhoc incubee
 		try {
 			UserDynamoDB.createAdhocIncubee(uuid, incubee.getName(), incubee.getEmail_id(), uid);
+			
+			//add like incubee, so it shows up in the investor's dashboard.
+			
+			try {
+				UserStoreDynamoDB.loadLike(uid, uuid);
+				logger.info("Added like for the Adhoc Incubee: UID: " + uid + " IncubeeID: " + uuid);
+			} catch (Exception e) {
+				logger.error("Error adding a like, for the Adhoc Incubee : UID: " + uid + " IncubeeID: " + uuid +" \nError "+ e.getMessage(), e);
+				e.printStackTrace();
+			}
+			
 			AdhocIncubeeResponse adhocIncResponse = new AdhocIncubeeResponse();
 			adhocIncResponse.setStatusMessage("Success");
 			adhocIncResponse.setStatusCode(AdhocIncubeeResponse.SUCCESS);
