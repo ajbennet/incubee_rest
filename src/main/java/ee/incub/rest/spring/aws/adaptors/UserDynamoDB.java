@@ -399,6 +399,36 @@ public class UserDynamoDB {
 			throw e;
 		}
 	}
+	
+	public static AdhocIncubee getAdhocIncubee(String incubee_id)
+			throws AmazonServiceException {
+		Table table = dynamoDB.getTable(Constants.ADHOC_INCUBEE_TABLE);
+		try {
+			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+					"id = :v1 ").withValueMap(
+					new ValueMap().withString(":v1", incubee_id))
+			// .withProjectionExpression("company_url, description, founder, high_concept, location, logo_url, twitter_url, video_url")
+			;
+			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			Iterator<Item> iterator = items.iterator();
+
+			logger.info("Query: printing results...: ");
+			AdhocIncubee incubee = null;
+			while (iterator.hasNext()) {
+
+				Item item = iterator.next();
+				logger.info("Adhoc Incubee from DB for incubee_id: " + incubee_id
+						+ " - " + item.toJSONPretty());
+				incubee = Utils.adhocIncubeeFromItem(item);
+
+			}
+			return incubee;
+		} catch (AmazonServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
+	}
+	
 
 	public static List<Incubee> getAllIncubees() {
 		// long twoWeeksAgoMilli = (new Date()).getTime()

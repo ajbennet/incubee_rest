@@ -12,6 +12,8 @@ public class Constants {
 	public static final String LIKE_TABLE = Config.getProperty("like_table");
 	public static final String CUSTOMER_TABLE = Config.getProperty("customer_table");
 	public static final String REVIEW_TABLE = Config.getProperty("review_table");
+	public static final String REVIEW_USERID_INDEX = Config.getProperty("review_userid_index");
+	public static final String REVIEW_INCUBEEID_INDEX = Config.getProperty("review_incubeeid_index");
 	public static final String REPLY_TABLE = Config.getProperty("reply_table");
 	public static final String EMAIL_USERNAME = Config.getProperty("email_username");
 	public static final String EMAIL_PASSWORD = Config.getProperty("email_password");

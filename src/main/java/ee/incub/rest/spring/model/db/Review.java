@@ -16,7 +16,14 @@ public class Review {
 	int views;
 	int likes;
 	int dislikes;
+	String review_id;
 	
+	public String getReview_id() {
+		return review_id;
+	}
+	public void setReview_id(String review_id) {
+		this.review_id = review_id;
+	}
 	public static final String INPERSON_MEET ="PER";
 	public static final String TELEPHONIC_MEET = "TEL";
 	public static final String INTERESTED = "INT";
@@ -96,6 +103,13 @@ public class Review {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	@Override
+	public String toString() {
+		return "Review [incubee_id=" + incubee_id + ", title=" + title + ", description=" + description + ", rating="
+				+ rating + ", user_id=" + user_id + ", meeting=" + meeting + ", status=" + status + ", date=" + date
+				+ ", replies=" + replies + ", views=" + views + ", likes=" + likes + ", dislikes=" + dislikes
+				+ ", review_id=" + review_id + "]";
 	}
 	
 	

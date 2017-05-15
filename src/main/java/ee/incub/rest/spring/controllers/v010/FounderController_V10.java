@@ -110,6 +110,9 @@ public class FounderController_V10 {
 	@ResponseBody
 	public IncubeeResponse getForId(@PathVariable("id") String id) {
 		logger.info("Recieved getIncubee for Id: " + id);
+		if (id.startsWith("adh")){
+			return Utils.fromIncubee(UserDynamoDB.getAdhocIncubee(id));
+		}
 		return Utils.fromIncubee(UserDynamoDB.getIncubee(id));
 	}
 	

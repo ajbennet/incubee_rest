@@ -105,6 +105,18 @@ public class Utils {
 			return incubee;
 		}
 	}
+	
+	public static IncubeeResponse fromIncubee(AdhocIncubee request) {
+		if (request == null) {
+			return null;
+		} else {
+			IncubeeResponse incubee = new IncubeeResponse();
+			incubee.setId(request.getId());
+			incubee.setCompany_name(request.getName());
+			incubee.setContact_email(request.getEmail_id());
+			return incubee;
+		}
+	}
 
 	public static List<IncubeeResponse> fromIncubeeList(List<Incubee> request) {
 		if (request == null) {
@@ -182,6 +194,24 @@ public class Utils {
 		}
 		return null;
 	}
+	
+	public static AdhocIncubee adhocIncubeeFromItem(Item item) {
+		if (item != null) {
+			AdhocIncubee incubee = new AdhocIncubee();
+
+			incubee.setName(item.getString("name") != null ? item
+					.getString("name") : null);
+			incubee.setEmail_id(item.getString("email_id") != null ? item.getString(
+					"email_id") : null);
+			incubee.setId(item.get("id") != null ? item.getString("id") : null);
+			incubee.setCreated_by_id(item.getString("created_by_id") != null ? item
+					.getString("created_by_id") : null);
+			logger.debug("AdhocIncubee: " + item.toString());
+			return incubee;
+		}
+		return null;
+	}
+
 
 	public static Message messageFromItem(Item item) {
 		if (item != null) {
@@ -240,13 +270,16 @@ public class Utils {
 			review.setTitle(item.getString("title") != null ? item
 					.getString("title") : null);
 			review.setRating(item.getInt("rating"));
-			review.setLikes(item.getInt("likes"));
-			review.setDislikes(item.getInt("dislikes"));
-			review.setReplies(item.getInt("replies"));
+			review.setLikes(item.isPresent("likes")?item.getInt("likes"):0);
+			review.setDislikes(item.isPresent("dislikes")?item.getInt("dislikes"):0);
+			review.setReplies(item.isPresent("replies")?item.getInt("replies"):0);
+			review.setViews(item.isPresent("views")?item.getInt("views"):0);
 			review.setStatus(item.getString("status") != null ? item
 					.getString("status") : null);
 			review.setMeeting(item.getString("meeting") != null ? item
 							.getString("meeting") : null);
+			review.setReview_id(item.getString("review_id")!=null ? item
+							.getString("review_id"):null);
 			try {
 				review.setDate(item.getString("date") != null ? dateFormatter
 						.parse(item.getString("date")) : null);
@@ -354,7 +387,7 @@ public class Utils {
 	}
 	
 	public static Review reviewFromReviewRequest(
-			ReviewRequest reviewRequest, String uid) {
+			ReviewRequest reviewRequest, String uid, String uuid) {
 		Review review = new Review();
 		review.setIncubee_id(reviewRequest.getIncubee_id());
 		review.setUser_id(uid);
@@ -368,6 +401,7 @@ public class Utils {
 		review.setDislikes(0);
 		review.setViews(1);
 		review.setReplies(0);
+		review.setReview_id(uuid);
 		return review;
 	}
 
