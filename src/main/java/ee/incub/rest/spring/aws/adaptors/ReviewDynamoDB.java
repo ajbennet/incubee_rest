@@ -57,8 +57,7 @@ import ee.incub.rest.spring.utils.Utils;
 
 public class ReviewDynamoDB {
 
-	static DynamoDB dynamoDB = new DynamoDB(new AmazonDynamoDBClient(
-			new ProfileCredentialsProvider()));
+	
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static final Logger logger = LoggerFactory
@@ -70,7 +69,7 @@ public class ReviewDynamoDB {
 	
 	public static boolean createReview(Review review) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.REVIEW_TABLE);
 		
 		try {
 
@@ -106,7 +105,7 @@ public class ReviewDynamoDB {
 	
 	static void initializeAndCreateTables() {
 
-		TableCollection<ListTablesResult> tables = dynamoDB.listTables();
+		TableCollection<ListTablesResult> tables = DynamoDBHelper.dynamoDB.listTables();
 		Iterator<Table> iterator = tables.iterator();
 
 		logger.debug("Listing table names");
@@ -204,7 +203,7 @@ public class ReviewDynamoDB {
 			createTableRequest
 					.setGlobalSecondaryIndexes(globalSecondaryIndexes);
 
-			Table table = dynamoDB.createTable(createTableRequest);
+			Table table = DynamoDBHelper.dynamoDB.createTable(createTableRequest);
 			logger.info("Creating Table : " + table.getDescription());
 
 			logger.info("Waiting for " + tableName
@@ -221,7 +220,7 @@ public class ReviewDynamoDB {
 	}
 	
 	public static Review[] getReviewsForIncubee(String incubee_id) throws Exception {
-		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.REVIEW_TABLE);
 		Index index = table.getIndex(Constants.REVIEW_INCUBEEID_INDEX);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -250,7 +249,7 @@ public class ReviewDynamoDB {
 	}
 	
 	public static Review getReviewForIncubeeByUser(String incubee_id, String uid) throws Exception {
-		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.REVIEW_TABLE);
 		Index index = table.getIndex(Constants.REVIEW_INCUBEEID_INDEX);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -277,7 +276,7 @@ public class ReviewDynamoDB {
 	}
 	
 	public static Review getReviewForIncubeeByReviewId( String review_id) throws Exception {
-		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.REVIEW_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"review_id = :review_id").withValueMap(new ValueMap()
@@ -303,7 +302,7 @@ public class ReviewDynamoDB {
 	
 	public static void updateReview(Review review) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.REVIEW_TABLE);
 
 		/*
 		 * .withString("user_id", review.getUser_id())
@@ -365,7 +364,7 @@ public class ReviewDynamoDB {
 	}
 	public static void deleteReview(String review_id) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.REVIEW_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.REVIEW_TABLE);
 
 		try {
 
@@ -390,7 +389,7 @@ public class ReviewDynamoDB {
 
 		logger.info("Describing " + tableName);
 
-		TableDescription tableDescription = dynamoDB.getTable(tableName)
+		TableDescription tableDescription = DynamoDBHelper.dynamoDB.getTable(tableName)
 				.describe();
 		System.out.format("Name: %s:\n" + "Status: %s \n"
 				+ "Provisioned Throughput (read capacity units/sec): %d \n"
@@ -403,7 +402,7 @@ public class ReviewDynamoDB {
 	}
 
 	// public static Incubee getIncubee(String incubee_id) {
-	// Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+	// Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INCUBEE_TABLE);
 	// QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 	// "id = :v1 ").withValueMap(
 	// new ValueMap().withString(":v1", incubee_id))

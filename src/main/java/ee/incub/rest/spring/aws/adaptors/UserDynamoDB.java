@@ -50,8 +50,7 @@ import ee.incub.rest.spring.utils.Utils;
 
 public class UserDynamoDB {
 
-	static DynamoDB dynamoDB = new DynamoDB(new AmazonDynamoDBClient(
-			new ProfileCredentialsProvider()));
+	
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static final Logger logger = LoggerFactory
@@ -62,7 +61,7 @@ public class UserDynamoDB {
 
 	public static void loadIncubee(Incubee incubee) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INCUBEE_TABLE);
 
 		try {
 
@@ -112,7 +111,7 @@ public class UserDynamoDB {
 	
 	public static void createAdhocIncubee(String incubeeId, String name, String emailId , String createdById) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.ADHOC_INCUBEE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.ADHOC_INCUBEE_TABLE);
 
 		try {
 
@@ -140,7 +139,7 @@ public class UserDynamoDB {
 
 	public static boolean createUser(User user) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
 
 		try {
 
@@ -177,7 +176,7 @@ public class UserDynamoDB {
 	}
 
 	// public static Incubee getIncubee(String incubee_id) {
-	// Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+	// Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INCUBEE_TABLE);
 	// QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 	// "id = :v1 ").withValueMap(
 	// new ValueMap().withString(":v1", incubee_id))
@@ -217,7 +216,7 @@ public class UserDynamoDB {
 	// }
 
 	public static User getUser(String user_id) throws AmazonServiceException {
-		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"id = :v1 ").withValueMap(
@@ -258,7 +257,7 @@ public class UserDynamoDB {
 
 	public static User getUserForHandle(String handle_id)
 			throws AmazonServiceException {
-		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"id = :v1 ").withValueMap(
@@ -299,7 +298,7 @@ public class UserDynamoDB {
 
 	public static Customer[] getCustomerDetailsforIds(Set<String> userIdSet)
 			throws AmazonServiceException {
-		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
 		List<Customer> customerList = null;
 		Iterator<String> userIterator = userIdSet.iterator();
 		try {
@@ -350,7 +349,7 @@ public class UserDynamoDB {
 
 	public static void deleteUser(String userid) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
 
 		try {
 
@@ -373,7 +372,7 @@ public class UserDynamoDB {
 
 	public static Incubee getIncubee(String incubee_id)
 			throws AmazonServiceException {
-		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INCUBEE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"id = :v1 ").withValueMap(
@@ -402,7 +401,7 @@ public class UserDynamoDB {
 	
 	public static AdhocIncubee getAdhocIncubee(String incubee_id)
 			throws AmazonServiceException {
-		Table table = dynamoDB.getTable(Constants.ADHOC_INCUBEE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.ADHOC_INCUBEE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"id = :v1 ").withValueMap(
@@ -476,7 +475,7 @@ public class UserDynamoDB {
 	
 	static void initializeAndCreateTables() {
 
-		TableCollection<ListTablesResult> tables = dynamoDB.listTables();
+		TableCollection<ListTablesResult> tables = DynamoDBHelper.dynamoDB.listTables();
 		Iterator<Table> iterator = tables.iterator();
 
 		logger.debug("Listing table names");
@@ -527,7 +526,7 @@ public class UserDynamoDB {
 									20L).withWriteCapacityUnits(10L));
 
 			logger.info("Issuing CreateTable request for " + tableName);
-			Table table = dynamoDB.createTable(request);
+			Table table = DynamoDBHelper.dynamoDB.createTable(request);
 
 			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
@@ -563,7 +562,7 @@ public class UserDynamoDB {
 									20L).withWriteCapacityUnits(10L));
 
 			logger.info("Issuing CreateTable request for " + tableName);
-			Table table = dynamoDB.createTable(request);
+			Table table = DynamoDBHelper.dynamoDB.createTable(request);
 
 			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
@@ -599,7 +598,7 @@ public class UserDynamoDB {
 									2L).withWriteCapacityUnits(2L));
 
 			logger.info("Issuing CreateTable request for " + tableName);
-			Table table = dynamoDB.createTable(request);
+			Table table = DynamoDBHelper.dynamoDB.createTable(request);
 
 			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
@@ -615,7 +614,7 @@ public class UserDynamoDB {
 	}
 	public static boolean updateUser(User user) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.USER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
 
 		try {
 			if (user.getCompany_id() != null
@@ -646,7 +645,7 @@ public class UserDynamoDB {
 	}
 	public static void updateIncubee(Incubee incubee) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INCUBEE_TABLE);
 
 		try {
 			NameMap nameMap = new NameMap().with("#loc", "location");
@@ -741,7 +740,7 @@ public class UserDynamoDB {
 
 		logger.info("Describing " + tableName);
 
-		TableDescription tableDescription = dynamoDB.getTable(tableName)
+		TableDescription tableDescription = DynamoDBHelper.dynamoDB.getTable(tableName)
 				.describe();
 		System.out.format("Name: %s:\n" + "Status: %s \n"
 				+ "Provisioned Throughput (read capacity units/sec): %d \n"
@@ -754,7 +753,7 @@ public class UserDynamoDB {
 	}
 
 	// public static Incubee getIncubee(String incubee_id) {
-	// Table table = dynamoDB.getTable(Constants.INCUBEE_TABLE);
+	// Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INCUBEE_TABLE);
 	// QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 	// "id = :v1 ").withValueMap(
 	// new ValueMap().withString(":v1", incubee_id))

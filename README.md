@@ -524,9 +524,66 @@ POST data:
 Response
 
 ```sh
-{"statusMessage":"Success","statusCode":"REV_1000","reviews":null}
+
+{
+   "statusMessage":"Success",
+   "statusCode":"REV_1000",
+   "reviews":[
+      {
+         "incubee_id":"inc_551573ad-563b-40cc-b3a8-5a8ad57b1506",
+         "title":"Loved It",
+         "description":"The team looks sharp and the product has great potential",
+         "rating":4,
+         "user_id":"110489314263267697974",
+         "meeting":"PER",
+         "status":"INT",
+         "date":1494960321895,
+         "replies":0,
+         "views":1,
+         "likes":0,
+         "dislikes":0,
+         "review_id":"rev_77d1d45c-0842-4f44-ae72-e0316343cc6a"
+      }
+   ]
+}
 
 ```
+
+## Edit Review
+
+```sh
+PUT http://www.incub.ee/rest/v1.0/review?uid=110489314263267697974&review_id=rev_61cc263f-4949-4a42-90ac-33768a122cbc
+
+PUT data:
+{
+	"title":"Updated - Loved It",
+	"description":"Updated - The team looks sharp and the product has great potential",
+	"incubee_id":"inc_551573ad-563b-40cc-b3a8-5a8ad57b1506",
+	"rating":5,
+	"meeting":"PHO",
+	"status":"PAS"
+}
+
+```
+
+Response
+
+```sh
+{"statusMessage":"Success","statusCode":"REV_1000"}
+```
+
+## Delete Review
+
+```sh
+DELETE http://www.incub.ee/rest/v1.0/review?uid=110489314263267697974&review_id=rev_61cc263f-4949-4a42-90ac-33768a122cbc
+```
+
+Response
+
+```sh
+{"statusMessage":"Success","statusCode":"REV_1000"}
+```
+
 
 
 ## Get All Reviews for Incubee

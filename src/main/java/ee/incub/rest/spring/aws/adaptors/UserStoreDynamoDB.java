@@ -33,8 +33,7 @@ import ee.incub.rest.spring.utils.Constants;
 
 public class UserStoreDynamoDB {
 
-	static DynamoDB dynamoDB = new DynamoDB(new AmazonDynamoDBClient(
-			new ProfileCredentialsProvider()));
+	
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static final Logger logger = LoggerFactory
@@ -44,7 +43,7 @@ public class UserStoreDynamoDB {
 	}
 
 	public static boolean loadLike(String userId, String incubeeId) throws Exception {
-		Table table = dynamoDB.getTable(Constants.LIKE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.LIKE_TABLE);
 		if(userId== null || incubeeId == null || userId.isEmpty() || incubeeId.isEmpty()){
 			logger.error("UserId or IncubeeID empty in loadLike request: " + userId + incubeeId);
 			return false;
@@ -71,7 +70,7 @@ public class UserStoreDynamoDB {
 	}
 	
 	public static boolean loadCustomer(String userId, String incubeeId) throws Exception {
-		Table table = dynamoDB.getTable(Constants.CUSTOMER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.CUSTOMER_TABLE);
 		if(userId== null || incubeeId == null || userId.isEmpty() || incubeeId.isEmpty()){
 			logger.error("UserId or IncubeeID empty in loadCustomer request : " + userId + incubeeId);
 			return false;
@@ -97,7 +96,7 @@ public class UserStoreDynamoDB {
 	}
 		
 	public static String[] getCustomeredUsersforIncubees(String incubee_id) {
-		Table table = dynamoDB.getTable(Constants.CUSTOMER_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.CUSTOMER_TABLE);
 		 long fiveYearsAgoMilli = (new Date()).getTime()
 				 - (15L * 365L * 24L * 60L * 60L * 1000L);
 				 Date twoWeeksAgo = new Date();
@@ -135,7 +134,7 @@ public class UserStoreDynamoDB {
 	
 
 	public static String[] getLikedIncubees(String user_id) {
-		Table table = dynamoDB.getTable(Constants.LIKE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.LIKE_TABLE);
 		 long fiveYearsAgoMilli = (new Date()).getTime()
 				 - (15L * 365L * 24L * 60L * 60L * 1000L);
 				 Date twoWeeksAgo = new Date();
@@ -173,7 +172,7 @@ public class UserStoreDynamoDB {
 
 	static void initializeAndCreateTables() {
 
-		TableCollection<ListTablesResult> tables = dynamoDB.listTables();
+		TableCollection<ListTablesResult> tables = DynamoDBHelper.dynamoDB.listTables();
 		Iterator<Table> iterator = tables.iterator();
 
 		logger.debug("Listing table names");
@@ -222,7 +221,7 @@ public class UserStoreDynamoDB {
 									2L).withWriteCapacityUnits(2L));
 
 			logger.info("Issuing CreateTable request for " + tableName);
-			Table table = dynamoDB.createTable(request);
+			Table table = DynamoDBHelper.dynamoDB.createTable(request);
 
 			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
@@ -261,7 +260,7 @@ public class UserStoreDynamoDB {
 									2L).withWriteCapacityUnits(2L));
 
 			logger.info("Issuing CreateTable request for " + tableName);
-			Table table = dynamoDB.createTable(request);
+			Table table = DynamoDBHelper.dynamoDB.createTable(request);
 
 			logger.info("Waiting for " + tableName
 					+ " to be created...this may take a while...");
@@ -280,7 +279,7 @@ public class UserStoreDynamoDB {
 
 		logger.info("Describing " + tableName);
 
-		TableDescription tableDescription = dynamoDB.getTable(tableName)
+		TableDescription tableDescription = DynamoDBHelper.dynamoDB.getTable(tableName)
 				.describe();
 		System.out.format("Name: %s:\n" + "Status: %s \n"
 				+ "Provisioned Throughput (read capacity units/sec): %d \n"

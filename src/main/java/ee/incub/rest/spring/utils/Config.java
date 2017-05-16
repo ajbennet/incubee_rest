@@ -12,16 +12,27 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	private static Properties prop = new Properties();
 	private static String propFileName = "config.properties";
+	private static String propQAFileName = "config-qa.properties";
 	private static final Logger logger = LoggerFactory
 			.getLogger(Config.class);
 	static {
 		InputStream inputStream = Config.class.getClassLoader()
-				.getResourceAsStream(propFileName);
+				.getResourceAsStream(propQAFileName);
 		try {
 			prop.load(inputStream);
-			logger.info("Properties :" +prop);
+			logger.info("QA Properties :" +prop);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info("QA Config not loaded, so trying Prod");
+			//if no config file found, it may be in qa mode., so try loading that file.
+			inputStream = Config.class.getClassLoader()
+					.getResourceAsStream(propFileName);
+			try {
+				prop.load(inputStream);
+				logger.info("Prod Properties :" +prop);
+			} catch (IOException ex) {
+				logger.error("Both QA and Production failed");
+				ex.printStackTrace();
+			}
 		}
 	}
 

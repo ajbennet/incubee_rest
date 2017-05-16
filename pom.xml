@@ -14,7 +14,22 @@
 		<aws.version>1.9.40</aws.version>
 		<jackson.version>2.5.0</jackson.version>
 	</properties>
-
+	<profiles>
+		<profile>
+			<id>qa</id>
+			<properties>
+				<rp.build.warname>incubee-qa</rp.build.warname>
+				<rp.build.configname>config-qa.properties</rp.build.configname>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<rp.build.warname>incubee</rp.build.warname>
+				<rp.build.configname>config-prod.properties</rp.build.configname>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -161,7 +176,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>incubee</finalName>
+		<finalName>${rp.build.warname}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -183,7 +198,8 @@
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
-					<include>*.properties</include>
+					<include>log4j.properties</include>
+					<include>${rp.build.configname}</include>
 					<include>*.ftl</include>
 				</includes>
 			</resource>

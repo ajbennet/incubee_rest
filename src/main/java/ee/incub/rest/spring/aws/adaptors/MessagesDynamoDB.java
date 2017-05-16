@@ -10,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Index;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
@@ -35,15 +32,13 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 
-import ee.incub.rest.spring.model.db.Incubee;
 import ee.incub.rest.spring.model.db.Message;
 import ee.incub.rest.spring.utils.Constants;
 import ee.incub.rest.spring.utils.Utils;
 
 public class MessagesDynamoDB {
 
-	static DynamoDB dynamoDB = new DynamoDB(new AmazonDynamoDBClient(
-			new ProfileCredentialsProvider()));
+	
 	static SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static final Logger logger = LoggerFactory
@@ -54,7 +49,7 @@ public class MessagesDynamoDB {
 
 	public static void loadMessage(Message message) throws Exception{
 
-		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.MESSAGE_TABLE);
 		if (message == null || message.getMid() == null){
 			throw new IllegalArgumentException("Message null or invalid Mid");
 		}
@@ -97,7 +92,7 @@ public class MessagesDynamoDB {
 	}
 
 	public static Message[] getMessagesForUser(String eid) throws Exception {
-		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.MESSAGE_TABLE);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
 					"eid = :eid").withValueMap(new ValueMap()
@@ -126,7 +121,7 @@ public class MessagesDynamoDB {
 	}
 
 	public static Message getMessageForMessageID(String mid, String eid) throws Exception {
-		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.MESSAGE_TABLE);
 		Index index = table.getIndex(Constants.MID_INDEX);
 		try {
 			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
@@ -160,7 +155,7 @@ public class MessagesDynamoDB {
 
 	static void initializeAndCreateTables() {
 
-		TableCollection<ListTablesResult> tables = dynamoDB.listTables();
+		TableCollection<ListTablesResult> tables = DynamoDBHelper.dynamoDB.listTables();
 		Iterator<Table> iterator = tables.iterator();
 
 		logger.debug("Listing table names");
@@ -217,7 +212,7 @@ public class MessagesDynamoDB {
 			localSecondaryIndexes.add(localSecondaryIndex);
 			createTableRequest.setLocalSecondaryIndexes(localSecondaryIndexes);
 			
-			Table table = dynamoDB.createTable(createTableRequest);
+			Table table = DynamoDBHelper.dynamoDB.createTable(createTableRequest);
 
 			logger.debug("Waiting for " + tableName
 					+ " to be created...this may take a while...");
@@ -232,7 +227,7 @@ public class MessagesDynamoDB {
 	
 	public static void updateMessage(Message message) throws Exception {
 
-		Table table = dynamoDB.getTable(Constants.MESSAGE_TABLE);
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.MESSAGE_TABLE);
 		if (message == null || message.getDir() == null){
 			throw new IllegalArgumentException("Message obect not valid");
 		}
@@ -301,7 +296,7 @@ public class MessagesDynamoDB {
 
 		System.out.println("Describing " + tableName);
 
-		TableDescription tableDescription = dynamoDB.getTable(tableName)
+		TableDescription tableDescription = DynamoDBHelper.dynamoDB.getTable(tableName)
 				.describe();
 		System.out.format("Name: %s:\n" + "Status: %s \n"
 				+ "Provisioned Throughput (read capacity units/sec): %d \n"
