@@ -274,8 +274,8 @@ public class Utils {
 			review.setDislikes(item.isPresent("dislikes")?item.getInt("dislikes"):0);
 			review.setReplies(item.isPresent("replies")?item.getInt("replies"):0);
 			review.setViews(item.isPresent("views")?item.getInt("views"):0);
-			review.setStatus(item.getString("status") != null ? item
-					.getString("status") : null);
+			review.setStatus(item.getString("review_status") != null ? item
+					.getString("review_status") : null);
 			review.setMeeting(item.getString("meeting") != null ? item
 							.getString("meeting") : null);
 			review.setReview_id(item.getString("review_id")!=null ? item
