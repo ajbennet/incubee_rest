@@ -438,8 +438,7 @@ public class UserDynamoDB {
 		// "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		// String twoWeeksAgoStr = df.format(twoWeeksAgo);
 
-		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
-				new ProfileCredentialsProvider());
+		AmazonDynamoDBClient client = DynamoDBHelper.dynamoDBClient;
 		ScanRequest scanRequest = new ScanRequest()
 				.withTableName(Constants.INCUBEE_TABLE);
 		List<Incubee> list = new ArrayList<Incubee>();
@@ -453,15 +452,14 @@ public class UserDynamoDB {
 
 	public static List<AdhocIncubee> getAllAdhocIncubees() {
 		// long twoWeeksAgoMilli = (new Date()).getTime()
-		// - (15L * 24L * 60L * 60L * 1000L);
+		// - (15L * 24L * 60L * 60L  * 1000L);
 		// Date twoWeeksAgo = new Date();
 		// twoWeeksAgo.setTime(twoWeeksAgoMilli);
 		// SimpleDateFormat df = new SimpleDateFormat(
 		// "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		// String twoWeeksAgoStr = df.format(twoWeeksAgo);
 
-		AmazonDynamoDBClient client = new AmazonDynamoDBClient(
-				new ProfileCredentialsProvider());
+		AmazonDynamoDBClient client = DynamoDBHelper.dynamoDBClient;
 		ScanRequest scanRequest = new ScanRequest()
 				.withTableName(Constants.ADHOC_INCUBEE_TABLE);
 		List<AdhocIncubee> list = new ArrayList<AdhocIncubee>();

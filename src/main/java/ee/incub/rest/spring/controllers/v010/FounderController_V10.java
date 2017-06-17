@@ -108,12 +108,22 @@ public class FounderController_V10 {
 
 	@RequestMapping(value = "/v1.0/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public IncubeeResponse getForId(@PathVariable("id") String id) {
+	public ResponseEntity<IncubeeResponse> getForId(@PathVariable("id") String id) {
 		logger.info("Recieved getIncubee for Id: " + id);
+		IncubeeResponse response = null;
 		if (id.startsWith("adh")){
-			return Utils.fromIncubee(UserDynamoDB.getAdhocIncubee(id));
+			response = Utils.fromIncubee(UserDynamoDB.getAdhocIncubee(id));
+			if (response!=null)
+				return new ResponseEntity<IncubeeResponse>(response, HttpStatus.OK) ;
+			else
+				return new ResponseEntity<IncubeeResponse>(response, HttpStatus.NOT_FOUND) ;
 		}
-		return Utils.fromIncubee(UserDynamoDB.getIncubee(id));
+		
+		response =  Utils.fromIncubee(UserDynamoDB.getIncubee(id));
+		if (response!=null)
+			return new ResponseEntity<IncubeeResponse>(response, HttpStatus.OK) ;
+		else
+			return new ResponseEntity<IncubeeResponse>(response, HttpStatus.NOT_FOUND) ;
 	}
 	
 	@RequestMapping(value = "/v1.0/adhocincubee", method = RequestMethod.GET)

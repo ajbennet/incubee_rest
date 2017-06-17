@@ -177,6 +177,7 @@
 
 	<build>
 		<finalName>${rp.build.warname}</finalName>
+		<outputDirectory>war/${rp.build.warname}</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -197,11 +198,15 @@
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
+				<!-- <excludes>
+					<exclude>*.properties</exclude>
+				</excludes> -->
 				<includes>
 					<include>log4j.properties</include>
 					<include>${rp.build.configname}</include>
 					<include>*.ftl</include>
 				</includes>
+				
 			</resource>
 		</resources>
 	</build>
