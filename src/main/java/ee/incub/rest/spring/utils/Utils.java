@@ -40,7 +40,8 @@ public class Utils {
 		for (int i = 0; i < reviews.length; i++) {
 			sum =sum+ reviews[i].getRating();
 			int[] noOfStars = reviewData.getNoOfStars();
-			noOfStars[reviews[i].getRating()-1]++;
+			int starIndex = reviews[i].getRating()>0?reviews[i].getRating()-1:0;
+			noOfStars[starIndex]++;
 			reviewData.setNoOfStars(noOfStars);					
 		}
 		reviewData.setAverageRating(sum/reviews.length);
