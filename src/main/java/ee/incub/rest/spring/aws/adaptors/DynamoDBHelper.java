@@ -32,7 +32,7 @@ public class DynamoDBHelper {
 			dynamoDBClient =  new AmazonDynamoDBClient(
 					new ProfileCredentialsProvider());
 			dynamoDBClient.setRegion(Regions.US_EAST_1);
-			logger.info("Initializing QA Database at " + Regions.US_EAST_1);
+			logger.info("Initializing PROD Database at " + Regions.US_EAST_1);
 		}
 	}
 }

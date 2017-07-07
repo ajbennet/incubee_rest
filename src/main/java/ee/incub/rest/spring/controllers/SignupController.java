@@ -144,7 +144,8 @@ public class SignupController {
 			user.setToken(token.getToken());
 			user.setHandle_id(token.getId());
 			user.setLogin_type("google");
-			user.setUser_type(User.INVESTOR);
+			if(UserDynamoDB.isWhitelistedInvestor(token.getEmail()))
+					user.setUser_type(User.INVESTOR);
 			UserDynamoDB.createUser(user);
 			logger.info("Created User : " + user_id);
 			return true;

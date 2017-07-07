@@ -214,6 +214,29 @@ public class UserDynamoDB {
 	// }
 	// return incubee;
 	// }
+	
+	public static boolean isWhitelistedInvestor(String email_id) throws AmazonServiceException {
+		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.INVESTOR_WHITELIST_TABLE);
+		try {
+			QuerySpec querySpec = new QuerySpec().withKeyConditionExpression(
+					"email_id = :v1 ").withValueMap(
+					new ValueMap().withString(":v1", email_id.toLowerCase()));
+			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			Iterator<Item> iterator = items.iterator();
+
+			logger.info("Query: printing results...: ");
+			boolean returnvalue = false;
+			if (iterator.hasNext()) {
+				returnvalue = true;
+			}
+			return returnvalue;
+		}catch (AmazonServiceException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
+	}
+		
+
 
 	public static User getUser(String user_id) throws AmazonServiceException {
 		Table table = DynamoDBHelper.dynamoDB.getTable(Constants.USER_TABLE);
@@ -480,6 +503,7 @@ public class UserDynamoDB {
 		boolean createUserTable = true;
 		boolean createIncubeeTable = true;
 		boolean createAdhocIncubeeTable = true;
+		boolean createinvestorWhitelistTable = true;
 		while (iterator.hasNext()) {
 			Table table = iterator.next();
 			logger.debug("Table : " + table.getTableName());
@@ -489,6 +513,9 @@ public class UserDynamoDB {
 				createUserTable = false;
 			}else if (table.getTableName().equals(Constants.ADHOC_INCUBEE_TABLE)) {
 				createAdhocIncubeeTable = false;
+			}
+			else if (table.getTableName().equals(Constants.INVESTOR_WHITELIST_TABLE)) {
+				createinvestorWhitelistTable = false;
 			}
 		}
 		if (createUserTable) {
@@ -500,7 +527,46 @@ public class UserDynamoDB {
 		if (createAdhocIncubeeTable) {
 			createAdhocIncubeeTable();
 		}
+		if(createinvestorWhitelistTable){
+			createInvestorWhitelistTable();
+		}
 		
+	}
+	
+	static void createInvestorWhitelistTable() {
+		String tableName = Constants.INVESTOR_WHITELIST_TABLE;
+		try {
+
+			ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
+			attributeDefinitions.add(new AttributeDefinition()
+					.withAttributeName("email_id").withAttributeType("S"));
+
+			ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
+			keySchema.add(new KeySchemaElement().withAttributeName("email_id")
+					.withKeyType(KeyType.HASH));
+
+			CreateTableRequest request = new CreateTableRequest()
+					.withTableName(tableName)
+					.withKeySchema(keySchema)
+					.withAttributeDefinitions(attributeDefinitions)
+					.withProvisionedThroughput(
+							new ProvisionedThroughput().withReadCapacityUnits(
+									20L).withWriteCapacityUnits(10L));
+
+			logger.info("Issuing CreateTable request for " + tableName);
+			Table table = DynamoDBHelper.dynamoDB.createTable(request);
+
+			logger.info("Waiting for " + tableName
+					+ " to be created...this may take a while...");
+			table.waitForActive();
+
+			getTableInformation(tableName);
+
+		} catch (Exception e) {
+			logger.error("CreateTable request failed for " + tableName);
+			logger.error(e.getMessage());
+		}
+
 	}
 
 	static void createUserTable() {

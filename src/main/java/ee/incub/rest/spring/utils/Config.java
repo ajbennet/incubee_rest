@@ -23,7 +23,7 @@ public class Config {
 			logger.info("QA Properties :" +prop);
 		} catch (Exception e) {
 			logger.info("QA Config not loaded, so trying Prod");
-			//if no config file found, it may be in qa mode., so try loading that file.
+			//if no config file found, it may be in production mode., so try loading that file.
 			inputStream = Config.class.getClassLoader()
 					.getResourceAsStream(propProdFileName);
 			try {

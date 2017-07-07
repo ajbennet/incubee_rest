@@ -5,3 +5,4 @@
 /target/incubee/
 /target/maven-archiver/
 /target/
+/settings/**
