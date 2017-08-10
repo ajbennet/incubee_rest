@@ -68,9 +68,9 @@ public class UserDynamoDB {
 			logger.debug("Adding data to " + Constants.INCUBEE_TABLE);
 
 			Item item = new Item().withPrimaryKey("id", incubee.getId());
-			if (incubee.getCompany_name() != null)
+			if (incubee.getCompany_name() != null && !incubee.getCompany_name().isEmpty())
 				item.withString("company_name", incubee.getCompany_name());
-			if (incubee.getCompany_url() != null)
+			if (incubee.getCompany_url() != null && !incubee.getCompany_url().isEmpty())
 				item.withString("company_url", incubee.getCompany_url());
 			// need to hash this.
 			if (incubee.getImages() != null)
@@ -78,24 +78,24 @@ public class UserDynamoDB {
 						new HashSet<String>(Arrays.asList(incubee.getImages())));
 			if (incubee.getVideo() != null)
 				item.withString("video", incubee.getVideo());
-			if (incubee.getHigh_concept() != null)
+			if (incubee.getHigh_concept() != null && !incubee.getHigh_concept().isEmpty())
 				item.withString("high_concept", incubee.getHigh_concept());
-			if (incubee.getDescription() != null)
+			if (incubee.getDescription() != null && !incubee.getDescription().isEmpty())
 				item.withString("description", incubee.getDescription());
-			if (incubee.getFounder() != null)
+			if (incubee.getFounder() != null && !incubee.getFounder().isEmpty())
 				item.withString("founder", incubee.getFounder());
-			if (incubee.getLogo_url() != null)
+			if (incubee.getLogo_url() != null && !incubee.getLogo_url().isEmpty())
 				item.withString("logo_url", incubee.getLogo_url());
-			if (incubee.getTwitter_url() != null)
+			if (incubee.getTwitter_url() != null && !incubee.getTwitter_url().isEmpty())
 				item.withString("twitter_url", incubee.getTwitter_url());
-			if (incubee.getLocation() != null)
+			if (incubee.getLocation() != null  && !incubee.getLocation().isEmpty())
 				item.withString("location", incubee.getLocation());
-			if (incubee.getVideo_url() != null)
+			if (incubee.getVideo_url() != null && !incubee.getVideo_url().isEmpty())
 				item.withString("video_url", incubee.getVideo_url());
 			item.withBoolean("funding", incubee.isFunding());
-			if (incubee.getField() != null)
+			if (incubee.getField() != null && !incubee.getField().isEmpty())
 				item.withString("field", incubee.getField());
-			if (incubee.getProject_status() != null)
+			if (incubee.getProject_status() != null && !incubee.getProject_status().isEmpty())
 				item.withString("project_status", incubee.getProject_status());
 			item.withString("added_time", (dateFormatter.format(new Date())));
 			item.withString("updated_time", (dateFormatter.format(new Date())));
