@@ -194,6 +194,14 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+       			<artifactId>maven-war-plugin</artifactId>
+        		<version>2.6</version>
+        		<configuration>
+          			<warName>war/${rp.build.warname}</warName>
+        		</configuration>
+      		</plugin>
 		</plugins>
 		<resources>
 			<resource>

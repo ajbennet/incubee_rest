@@ -49,10 +49,10 @@
 
 			<!-- One Column -->
 			<table width="580"  class="deviceWidth" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#eeeeed" style="margin:0 auto;">
-				<tr>
+				<!--<tr>
 					<td valign="top" style="padding:0" bgcolor="#ffffff">
 						<a href="#"><img  class="deviceWidth" src="http://www.incub.ee/img/headliner.jpg" alt="" border="0" style="display: block; border-radius: 4px;" /></a>
-					</td>
+					</td>-->
 				</tr>
                 <tr>
                     <td style="font-size: 13px; color: #959595; font-weight: normal; text-align: left; font-family: Georgia, Times, serif; line-height: 24px; vertical-align: top; padding:10px 8px 10px 8px" bgcolor="#eeeeed">
@@ -88,7 +88,7 @@
                             <table align="left" width="49%" cellpadding="0" cellspacing="0" border="0" class="deviceWidth">
                                 <tr>
                                     <td valign="top" align="center" class="center" style="padding-top:20px">
-                                            <a href="#"><img width="267" src="http://www.incub.ee/img/freeze/Slides/hand-freeze.png" alt="" border="0" style="border-radius: 4px; width: 267px; display: block;" class="deviceWidth" /></a>
+                                            <a href="#"><img width="267" src="http://www.incub.ee/app/img/hand-freeze.png" alt="" border="0" style="border-radius: 4px; width: 267px; display: block;" class="deviceWidth" /></a>
                                     </td>
                                 </tr>
                             </table>
@@ -176,7 +176,7 @@
                                                     <br />
                                                     
                                                     
-                                                    <a href="#"><img src="http://www.incub.ee/img/freeze/logo.png" alt="" border="0" style=" width: 100px; padding-top: 5px;" /></a><br/>
+                                                    <a href="#"><img src="http://www.incub.ee/app/img/logo.png" alt="" border="0" style=" width: 100px; padding-top: 5px;" /></a><br/>
                                                     
                                                     <a href="#" style="text-decoration: none; color: #848484; font-weight: normal;">abi@incub.ee</a>
                                                 </td>
